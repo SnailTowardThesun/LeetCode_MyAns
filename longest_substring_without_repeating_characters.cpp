@@ -24,7 +24,6 @@ public:
 			locs[s[i]]=i;
 		}
 		return max;
-		return result;
 	}
 };
 
