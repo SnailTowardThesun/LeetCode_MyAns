@@ -28,11 +28,3 @@ public:
 	}
 };
 
-int main()
-{
-	solution ss;
-	string s = "aaaab";
-	cout<<"ready to get the answer"<<endl;
-	cout<<ss.lengthofLongestSubString(s)<<endl;
-	return 0;
-}
