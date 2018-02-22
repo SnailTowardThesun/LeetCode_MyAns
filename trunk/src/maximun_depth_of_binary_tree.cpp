@@ -3,6 +3,7 @@
  The maximum depth is the number of nodes along th longest path from the root node down to the farthest leaf node.
  */
 #include <iostream>
+#include <algorithm>
 using namespace std;
 
 struct TreeNode

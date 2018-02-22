@@ -3,6 +3,7 @@
  The minimum depth is the number of nodes along the shortest path from root node down to the nearest leaf node.
  */
 #include <iostream>
+#include <algorithm>
 using namespace std;
 
 struct TreeNode

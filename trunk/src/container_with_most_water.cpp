@@ -5,6 +5,7 @@ Note:You may not slant the container
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
 using namespace std;
 class solution
 {
