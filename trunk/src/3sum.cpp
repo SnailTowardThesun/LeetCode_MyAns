@@ -28,48 +28,76 @@ using namespace std;
 
 void problem()
 {
-    cout << "Given an array S of n integers, are there elements a, b, c in S such that a + b + c = 0? Find all unique triplets in the array which gives the sum of zero." << endl;
-    cout << "Note: The solution set must not contain duplicate triplets." << endl;
-    cout << "For example given array S = [-1, 0 ,1, 2, -1, -4]," << endl;
-    cout << "A solution set is :" << endl;
-    cout << "[" << endl;
-    cout << "\t" << "[-1, 0, 1]," << endl;
-    cout << "\t" << "[-1, -1, 2]" << endl;
-    cout << "]" << endl;
+	cout << "Given an array S of n integers, are there elements a, b, c in S such that a + b + c = 0? Find all unique triplets in the array which gives the sum of zero." << endl;
+	cout << "Note: The solution set must not contain duplicate triplets." << endl;
+	cout << "For example given array S = [-1, 0 ,1, 2, -1, -4]," << endl;
+	cout << "A solution set is :" << endl;
+	cout << "[" << endl;
+	cout << "\t" << "[-1, 0, 1]," << endl;
+	cout << "\t" << "[-1, -1, 2]" << endl;
+	cout << "]" << endl;
 }
 
 class Solution
 {
 public:
-    vector<vector<int>> threeSum(vector<int>& num_list)
-    {
-        vector<vector<int>> ret;
-        std::sort(num_list.begin(), num_list.end());
-        return ret;
-    }
+	vector<vector<int>> threeSum(vector<int>& nums)
+	{
+		vector<vector<int>> res;
+		std::sort(nums.begin(), nums.end());
+
+		for (int k = 0; k < nums.size(); ++k) {
+			if (nums[k] > 0) {
+				break;
+			}
+
+			if (k > 0 && nums[k] == nums[k - 1]) {
+				continue;
+			}
+
+			int target = 0 - nums[k];
+			int i = k + 1, j = nums.size() - 1;
+			while (i < j) {
+				if (nums[i] + nums[j] == target) {
+					res.push_back({ nums[k], nums[i], nums[j] });
+					while (i < j && nums[i] == nums[i + 1]) ++i;
+					while (i < j && nums[j] == nums[j - 1]) --j;
+					++i; --j;
+				}
+				else if (nums[i] + nums[j] < target) {
+					++i;
+				}
+				else {
+					--j;
+				}
+			}
+		}
+		return res;
+	}
+
 };
 
 int test(int argc, char* argvp[])
 {
-    problem();
-    vector<int> example;
+	problem();
+	vector<int> example;
 
-    example.push_back(-1);
-    example.push_back(0);
-    example.push_back(1);
-    example.push_back(2);
-    example.push_back(-1);
-    example.push_back(-4);
+	example.push_back(-1);
+	example.push_back(0);
+	example.push_back(1);
+	example.push_back(2);
+	example.push_back(-1);
+	example.push_back(-4);
 
-    Solution s;
-    auto ret = s.threeSum(example);
-    for (auto i : ret)
-    {
-        for (auto j : i)
-        {
-            cout << j << " ";
-        }
-        cout << endl;
-    }
-    return 0;
+	Solution s;
+	auto ret = s.threeSum(example);
+	for (auto i : ret)
+	{
+		for (auto j : i)
+		{
+			cout << j << " ";
+		}
+		cout << endl;
+	}
+	return 0;
 }
