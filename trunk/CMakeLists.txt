@@ -9,9 +9,5 @@ set (SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 set (SRC_FILE_LISTS ${SRC_DIR}/main.cpp)
 
-# src
-include_directories(${SRC_DIR})
-aux_source_directory(${SRC_DIR} SRC_FILE_LISTS)
-
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/objs/)
 add_executable(LeetCode_Ans ${SRC_FILE_LISTS})
