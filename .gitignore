@@ -1,3 +1,37 @@
 trunk/compile
 trunk/objs
 .vs
+# Rust-specific
+/target
+**/*.rs.bk
+Cargo.lock  # Optional: Include if you want to lock dependencies, exclude for libraries
+
+# Generated files
+*.o
+*.so
+*.rlib
+*.dll
+*.dylib
+*.exe
+
+# Editor and IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# Documentation
+/doc
+
+# Testing and profiling
+*.profraw
+*.profdata
+
+# Miscellaneous
+*.log
+*.bak
