@@ -1,0 +1,55 @@
+# Build directories
+build/
+cmake-build-debug/
+cmake-build-release/
+objs/
+
+# Executable files
+*.exe
+*.out
+*.app
+
+# Object files
+*.o
+*.obj
+
+# Shared libraries
+*.so
+*.dll
+*.dylib
+
+# Static libraries
+*.a
+*.lib
+
+# Temporary files
+*.tmp
+*.temp
+
+# Log files
+*.log
+
+# Code coverage files
+*.gcda
+*.gcno
+*.gcov
+
+# IDE and editor files
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+*.swp
+*.bak
+*.DS_Store
+
+# Dependency directories
+deps/
+third_party/
+
+# CMake files
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+CTestTestfile.cmake
+Testing/
