@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.31)
 
 Project(LeetCode_Ans_Cplusplus)
 
@@ -13,7 +13,7 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 # compile params
-set(CMAKE_CXX_FLAGS "-g -std=c++14 -Wall")
+set(CMAKE_CXX_FLAGS "-g -std=c++17 -Wall")
 
 set(TEST_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/tests)
 file(GLOB TEST_FILES "${TEST_SRC_DIR}/*.cpp")
@@ -23,6 +23,7 @@ enable_testing()
 add_executable(
         tests
         ${TEST_FILES}
+        top150/test_top_150.cpp
 )
 target_link_libraries(
         tests
