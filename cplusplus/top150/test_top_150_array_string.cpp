@@ -176,6 +176,8 @@ TEST(TOP150, NO121_MaxProfit) {
                     ret = std::max(ret, prices[i] - min_price);
                 }
             }
+
+            return ret;
         }
     };
 
@@ -421,4 +423,41 @@ TEST(TOP150, NO134_CanCompleteCircuit) {
     std::vector<int> cost{3,4,5,1,2};
     auto ret = solution.canCompleteCircuit(gas, cost);
     EXPECT_EQ(ret, 3);
+}
+
+TEST(TOP150, NO135_Candy) {
+    class Solution {
+    public:
+        int candy(vector<int>& ratings) {
+            // 我们先找从左到右满足最少的糖果，再找从右到左的，最后取两边都满足的值(就是最大值)。
+            auto n = int(ratings.size());
+            std::vector<int> left_container(n, 1);
+            for (auto i = 1; i < n; i++) {
+                if (ratings[i] > ratings[i - 1]) {
+                    left_container[i] = left_container[i - 1] + 1;
+                } else {
+                    left_container[i] = 1;
+                }
+            }
+
+            std::vector<int> right_container(n, 1);
+            for (int i = n - 2; i >= 0; i--) {
+                if (ratings[i] > ratings[i + 1]) {
+                    right_container[i] = right_container[i + 1] + 1;
+                } else {
+                    right_container[i] = 1;
+                }
+            }
+            auto ret = 0;
+            for (auto i = 0; i < n; i++) {
+                ret += std::max(left_container[i], right_container[i]);
+            }
+            return ret;
+        }
+    };
+
+    Solution solution;
+    auto ratings = vector<int>{1,0,2};
+    auto ret = solution.candy(ratings);
+    EXPECT_EQ(ret, 5);
 }

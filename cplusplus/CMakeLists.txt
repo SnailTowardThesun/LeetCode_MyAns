@@ -23,7 +23,7 @@ enable_testing()
 add_executable(
         tests
         ${TEST_FILES}
-        top150/test_top_150.cpp
+        top150/test_top_150_array_string.cpp
 )
 target_link_libraries(
         tests
