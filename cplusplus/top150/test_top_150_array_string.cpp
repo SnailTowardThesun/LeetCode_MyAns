@@ -6,6 +6,8 @@
 #include <algorithm>
 #include <vector>
 #include <iterator>
+#include <stack>
+#include <mach/port.h>
 
 using namespace std;
 
@@ -460,4 +462,217 @@ TEST(TOP150, NO135_Candy) {
     auto ratings = vector<int>{1,0,2};
     auto ret = solution.candy(ratings);
     EXPECT_EQ(ret, 5);
+}
+
+TEST(TOP150, NO42_Trap) {
+    class Solution {
+    public:
+        int trap(vector<int>& height) {
+            int ret = 0;
+
+            int left_point = 0;
+            int right_point = static_cast<int>(height.size()) - 1;
+
+            int left_max = 0;
+            int right_max = 0;
+
+            while (left_point < right_point) {
+                left_max = std::max(left_max, height[left_point]);
+                right_max = std::max(right_max, height[right_point]);
+                if (left_max < right_max) {
+                    ret += (left_max - height[left_point]);
+                    left_point++;
+                } else {
+                    ret += (right_max - height[right_point]);
+                    right_point--;
+                }
+            }
+
+            return ret;
+        }
+    };
+
+    Solution solution;
+    std::vector<int> height{0,1,0,2,1,0,1,3,2,1,2,1};
+    auto ret = solution.trap(height);
+    EXPECT_EQ(ret, 6);
+}
+
+TEST(TOP150, NO13_RomainToInt) {
+    class Solution {
+    public:
+        int romanToInt(string s) {
+            auto ret = 0;
+
+            for (auto i = 0; i < s.size(); ) {
+                if (s[i] == 'M') {
+                    ret += 1000;
+                    i++;
+                } else if (s[i] == 'D') {
+                    ret += 500;
+                    i++;
+                } else if (s[i] == 'C') {
+                    if (i < s.size() - 1 && s[i + 1] == 'M') {
+                        ret += 900;
+                        i+=2;
+                    } else if (i < s.size() - 1 && s[i + 1] == 'D') {
+                        ret += 400;
+                        i+=2;
+                    } else {
+                        ret += 100;
+                        i++;
+                    }
+                }else if (s[i] == 'L') {
+                    ret += 50;
+                    i++;
+                }else if (s[i] == 'X') {
+                    if (i < s.size() - 1 && s[i + 1] == 'L') {
+                        ret += 40;
+                        i+=2;
+                    } else if (i < s.size() - 1 && s[i + 1] == 'C') {
+                        ret += 90;
+                        i+=2;
+                    } else {
+                        ret += 10;
+                        i++;
+                    }
+                }else if (s[i] == 'V') {
+                    ret += 5;
+                    i++;
+                }else if (s[i] == 'I') {
+                    if (i < s.size() - 1 && s[i + 1] == 'V') {
+                        ret += 4;
+                        i+=2;
+                    } else if (i < s.size() - 1 && s[i+1] == 'X') {
+                        ret += 9;
+                        i+=2;
+                    } else {
+                        ret += 1;
+                        i++;
+                    }
+                }
+            }
+            return ret;
+        }
+    };
+
+    Solution solution;
+    auto s = "MCMXCIV";
+    auto ret = solution.romanToInt(s);
+    EXPECT_EQ(ret, 1994);
+}
+
+TEST(TOP150, NO12_IntToRoman) {
+    class Solution {
+    public:
+        string intToRoman(int num) {
+            std::string ret;
+
+            std::vector<int> nums{1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
+            std::vector<std::string> signs{"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
+
+            for (int i = 0; i < nums.size(); i++) {
+               while (num >= nums[i]) {
+                   num -= nums[i];
+                   ret += signs[i];
+               }
+            }
+
+            return ret;
+        }
+    };
+
+    Solution solution;
+    auto ret = solution.intToRoman(1994);
+    EXPECT_EQ(ret, "MCMXCIV");
+}
+
+TEST(TOP150, NO58_LengthOfLastWord) {
+    class Solution {
+    public:
+        int lengthOfLastWord(string s) {
+            int idx = s.size() - 1;
+            while (s[idx] == ' ' && idx >= 0) {
+                idx--;
+            }
+
+            auto end = idx;
+            while (idx >= 0 && s[idx] != ' ') {
+                idx--;
+            }
+            return end - idx;;
+        }
+    };
+
+    Solution solution;
+    auto ret = solution.lengthOfLastWord("Hello World");
+    EXPECT_EQ(ret, 5);
+}
+
+TEST(TOP150, NO14_LongestCommonPrefix) {
+    class Solution {
+    public:
+        string longestCommonPrefix(vector<string>& strs) {
+            if (strs.empty()) {
+                return "";
+            }
+
+            auto pos = 0;
+            auto is_end = false;
+            while (pos < strs[0].size()) {
+                auto t = strs[0].at(pos);
+                for (auto i : strs) {
+                    if (pos > int(i.size()) - 1) {
+                        is_end = true;
+                        break;
+                    }
+
+                    if (i.at(pos) != t) {
+                        is_end = true;
+                        break;
+                    }
+                }
+
+                if (is_end) {
+                    break;
+                }
+
+                pos++;
+            }
+            return strs[0].substr(0, pos);
+        }
+    };
+
+    Solution solution;
+    auto input = std::vector<std::string>{"abab","aba",""};
+    auto ret = solution.longestCommonPrefix(input);
+    EXPECT_EQ(ret, "fl");
+}
+
+TEST(TOP150, NO151_ReverseWords) {
+    class Solution {
+    public:
+        string reverseWords(string s) {
+            std::vector<std::string> words;
+
+            auto pre = 0;
+            auto sub = 1;
+            while (sub < s.size()) {
+                
+            }
+
+            std::string ret = "";
+            for (int i = words.size() - 1; i >= 0; i--) {
+                ret.append(words[i]);
+                ret.append("");
+            }
+
+            ret.pop_back();
+            return ret;
+        }
+    };
+
+    Solution solution;
+    auto ret = solution.reverseWords("the sky is blue");
+    EXPECT_EQ(ret, "blue is sky the");
 }
