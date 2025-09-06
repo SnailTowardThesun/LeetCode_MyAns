@@ -676,3 +676,32 @@ TEST(TOP150, NO151_ReverseWords) {
     auto ret = solution.reverseWords("the sky is blue");
     EXPECT_EQ(ret, "blue is sky the");
 }
+
+TEST(TOP150, NO6_Z) {
+    class Solution {
+    public:
+        std::string convert(std::string s, int numRows) {
+            if (numRows == 1) {
+                return s;
+            }
+
+            std::string ret;
+
+            // the first line and last line will have one in one round
+
+            // other columns between first and last contains two in round
+
+            for (auto i = 0; i < numRows; i++) {
+
+            }
+
+            return ret;
+        }
+    };
+
+    Solution solution;
+
+    auto s = 'PAYPALISHIRING';
+    auto ret = solution.convert(s, 3);
+    EXPECT_EQ(ret, "PAHNAPLSIIGYIR");
+}
