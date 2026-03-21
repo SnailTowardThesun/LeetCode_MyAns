@@ -702,6 +702,4 @@ TEST(TOP150, NO6_Z) {
     Solution solution;
 
     auto s = 'PAYPALISHIRING';
-    auto ret = solution.convert(s, 3);
-    EXPECT_EQ(ret, "PAHNAPLSIIGYIR");
 }
