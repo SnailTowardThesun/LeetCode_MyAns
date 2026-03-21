@@ -20,7 +20,6 @@ LeetCode 算法题解集合，包含 C++ 和 Rust 两种语言的实现。本项
 ├── rust/                  # Rust 算法题解
 │   ├── ans/               # 主答案模块
 │   └── baseAlgorithm/     # 基础算法练习
-├── trunk/                 # 其他练习代码
 └── .clang-format          # C++ 代码格式化配置
 ```
 
