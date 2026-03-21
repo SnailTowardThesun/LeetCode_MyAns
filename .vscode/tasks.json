@@ -1,0 +1,119 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "C++: Build",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "${workspaceFolder}/cplusplus/build"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "problemMatcher": ["$gcc"],
+            "detail": "Build C++ project with CMake"
+        },
+        {
+            "label": "C++: Configure",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-B",
+                "${workspaceFolder}/cplusplus/build",
+                "-S",
+                "${workspaceFolder}/cplusplus"
+            ],
+            "group": "build",
+            "problemMatcher": [],
+            "detail": "Configure C++ CMake project"
+        },
+        {
+            "label": "C++: Build & Configure",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-B",
+                "${workspaceFolder}/cplusplus/build",
+                "-S",
+                "${workspaceFolder}/cplusplus",
+                "&&",
+                "cmake",
+                "--build",
+                "${workspaceFolder}/cplusplus/build"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"],
+            "detail": "Configure and build C++ project"
+        },
+        {
+            "label": "C++: Run Tests",
+            "type": "shell",
+            "command": "${workspaceFolder}/cplusplus/build/tests",
+            "group": "test",
+            "problemMatcher": [],
+            "detail": "Run C++ Google Tests"
+        },
+        {
+            "label": "Rust: Build",
+            "type": "shell",
+            "command": "cargo",
+            "args": [
+                "build"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/rust"
+            },
+            "group": "build",
+            "problemMatcher": ["$rustc"],
+            "detail": "Build Rust project"
+        },
+        {
+            "label": "Rust: Test",
+            "type": "shell",
+            "command": "cargo",
+            "args": [
+                "test"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/rust"
+            },
+            "group": "test",
+            "problemMatcher": ["$rustc"],
+            "detail": "Run Rust tests"
+        },
+        {
+            "label": "Rust: Check",
+            "type": "shell",
+            "command": "cargo",
+            "args": [
+                "clippy"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/rust"
+            },
+            "group": "build",
+            "problemMatcher": ["$rustc"],
+            "detail": "Run Rust Clippy"
+        },
+        {
+            "label": "Rust: Format",
+            "type": "shell",
+            "command": "cargo",
+            "args": [
+                "fmt"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/rust"
+            },
+            "group": "build",
+            "problemMatcher": [],
+            "detail": "Format Rust code"
+        }
+    ]
+}
