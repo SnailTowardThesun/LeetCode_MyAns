@@ -1,8 +1,9 @@
 .vs
 # Rust-specific
-/target
+target/
+**/target/
 **/*.rs.bk
-Cargo.lock  # Optional: Include if you want to lock dependencies, exclude for libraries
+**/Cargo.lock  # Optional: Include if you want to lock dependencies, exclude for libraries
 
 # Generated files
 *.o
