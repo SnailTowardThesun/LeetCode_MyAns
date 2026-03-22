@@ -1,12 +1,14 @@
-mod offer;
+#![allow(dead_code)]
+
 mod daily;
+mod offer;
 
 use std::collections::HashMap;
-use std::option::Option;
 
 /**
 * 1. two sum
 * Given an array of integers, return indices of the two numbers such that they add up to a specific target.
+*
 * You may assume that each input would have exactly one solution, and you may not use the same element twice.
 *
 * Example:
@@ -38,7 +40,6 @@ fn test_two_sum() {
     assert_eq!(ans[0], 0);
     assert_eq!(ans[1], 1);
 }
-
 
 /**
  * 2. add two numbers
@@ -639,7 +640,7 @@ fn test_is_palindrome() {
 * s = "ab"
 * p = ".*"
 * Output: true
-* Explanation: ".*" means "zero or more (*) of any character (.)".
+* Explanation: ".*" means "zero or more (*) of any character (.".
 * Example 4:
 *
 * Input:
@@ -1171,20 +1172,30 @@ fn four_sum(nums: Vec<i32>, target: i32) -> Vec<Vec<i32>> {
     nums.sort();
 
     for i in 0..nums.len() - 3 {
-        if i > 0 && nums[i] == nums[i-1] {continue;}
-        for j in i+1..nums.len() - 2 {
-            if j > i + 1 && nums[j] == nums[j-1] {continue;}
+        if i > 0 && nums[i] == nums[i - 1] {
+            continue;
+        }
+        for j in i + 1..nums.len() - 2 {
+            if j > i + 1 && nums[j] == nums[j - 1] {
+                continue;
+            }
             let new_target = target - nums[i] - nums[j];
             let mut l = j + 1;
             let mut r = nums.len() - 1;
             while l < r {
                 let tmp = nums[l] + nums[r];
                 if tmp == new_target {
-                    ret.push(vec![nums[i], nums[j],nums[l], nums[r]]);
-                    l = l+1;
-                    r = r-1;
-                    while nums[l] == nums[l-1] && l < r {l = l + 1; continue;}
-                    while nums[r] == nums[r + 1] && l < r {r = r - 1; continue;}
+                    ret.push(vec![nums[i], nums[j], nums[l], nums[r]]);
+                    l = l + 1;
+                    r = r - 1;
+                    while nums[l] == nums[l - 1] && l < r {
+                        l = l + 1;
+                        continue;
+                    }
+                    while nums[r] == nums[r + 1] && l < r {
+                        r = r - 1;
+                        continue;
+                    }
                     continue;
                 }
 
@@ -1195,9 +1206,7 @@ fn four_sum(nums: Vec<i32>, target: i32) -> Vec<Vec<i32>> {
                 if tmp < new_target {
                     l = l + 1;
                 }
-
             }
-
         }
     }
 
@@ -1205,7 +1214,7 @@ fn four_sum(nums: Vec<i32>, target: i32) -> Vec<Vec<i32>> {
 }
 #[test]
 fn test_four_sum() {
-    let nums = vec![2,2,2,2,2];
+    let nums = vec![2, 2, 2, 2, 2];
     let ret = four_sum(nums, 8);
     for i in 0..ret.len() {
         for j in 0..ret[i].len() {
@@ -1220,21 +1229,29 @@ fn test_four_sum() {
 */
 fn combination_sum2(candidates: Vec<i32>, target: i32) -> Vec<Vec<i32>> {
     let mut ret = vec![];
-    
-    fn dfs(candidates: &Vec<i32>, target:i32, cans: &mut Vec<i32>, ret: &mut Vec<Vec<i32>>, idx: usize) {
+
+    fn dfs(
+        candidates: &Vec<i32>,
+        target: i32,
+        cans: &mut Vec<i32>,
+        ret: &mut Vec<Vec<i32>>,
+        idx: usize,
+    ) {
         if target < 0 {
-            return
+            return;
         }
 
         if target == 0 {
             ret.push(cans.clone());
-            return
+            return;
         }
 
         for i in idx..candidates.len() {
-            if i > idx && candidates[i] == candidates[i-1] { continue; }
+            if i > idx && candidates[i] == candidates[i - 1] {
+                continue;
+            }
             cans.push(candidates[i]);
-            dfs(candidates, target - candidates[i], cans, ret, i+1);
+            dfs(candidates, target - candidates[i], cans, ret, i + 1);
             cans.pop();
         }
     }
@@ -1246,7 +1263,7 @@ fn combination_sum2(candidates: Vec<i32>, target: i32) -> Vec<Vec<i32>> {
 }
 #[test]
 fn test_combination_sum2() {
-    let candidates = vec![10,1,2,7,6,1,5];
+    let candidates = vec![10, 1, 2, 7, 6, 1, 5];
     let ret = combination_sum2(candidates, 8);
     for i in 0..ret.len() {
         let tmp = ret.get(i).unwrap();
@@ -1265,7 +1282,7 @@ fn permute(nums: Vec<i32>) -> Vec<Vec<i32>> {
 
     if nums.len() == 1 {
         ret.push(nums);
-        return  ret
+        return ret;
     }
 
     for i in 0..nums.len() {
@@ -1283,7 +1300,7 @@ fn permute(nums: Vec<i32>) -> Vec<Vec<i32>> {
 
 #[test]
 fn test_permute() {
-    let nums = vec![1,2,3];
+    let nums = vec![1, 2, 3];
     let ret = permute(nums);
     for i in 0..ret.len() {
         for j in 0..ret[i].len() {
@@ -1303,7 +1320,7 @@ fn permute_unique(nums: Vec<i32>) -> Vec<Vec<i32>> {
         let mut ret = vec![];
         if nums.len() == 1 {
             ret.push(nums);
-            return  ret
+            return ret;
         }
 
         for i in 0..nums.len() {
@@ -1335,7 +1352,7 @@ fn permute_unique(nums: Vec<i32>) -> Vec<Vec<i32>> {
 
 #[test]
 fn test_permute_unique() {
-    let nums = vec![1,1,2];
+    let nums = vec![1, 1, 2];
     let ret = permute_unique(nums);
     for i in 0..ret.len() {
         for j in 0..ret[i].len() {
@@ -1387,7 +1404,7 @@ fn solve_n_queens(n: i32) -> Vec<Vec<String>> {
     }
     let mut ans = vec![];
     dfs(n as usize, &mut vec![], &mut ans);
-    return make_ans(ans)
+    return make_ans(ans);
 }
 
 #[test]
@@ -1432,7 +1449,7 @@ fn can_jump(nums: Vec<i32>) -> bool {
 
 #[test]
 fn test_can_jump() {
-    let example = vec![2,3,1,1,4];
+    let example = vec![2, 3, 1, 1, 4];
     let ret = can_jump(example);
     println!("{}", ret);
 }
@@ -1501,12 +1518,13 @@ fn generate_matrix(n: i32) -> Vec<Vec<i32>> {
     let mut ret = vec![vec![0; n as usize]; n as usize];
 
     let mut direction = 0; // 0: left->right, 1: top->down, 2: right->left, 3: down->top
-    let (mut top, mut right, mut left, mut down) = (0 as usize, (n - 1) as usize, 0 as usize, (n - 1) as usize);
+    let (mut top, mut right, mut left, mut down) =
+        (0 as usize, (n - 1) as usize, 0 as usize, (n - 1) as usize);
     let mut count = 1;
     while top <= down && left <= right {
         match direction {
             0 => {
-                for i in left..right+1 {
+                for i in left..right + 1 {
                     ret[top][i] = count;
                     count += 1;
                 }
@@ -1514,7 +1532,7 @@ fn generate_matrix(n: i32) -> Vec<Vec<i32>> {
                 direction = 1;
             }
             1 => {
-                for i in top..down+1 {
+                for i in top..down + 1 {
                     ret[i][right] = count;
                     count += 1;
                 }
@@ -1522,25 +1540,24 @@ fn generate_matrix(n: i32) -> Vec<Vec<i32>> {
                 direction = 2;
             }
             2 => {
-                for i in (left..right+1).rev() {
+                for i in (left..right + 1).rev() {
                     ret[down][i] = count;
-                    count +=1;
+                    count += 1;
                 }
-                down -=1;
+                down -= 1;
                 direction = 3
             }
-            3=> {
-                for i in (top..down+1).rev() {
+            3 => {
+                for i in (top..down + 1).rev() {
                     ret[i][left] = count;
                     count += 1;
                 }
-                left +=1;
+                left += 1;
                 direction = 0;
             }
             _ => {}
         }
     }
-
 
     return ret;
 }
@@ -1555,9 +1572,14 @@ fn test_generate_matrix() {
  * 60
  */
 fn get_permutation(n: i32, k: i32) -> String {
-    let (mut seq, mut res) = (String::with_capacity(n as usize), String::with_capacity(n as usize));
-    (1..=(n as u8)).for_each(|x| { seq.push((b'0' + x) as char); });
-    let (mut base, mut k) = ((1..=(n - 1)).fold(1, |m, x| { x * m }), k - 1);
+    let (mut seq, mut res) = (
+        String::with_capacity(n as usize),
+        String::with_capacity(n as usize),
+    );
+    (1..=(n as u8)).for_each(|x| {
+        seq.push((b'0' + x) as char);
+    });
+    let (mut base, mut k) = ((1..=(n - 1)).fold(1, |m, x| x * m), k - 1);
 
     for i in (1..=(n - 1)).rev() {
         let pos = (k / base) as usize;
@@ -1603,7 +1625,6 @@ fn rotate_right(head: Option<Box<ListNode>>, k: i32) -> Option<Box<ListNode>> {
         return Some(head);
     }
 
-
     let mut cur = &mut head;
     while target > 1 {
         cur = cur.next.as_mut().unwrap();
@@ -1624,9 +1645,8 @@ fn rotate_right(head: Option<Box<ListNode>>, k: i32) -> Option<Box<ListNode>> {
 fn test_rotate_right() {
     let head = Box::new(ListNode::new(2));
     let ret = rotate_right(Some(head), 1);
-    while let Some(node) = ret.as_ref() {
+    if let Some(node) = ret.as_ref() {
         println!("{}", node.val);
-        break;
     }
 }
 
@@ -1744,20 +1764,20 @@ fn is_number(s: String) -> bool {
 
     enum State {
         Begin,
-        Sign,   // "+"     "-"
-        Num,    // "+1"    "-12",   "123"
-        NumDot, // "1."    "-2."
-        InDot,  // "-."    "+."     "."
-        DotNum, // ".9"    "+1.2"   "0.0"
-        InE,    // "2.E"   "-0.9e"
-        InESign,// "4E-"   "0.01e+"
-        InENum, // "3e-2"  "4.e12"
+        Sign,    // "+"     "-"
+        Num,     // "+1"    "-12",   "123"
+        NumDot,  // "1."    "-2."
+        InDot,   // "-."    "+."     "."
+        DotNum,  // ".9"    "+1.2"   "0.0"
+        InE,     // "2.E"   "-0.9e"
+        InESign, // "4E-"   "0.01e+"
+        InENum,  // "3e-2"  "4.e12"
         Error,
     }
 
     use State::*;
 
-    fn is_digit(c: u8) -> bool{
+    fn is_digit(c: u8) -> bool {
         return b'0' <= c && c <= b'9';
     }
 
@@ -1769,7 +1789,7 @@ fn is_number(s: String) -> bool {
                 b'.' => InDot,
                 c if is_digit(*c) => Num,
                 _ => Error,
-            }
+            },
             Sign => match c {
                 c if is_digit(*c) => Num,
                 b'.' => InDot,
@@ -1789,7 +1809,7 @@ fn is_number(s: String) -> bool {
                 c if is_digit(*c) => DotNum,
                 b'e' | b'E' => InE,
                 _ => Error,
-            }
+            },
             DotNum => match c {
                 c if is_digit(*c) => DotNum,
                 b'e' | b'E' => InE,
@@ -1803,18 +1823,18 @@ fn is_number(s: String) -> bool {
             InESign => match c {
                 c if is_digit(*c) => InENum,
                 _ => Error,
-            }
+            },
             InENum => match c {
                 c if is_digit(*c) => InENum,
                 _ => Error,
-            }
+            },
             Error => return false,
         };
     }
     return match state {
         Num | NumDot | DotNum | InENum => true,
         _ => false,
-    }
+    };
 }
 
 #[test]
@@ -1830,7 +1850,7 @@ fn test_is_number() {
 fn add_binary(a: String, b: String) -> String {
     let ia = i128::from_str_radix(&a, 2).unwrap();
     let ib = i128::from_str_radix(&b, 2).unwrap();
-    return format!("{:b}", (ia+ib)).to_string();
+    return format!("{:b}", (ia + ib)).to_string();
 }
 
 #[test]
@@ -1946,7 +1966,7 @@ fn search_matrix(matrix: Vec<Vec<i32>>, target: i32) -> bool {
 
 #[test]
 fn test_search_matrix() {
-    let example = vec![vec![1,2,5,7], vec![10, 11, 16,20], vec![23,30,34,60]];
+    let example = vec![vec![1, 2, 5, 7], vec![10, 11, 16, 20], vec![23, 30, 34, 60]];
     let ret = search_matrix(example, 13);
     println!("{}", ret);
 }
@@ -2002,7 +2022,7 @@ fn test_inorder_traversal() {
  * Given an integer n, return all the structurally unique binary search trees, which has exactly n nodes of unique values from 1 to n. Return the answer in any order.
  */
 fn get_all_unique_binary_search_trees(n: i32) -> Vec<Option<Rc<RefCell<TreeNode>>>> {
-    let ret ;
+    let ret;
 
     fn helper(l: i32, r: i32) -> Vec<Option<Rc<RefCell<TreeNode>>>> {
         if l > r {
@@ -2156,7 +2176,7 @@ fn zigzag_level_order(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<Vec<i32>> {
         let mut tmp = vec![];
         let size = q.len();
         for _ in 0..size {
-            if let Some(node)= q.pop_front().unwrap() {
+            if let Some(node) = q.pop_front().unwrap() {
                 tmp.push(node.borrow().val);
 
                 if node.borrow().left != None {
@@ -2200,11 +2220,7 @@ fn max_depth(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
         Some(node) => {
             let left = max_depth(node.borrow_mut().left.take());
             let right = max_depth(node.borrow_mut().right.take());
-            return if left >= right {
-                left + 1
-            } else {
-                right + 1
-            }
+            return if left >= right { left + 1 } else { right + 1 };
         }
     }
 }
@@ -2356,7 +2372,7 @@ fn test_add_digits() {
 /**
 * 299.
 */
-fn get_hint(secret: String, guess: String) -> String {
+fn get_hint(_secret: String, _guess: String) -> String {
     let ret = String::from("");
 
     return ret;
@@ -2370,8 +2386,6 @@ fn test_get_hint() {
     let ret = get_hint(secret, guess);
     println!("{}", ret)
 }
-
-
 
 /**
 * 334.
@@ -2399,7 +2413,7 @@ fn increasing_triplet(nums: Vec<i32>) -> bool {
 
 #[test]
 fn test_increasing_triplet() {
-    let example = vec![1,2,3,4,5];
+    let example = vec![1, 2, 3, 4, 5];
     let ret = increasing_triplet(example);
     assert_eq!(ret, true);
 }
@@ -2407,8 +2421,8 @@ fn test_increasing_triplet() {
 /**
 * 373.
 */
-fn  k_smallest_pairs(nums1: Vec<i32>, nums2: Vec<i32>, k: i32) -> Vec<Vec<i32>> {
-    let mut sums_pair:Vec<Vec<i32>> = Vec::new();
+fn k_smallest_pairs(nums1: Vec<i32>, nums2: Vec<i32>, k: i32) -> Vec<Vec<i32>> {
+    let mut sums_pair: Vec<Vec<i32>> = Vec::new();
     let (len1, len2) = (nums1.len(), nums2.len());
 
     if len1 == 0 || len2 == 0 {
@@ -2422,20 +2436,20 @@ fn  k_smallest_pairs(nums1: Vec<i32>, nums2: Vec<i32>, k: i32) -> Vec<Vec<i32>> 
     let mut curr = 0;
 
     for _ in 0..k {
-        sums_pair.push(vec!(nums1[curr], nums2[next[curr]]));
+        sums_pair.push(vec![nums1[curr], nums2[next[curr]]]);
         next[curr] += 1;
         if next[curr] >= len2 {
-            floor = curr +1;
+            floor = curr + 1;
             if floor >= len1 {
                 break;
             }
         }
-        if curr == ceiling && ceiling +1 < len1{
+        if curr == ceiling && ceiling + 1 < len1 {
             ceiling += 1;
         }
         let mut sum = i32::MAX;
-        for c in floor..ceiling+1 {
-            if nums1[c] + nums2[next[c]] < sum{
+        for c in floor..ceiling + 1 {
+            if nums1[c] + nums2[next[c]] < sum {
                 sum = nums1[c] + nums2[next[c]];
                 curr = c;
             }
@@ -2454,7 +2468,6 @@ fn test_k_smallest_pairs() {
     for i in 0..ret.len() {
         print!("[{}, {}]\n", ret[i][0], ret[i][1]);
     }
-
 }
 
 /**
@@ -2477,7 +2490,7 @@ impl EqualList {
             pos = node.next.as_ref();
         }
 
-        return EqualList {list};
+        return EqualList { list };
     }
 
     fn get_random(&self) -> i32 {
@@ -2525,7 +2538,6 @@ fn test_lexical_order() {
     }
 }
 
-
 /*
  * 414. third max number
  */
@@ -2551,7 +2563,11 @@ fn test_third_max() {
 * 521.
 */
 fn find_lu_slength(a: String, b: String) -> i32 {
-    return if a == b {-1} else {(a.len().max(b.len())) as i32};
+    return if a == b {
+        -1
+    } else {
+        (a.len().max(b.len())) as i32
+    };
 }
 
 #[test]
@@ -2593,7 +2609,9 @@ fn test_convert_bst() {
 fn find_min_difference(time_points: Vec<String>) -> i32 {
     fn get_minutes(str: String) -> i32 {
         let b = str.as_bytes();
-        return ((b[0] - '0' as u8) as i32 * 10 + (b[1] - '0' as u8) as i32) * 60 + (b[3] - '0' as u8) as i32 * 10 + (b[4] - '0' as u8) as i32;
+        return ((b[0] - '0' as u8) as i32 * 10 + (b[1] - '0' as u8) as i32) * 60
+            + (b[3] - '0' as u8) as i32 * 10
+            + (b[4] - '0' as u8) as i32;
     }
 
     let mut container = vec![];
@@ -2605,17 +2623,21 @@ fn find_min_difference(time_points: Vec<String>) -> i32 {
     container.sort();
     let mut ret = i32::MAX;
     for i in 1..container.len() {
-        let tmp = container[i] - container[i-1];
+        let tmp = container[i] - container[i - 1];
         ret = min(tmp, ret);
     }
 
-    ret = min(ret, container[0] + 1440 - container[container.len()-1]);
+    ret = min(ret, container[0] + 1440 - container[container.len() - 1]);
     return ret;
 }
 
 #[test]
 fn test_find_min_difference() {
-    let example = vec![String::from("23:59"), String::from("00:01"), String::from("00:12")];
+    let example = vec![
+        String::from("23:59"),
+        String::from("00:01"),
+        String::from("00:12"),
+    ];
     let ret = find_min_difference(example);
     print!("{}", ret);
 }
@@ -2625,7 +2647,7 @@ fn test_find_min_difference() {
 */
 struct OrderedUnion {
     root: Vec<i32>,
-    rank: Vec<i32>
+    rank: Vec<i32>,
 }
 
 impl OrderedUnion {
@@ -2640,7 +2662,7 @@ impl OrderedUnion {
                 self.root[r1 as usize] = r2
             } else {
                 self.root[r2 as usize] = r1;
-                self.rank[r1 as usize]+=1;
+                self.rank[r1 as usize] += 1;
             }
         }
 
@@ -2659,23 +2681,23 @@ impl OrderedUnion {
         return self.root[t];
     }
 
-    fn connected(&mut self, t1: i32, t2: i32) -> bool{
+    fn connected(&mut self, t1: i32, t2: i32) -> bool {
         self.find(t1 as usize) == self.find(t2 as usize)
     }
 
-    fn new(size: usize) -> OrderedUnion{
-
-        let mut obj = OrderedUnion{
+    fn new(size: usize) -> OrderedUnion {
+        let mut obj = OrderedUnion {
             root: vec![0; size],
-            rank: vec![1; size]
+            rank: vec![1; size],
         };
 
         for i in 0..obj.root.len() {
             obj.root[i] = i as i32;
         }
 
-        return obj
-    }}
+        return obj;
+    }
+}
 
 fn find_circle_num(is_connected: Vec<Vec<i32>>) -> i32 {
     let mut obj = OrderedUnion::new(is_connected[0].len());
@@ -2689,7 +2711,7 @@ fn find_circle_num(is_connected: Vec<Vec<i32>>) -> i32 {
     }
 
     let mut map = HashMap::new();
-    for i in 0..obj.root.len(){
+    for i in 0..obj.root.len() {
         map.insert(obj.root[i], 0);
     }
 
@@ -2699,13 +2721,12 @@ fn find_circle_num(is_connected: Vec<Vec<i32>>) -> i32 {
 #[test]
 fn test_find_circle_num() {
     let obj = vec![
-        vec![1,0,0,1],
-        vec![0,1,1,0],
-        vec![0,1,1,1],
-        vec![1,0,1,1],
+        vec![1, 0, 0, 1],
+        vec![0, 1, 1, 0],
+        vec![0, 1, 1, 1],
+        vec![1, 0, 1, 1],
     ];
     println!("{}", find_circle_num(obj));
-
 }
 
 /**
@@ -2713,10 +2734,9 @@ fn test_find_circle_num() {
 */
 fn find_restaurant(list1: Vec<String>, list2: Vec<String>) -> Vec<String> {
     let mut ret = vec![];
-    let mut container: HashMap<String, usize>= HashMap::new();
+    let mut container: HashMap<String, usize> = HashMap::new();
 
-
-    for (i,item) in list1.iter().enumerate() {
+    for (i, item) in list1.iter().enumerate() {
         container.insert(item.to_string(), i);
     }
 
@@ -2737,8 +2757,18 @@ fn find_restaurant(list1: Vec<String>, list2: Vec<String>) -> Vec<String> {
 
 #[test]
 fn test_find_restaurant() {
-    let l1 = vec! [String::from("Shogun"), String::from("Tapioca Express"), String::from("Burger King"), String::from("KFC")];
-    let l2 = vec![String::from("Piatti"), String::from("The Grill at Torrey Pines"), String::from("Hungry Hunter Steakhouse"), String::from("Shogun")];
+    let l1 = vec![
+        String::from("Shogun"),
+        String::from("Tapioca Express"),
+        String::from("Burger King"),
+        String::from("KFC"),
+    ];
+    let l2 = vec![
+        String::from("Piatti"),
+        String::from("The Grill at Torrey Pines"),
+        String::from("Hungry Hunter Steakhouse"),
+        String::from("Shogun"),
+    ];
     let ret = find_restaurant(l1, l2);
     for i in ret {
         println!("{}", i)
@@ -2750,7 +2780,16 @@ fn test_find_restaurant() {
  */
 fn knight_probability(n: i32, k: i32, row: i32, column: i32) -> f64 {
     let mut dp = vec![vec![vec![0.0; k as usize + 1]; n as usize]; n as usize];
-    let dirs = vec![vec![-1, -2], vec![-1, 2], vec![1, -2], vec![1, 2], vec![-2, 1], vec![-2, -1], vec![2, 1], vec![2, -1]];
+    let dirs = vec![
+        vec![-1, -2],
+        vec![-1, 2],
+        vec![1, -2],
+        vec![1, 2],
+        vec![-2, 1],
+        vec![-2, -1],
+        vec![2, 1],
+        vec![2, -1],
+    ];
 
     for i in 0..n {
         for j in 0..n {
@@ -2761,14 +2800,15 @@ fn knight_probability(n: i32, k: i32, row: i32, column: i32) -> f64 {
     for p in 1..k + 1 {
         for i in 0..n {
             for j in 0..n {
-                for  d in dirs.clone() {
+                for d in dirs.clone() {
                     let nx = i + d[0];
                     let ny = j + d[1];
                     if nx < 0 || ny < 0 || nx >= n || ny >= n {
                         continue;
                     }
 
-                    dp[i as usize][j as usize][p as usize] += dp[nx as usize][ny as usize][p as usize-1]/8.0;
+                    dp[i as usize][j as usize][p as usize] +=
+                        dp[nx as usize][ny as usize][p as usize - 1] / 8.0;
                 }
             }
         }
@@ -2823,7 +2863,7 @@ fn is_one_bit_character(bits: Vec<i32>) -> bool {
 
 #[test]
 fn test_is_one_bit_character() {
-    let example = vec![1,1,1,0];
+    let example = vec![1, 1, 1, 0];
     let ret = is_one_bit_character(example);
     println!("ret: {}", ret);
 }
@@ -2831,18 +2871,23 @@ fn test_is_one_bit_character() {
 /**
 * 720.
 */
-fn longest_word(words: Vec<String>) -> String {
-    let mut ret = String::from("");
+fn longest_word(_words: Vec<String>) -> String {
+    let ret = String::from("");
 
     return ret;
 }
 
 #[test]
 fn test_longest_word() {
-    let example = vec![String::from("w"), String::from("wo"), String::from("wor"), String::from("worl"), String::from("world")];
+    let example = vec![
+        String::from("w"),
+        String::from("wo"),
+        String::from("wor"),
+        String::from("worl"),
+        String::from("world"),
+    ];
     let ret = longest_word(example);
     println!("{}", ret);
-
 }
 
 /**
@@ -2872,7 +2917,7 @@ fn dominant_index(nums: Vec<i32>) -> i32 {
     }
 
     if max < second_max * 2 {
-        return -1
+        return -1;
     }
 
     return max_pos as i32;
@@ -2880,7 +2925,7 @@ fn dominant_index(nums: Vec<i32>) -> i32 {
 
 #[test]
 fn test_dominant_index() {
-    let nums = vec![1,2,3,4];
+    let nums = vec![1, 2, 3, 4];
     let ret = dominant_index(nums);
     assert_eq!(ret, -1)
 }
@@ -2909,14 +2954,14 @@ fn min_diff_in_bst(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
 
 #[test]
 fn test_min_diff_in_bst() {
-    let root = Rc::new(RefCell::new(TreeNode{
+    let root = Rc::new(RefCell::new(TreeNode {
         val: 4,
-        left: Some(Rc::new(RefCell::new(TreeNode{
+        left: Some(Rc::new(RefCell::new(TreeNode {
             val: 2,
             left: None,
             right: None,
         }))),
-        right: Some(Rc::new(RefCell::new(TreeNode{
+        right: Some(Rc::new(RefCell::new(TreeNode {
             val: 6,
             left: None,
             right: None,
@@ -2935,18 +2980,18 @@ fn all_paths_source_target(graph: Vec<Vec<i32>>) -> Vec<Vec<i32>> {
 
     use std::collections::VecDeque;
 
-    let mut path : Vec<i32> = vec![0];
+    let path: Vec<i32> = vec![0];
     let mut container = VecDeque::from(vec![path]);
 
-    let mut cc = 0;
-    while container.len()  > 0{
-        cc+=1;
-        let mut current = container.pop_front().unwrap().clone();
+    let mut _cc = 0;
+    while container.len() > 0 {
+        _cc += 1;
+        let current = container.pop_front().unwrap().clone();
         let node = current[current.len() - 1];
         let tmp_c = graph[node as usize].clone();
         for i in tmp_c {
             let mut tmp_path = current.clone();
-            tmp_path.push(i );
+            tmp_path.push(i);
             if i == graph.len() as i32 - 1 {
                 ret.push(tmp_path);
             } else {
@@ -2986,12 +3031,7 @@ fn all_paths_source_target(graph: Vec<Vec<i32>>) -> Vec<Vec<i32>> {
 
 #[test]
 fn test_all_paths_source_target() {
-    let eg = vec![
-        vec![1, 2],
-        vec![3],
-        vec![3],
-        vec![]
-    ];
+    let eg = vec![vec![1, 2], vec![3], vec![3], vec![]];
 
     let ret = all_paths_source_target(eg);
     for i in ret {
@@ -3014,7 +3054,7 @@ fn uncommon_from_sentences(s1: String, s2: String) -> Vec<String> {
         for word in msg.split(' ') {
             if dics.contains_key(word) {
                 if let Some(s) = dics.get_mut(word) {
-                    *s  += 1;
+                    *s += 1;
                 }
                 continue;
             }
@@ -3026,18 +3066,21 @@ fn uncommon_from_sentences(s1: String, s2: String) -> Vec<String> {
     helper(&mut tmp, &s1);
     helper(&mut tmp, &s2);
 
-    for (k,v) in tmp {
+    for (k, v) in tmp {
         if v == 1 {
             ret.push(k.to_string());
         }
     }
 
-    return ret
+    return ret;
 }
 
 #[test]
 fn test_uncommon_from_sentences() {
-    let ret = uncommon_from_sentences(String::from("this apple is sweet"), String::from("this apple is sour"));
+    let ret = uncommon_from_sentences(
+        String::from("this apple is sweet"),
+        String::from("this apple is sour"),
+    );
     for i in 0..ret.len() {
         print!("{}\t", ret[i])
     }
@@ -3078,11 +3121,11 @@ fn test_min_deletion_size() {
     print!("{}", pos)
 }
 
+use std::collections::vec_deque::VecDeque;
 /**
  * 965. Univalued Binary Tree
  */
 use std::collections::HashSet;
-use std::collections::vec_deque::VecDeque;
 fn is_unival_tree(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
     let mut buf: HashSet<i32> = HashSet::new();
 
@@ -3192,7 +3235,7 @@ fn num_enclaves(grid: Vec<Vec<i32>>) -> i32 {
 
     fn helper(g: &mut Vec<Vec<i32>>, col: usize, row: usize) {
         if g[col][row] == 0 {
-            return
+            return;
         }
 
         g[col][row] = 0;
@@ -3273,8 +3316,8 @@ fn max_number_of_balloons(text: String) -> i32 {
     let mut ret = i32::MAX;
     ret = ret.min(*container.get(&'b').unwrap());
     ret = ret.min(*container.get(&'a').unwrap());
-    ret = ret.min(*container.get(&'l').unwrap()/2);
-    ret = ret.min(*container.get(&'o').unwrap()/2);
+    ret = ret.min(*container.get(&'l').unwrap() / 2);
+    ret = ret.min(*container.get(&'o').unwrap() / 2);
     ret = ret.min(*container.get(&'n').unwrap());
 
     return ret;
@@ -3321,7 +3364,11 @@ fn test_count_vowel_permutation() {
 * 1332.
 */
 fn remove_palindrome_sub(s: String) -> i32 {
-    return if s == s.chars().rev().collect::<String>() {1} else {2};
+    return if s == s.chars().rev().collect::<String>() {
+        1
+    } else {
+        2
+    };
 }
 
 #[test]
@@ -3368,7 +3415,7 @@ fn test_number_of_steps() {
 /**
 * 1380
 */
-fn lucky_numbers (matrix: Vec<Vec<i32>>) -> Vec<i32> {
+fn lucky_numbers(matrix: Vec<Vec<i32>>) -> Vec<i32> {
     let m = matrix.len();
     let n = matrix[0].len();
     let mut col = vec![0; n];
@@ -3380,7 +3427,7 @@ fn lucky_numbers (matrix: Vec<Vec<i32>>) -> Vec<i32> {
     }
     for x in 0..m {
         let mut i = 0;
-        for y in 1..n  {
+        for y in 1..n {
             if matrix[x][y] < matrix[x][i] {
                 i = y;
             }
@@ -3393,8 +3440,8 @@ fn lucky_numbers (matrix: Vec<Vec<i32>>) -> Vec<i32> {
 }
 
 #[test]
-fn test_lucky_numbers () {
-    let example = vec![vec![7,8], vec![1,2]];
+fn test_lucky_numbers() {
+    let example = vec![vec![7, 8], vec![1, 2]];
     let ret = lucky_numbers(example);
     println!("{}", ret[0]);
 }
@@ -3428,7 +3475,7 @@ fn longest_diverse_string(a: i32, b: i32, c: i32) -> String {
 
 #[test]
 fn test_longest_diverse_string() {
-    let ret = longest_diverse_string(0,8,11);
+    let ret = longest_diverse_string(0, 8, 11);
     print!("{}\n", ret);
 }
 
@@ -3458,7 +3505,7 @@ fn max_score(card_points: Vec<i32>, k: i32) -> i32 {
 
 #[test]
 fn test_max_score() {
-    max_score(vec![1,2,3,4,5,6,1], 3);
+    max_score(vec![1, 2, 3, 4, 5, 6, 1], 3);
 }
 
 /**
@@ -3498,19 +3545,18 @@ fn test_max_power() {
 fn simplified_fractions(n: i32) -> Vec<String> {
     let mut ret = vec![];
 
-    fn helper(a: i32, b :i32) -> i32 {
-        return if b == 0 {a} else {helper(b, a % b)};
+    fn helper(a: i32, b: i32) -> i32 {
+        return if b == 0 { a } else { helper(b, a % b) };
     }
 
-    for i in 1..n+1 {
+    for i in 1..n + 1 {
         for j in 1..i {
             println!("i: {}, j: {}", i, j);
             if helper(i, j) == 1 {
-                ret.push(format!("{}/{}", j,i));
+                ret.push(format!("{}/{}", j, i));
             }
         }
     }
-
 
     return ret;
 }
@@ -3532,21 +3578,28 @@ fn min_cost_connect_points(points: Vec<Vec<i32>>) -> i32 {
     struct Node {
         x: usize,
         y: usize,
-        distance: i32
+        distance: i32,
     }
 
     let mut container: Vec<Node> = vec![];
     // calculate all distance
     for i in 0..points.len() {
-        for j in i+1..points.len() {
-            let dis = i32::abs(points[i][0] - points[j][0]) + i32::abs(points[i][1]-points[j][1]);
-            container.push(Node {x: i, y:j, distance:dis})
+        for j in i + 1..points.len() {
+            let dis = i32::abs(points[i][0] - points[j][0]) + i32::abs(points[i][1] - points[j][1]);
+            container.push(Node {
+                x: i,
+                y: j,
+                distance: dis,
+            })
         }
     }
 
-    container.sort_by(|a,b| a.distance.cmp(&b.distance));
+    container.sort_by(|a, b| a.distance.cmp(&b.distance));
     for i in 0..container.len() {
-        println!("{}, {}: {}", container[i].x, container[i].y, container[i].distance);
+        println!(
+            "{}, {}: {}",
+            container[i].x, container[i].y, container[i].distance
+        );
     }
 
     let mut count = 0;
@@ -3554,32 +3607,25 @@ fn min_cost_connect_points(points: Vec<Vec<i32>>) -> i32 {
     let mut ret = 0;
 
     for i in 0..container.len() {
-       if count == points.len() - 1 {
-           break;
-       }
+        if count == points.len() - 1 {
+            break;
+        }
 
-       if obj.connected(container[i].x as i32, container[i].y as i32) {
-           continue;
-       }
+        if obj.connected(container[i].x as i32, container[i].y as i32) {
+            continue;
+        }
 
-       obj.union(container[i].x as i32, container[i].y as i32);
-       ret += container[i].distance;
-       count+=1;
+        obj.union(container[i].x as i32, container[i].y as i32);
+        ret += container[i].distance;
+        count += 1;
     }
 
     ret
 }
 
-
 #[test]
 fn test_min_cost_connect_points() {
-    let obj = vec![
-        vec![0,0],
-        vec![2,2],
-        vec![3, 10],
-        vec![5, 2],
-        vec![7,10]
-    ];
+    let obj = vec![vec![0, 0], vec![2, 2], vec![3, 10], vec![5, 2], vec![7, 10]];
     let ret = min_cost_connect_points(obj);
     println!("result: {}", ret);
 }
@@ -3626,7 +3672,6 @@ fn number_of_matches(n: i32) -> i32 {
 fn test_number_of_matches() {
     number_of_matches(11);
 }
-
 
 /**
  * 1716.
@@ -3695,13 +3740,15 @@ fn longest_nice_substring(s: String) -> String {
         }
     }
 
-    for (i, ch) in s.chars().enumerate() {
-        if upper_letter[ch.to_ascii_uppercase() as usize - 'A' as usize] == true && lower_letter[ch.to_ascii_lowercase() as usize - 'a' as usize] == true {
+    for (_i, (pos, ch)) in s.char_indices().enumerate() {
+        if upper_letter[ch.to_ascii_uppercase() as usize - 'A' as usize] == true
+            && lower_letter[ch.to_ascii_lowercase() as usize - 'a' as usize] == true
+        {
             continue;
         }
 
-        let s1 = longest_nice_substring(s[0..i].to_string());
-        let s2 = longest_nice_substring(s[i + 1..].to_string());
+        let s1 = longest_nice_substring(s[0..pos].to_string());
+        let s2 = longest_nice_substring(s[pos + ch.len_utf8()..].to_string());
         return if s1.len() >= s2.len() { s1 } else { s2 };
     }
 
@@ -3714,7 +3761,6 @@ fn test_longest_nice_substring() {
     let ret = longest_nice_substring(example);
     println!("{}", ret);
 }
-
 
 /**
  * 1765.
@@ -3794,9 +3840,9 @@ fn nearest_valid_point(x: i32, y: i32, points: Vec<Vec<i32>>) -> i32 {
 fn test_nearest_valid_point() {
     let x = 3;
     let y = 4;
-    let points = vec![vec![1,2], vec![3,1],vec![2,4],vec![2,3],vec![4,4]];
+    let points = vec![vec![1, 2], vec![3, 1], vec![2, 4], vec![2, 3], vec![4, 4]];
 
-    println!("{}", nearest_valid_point(x,y,points))
+    println!("{}", nearest_valid_point(x, y, points))
 }
 /**
 * 1791.
@@ -3811,7 +3857,6 @@ fn find_center(edges: Vec<Vec<i32>>) -> i32 {
             }
 
             container.insert(j, true);
-
         }
     }
 
@@ -3820,7 +3865,7 @@ fn find_center(edges: Vec<Vec<i32>>) -> i32 {
 
 #[test]
 fn test_find_center() {
-    let example = vec![vec![1,2], vec![1,3]];
+    let example = vec![vec![1, 2], vec![1, 3]];
     let ret = find_center(example);
     println!("{}", ret);
 }
@@ -3887,7 +3932,8 @@ fn reverse_prefix(word: String, ch: char) -> String {
         return word;
     }
 
-    return word[0..pos.unwrap() + 1].chars().rev().collect::<String>() + &word[(pos.unwrap() + 1)..];
+    return word[0..pos.unwrap() + 1].chars().rev().collect::<String>()
+        + &word[(pos.unwrap() + 1)..];
 }
 
 #[test]
@@ -3904,7 +3950,7 @@ fn count_k_difference(nums: Vec<i32>, k: i32) -> i32 {
     let mut mp = HashMap::new();
     let mut ans = 0;
     nums.iter().for_each(|x| {
-        ans += *mp.get(&(*x + k)).unwrap_or(&0) + *mp.get(&(*x-k)).unwrap_or(&0);
+        ans += *mp.get(&(*x + k)).unwrap_or(&0) + *mp.get(&(*x - k)).unwrap_or(&0);
         *mp.entry(*x).or_insert(0) += 1;
     });
     ans
@@ -3912,7 +3958,7 @@ fn count_k_difference(nums: Vec<i32>, k: i32) -> i32 {
 
 #[test]
 fn test_count_k_difference() {
-    let example = vec![3,2,1,5,4];
+    let example = vec![3, 2, 1, 5, 4];
     // let example = vec![1,2,2,1];
     let ret = count_k_difference(example, 2);
     println!("{}", ret);
@@ -3938,7 +3984,14 @@ fn maximum_difference(nums: Vec<i32>) -> i32 {
 
 #[test]
 fn test_maximum_difference() {
-    let example = vec![999, 997, 980, 976, 948, 940, 938, 928, 924, 917, 907, 907, 881, 878, 864, 862, 859, 857, 848, 840, 824, 824, 824, 805, 802, 798, 788, 777, 775, 766, 755, 748, 735, 732, 727, 705, 700, 697, 693, 679, 676, 644, 634, 624, 599, 596, 588, 583, 562, 558, 553, 539, 537, 536, 509, 491, 485, 483, 454, 449, 438, 425, 403, 368, 345, 327, 287, 285, 270, 263, 255, 248, 235, 234, 224, 221, 201, 189, 187, 183, 179, 168, 155, 153, 150, 144, 107, 102, 102, 87, 80, 57, 55, 49, 48, 45, 26, 26, 23, 15];
+    let example = vec![
+        999, 997, 980, 976, 948, 940, 938, 928, 924, 917, 907, 907, 881, 878, 864, 862, 859, 857,
+        848, 840, 824, 824, 824, 805, 802, 798, 788, 777, 775, 766, 755, 748, 735, 732, 727, 705,
+        700, 697, 693, 679, 676, 644, 634, 624, 599, 596, 588, 583, 562, 558, 553, 539, 537, 536,
+        509, 491, 485, 483, 454, 449, 438, 425, 403, 368, 345, 327, 287, 285, 270, 263, 255, 248,
+        235, 234, 224, 221, 201, 189, 187, 183, 179, 168, 155, 153, 150, 144, 107, 102, 102, 87,
+        80, 57, 55, 49, 48, 45, 26, 26, 23, 15,
+    ];
     let ret = maximum_difference(example);
     println!("{}", ret);
 }

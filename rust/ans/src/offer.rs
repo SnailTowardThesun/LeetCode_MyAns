@@ -1,6 +1,6 @@
 // Author: hankun1991@outlook.com
 
-use std::borrow::BorrowMut;
+#![allow(dead_code)]
 
 /**
 * offer.06
@@ -126,7 +126,7 @@ fn reverse_list(head: Option<Box<ListNode>>) ->Option<Box<ListNode>> {
 
     let mut curr = ret.as_mut();
     for i in container {
-        if let Some(mut node) = curr {
+        if let Some(node) = curr {
             node.next = Some(Box::new(ListNode{
                 val: i,
                 next: None,
@@ -161,7 +161,7 @@ fn test_reverse_list() {
 
     let mut curr = head.as_mut();
     for i in 1..10 {
-      if let Some(mut node) = curr {
+      if let Some(node) = curr {
           node.next = Some(Box::new(ListNode {
               val: i,
               next: None,
