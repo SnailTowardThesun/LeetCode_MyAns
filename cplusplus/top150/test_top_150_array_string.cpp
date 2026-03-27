@@ -2,12 +2,12 @@
 // Created by hanvs on 2025/5/26.
 //
 #include <gtest/gtest.h>
+#include <mach/port.h>
 
 #include <algorithm>
-#include <vector>
 #include <iterator>
 #include <stack>
-#include <mach/port.h>
+#include <vector>
 
 using namespace std;
 
@@ -160,14 +160,14 @@ TEST(TOP150, NO189_Rotate) {
     };
 
     Solution solution;
-    std::vector<int> nums{-1,-100,3,99};
+    std::vector<int> nums{-1, -100, 3, 99};
     auto k = 2;
     solution.rotate(nums, k);
 }
 
 TEST(TOP150, NO121_MaxProfit) {
     class Solution {
-    public:
+       public:
         int maxProfit(vector<int>& prices) {
             auto ret = 0;
             auto min_price = prices[0];
@@ -192,10 +192,10 @@ TEST(TOP150, NO121_MaxProfit) {
 
 TEST(TOP150, NO122_MaxProfit) {
     class Solution {
-    public:
+       public:
         int maxProfit(vector<int>& prices) {
             auto n = prices.size();
-            std::vector<std::vector<int>> dp(n, std::vector<int>(2, 0));
+            std::vector<std::vector<int> > dp(n, std::vector<int>(2, 0));
 
             dp[0][0] = 0;
             dp[0][1] = -prices[0];
@@ -212,12 +212,11 @@ TEST(TOP150, NO122_MaxProfit) {
             std::cout << std::endl;
 
             std::cout << "1: " << std::endl;
-            for (auto i = 0 ; i < n; i++) {
+            for (auto i = 0; i < n; i++) {
                 std::cout << dp[i][1] << ", ";
             }
 
-            return dp[n-1][0];
-
+            return dp[n - 1][0];
         }
     };
 
@@ -229,7 +228,7 @@ TEST(TOP150, NO122_MaxProfit) {
 
 TEST(TOP150, NO55_CanJump) {
     class Solution {
-    public:
+       public:
         bool canJump(vector<int>& nums) {
             auto right_most = 0;
             for (auto i = 0; i < nums.size(); i++) {
@@ -246,20 +245,20 @@ TEST(TOP150, NO55_CanJump) {
     };
 
     Solution solution;
-    vector<int> nums{2,3,1,1,4};
+    vector<int> nums{2, 3, 1, 1, 4};
     auto ret = solution.canJump(nums);
     EXPECT_EQ(ret, true);
 }
 
 TEST(TOP150, NO45_jump) {
     class Solution {
-    public:
+       public:
         int jump(vector<int>& nums) {
             auto max_pos = 0;
             auto end = 0;
             auto ret = 0;
 
-            for (auto i = 0;i < nums.size() - 1; i++) {
+            for (auto i = 0; i < nums.size() - 1; i++) {
                 if (max_pos >= i) {
                     max_pos = std::max(max_pos, i + nums[i]);
                     if (i == end) {
@@ -273,14 +272,14 @@ TEST(TOP150, NO45_jump) {
         }
     };
     Solution solution;
-    std::vector<int> nums{2,3,1,1,4};
+    std::vector<int> nums{2, 3, 1, 1, 4};
     auto ret = solution.jump(nums);
     EXPECT_EQ(ret, 2);
 }
 
 TEST(TOP150, NO274_HIndex) {
     class Solution {
-    public:
+       public:
         int hIndex(vector<int>& citations) {
             std::sort(citations.begin(), citations.end(), std::greater<int>());
             auto ret = 0;
@@ -296,16 +295,17 @@ TEST(TOP150, NO274_HIndex) {
     };
 
     Solution solution;
-    std::vector<int> citations{3,0,6,1,5};
+    std::vector<int> citations{3, 0, 6, 1, 5};
     auto ret = solution.hIndex(citations);
     EXPECT_EQ(ret, 3);
 }
 
 TEST(TOP150, NO380_RandomizedSet) {
     class RandomizedSet {
-    private:
+       private:
         std::set<int> container;
-    public:
+
+       public:
         RandomizedSet() {}
 
         bool insert(int val) {
@@ -352,13 +352,13 @@ TEST(TOP150, NO380_RandomizedSet) {
     auto param_5 = randomizedSet.insert(2);
     EXPECT_EQ(param_5, false);
 
-    ret =randomizedSet.getRandom();
+    ret = randomizedSet.getRandom();
     EXPECT_TRUE(ret == 2);
 }
 
 TEST(TOP150, NO239_ProductExceptSelf) {
     class Solution {
-    public:
+       public:
         vector<int> productExceptSelf(vector<int>& nums) {
             std::vector<int> ret(nums.begin(), nums.end());
 
@@ -381,7 +381,7 @@ TEST(TOP150, NO239_ProductExceptSelf) {
                 if (zero_count == 1) {
                     if (nums[i] == 0) {
                         ret[i] = total;
-                    }else {
+                    } else {
                         ret[i] = 0;
                     }
                 } else {
@@ -389,19 +389,18 @@ TEST(TOP150, NO239_ProductExceptSelf) {
                 }
             }
 
-
             return ret;
         }
     };
     Solution solution;
-    std::vector<int> nums{1,2,3,4};
+    std::vector<int> nums{1, 2, 3, 4};
     auto ret = solution.productExceptSelf(nums);
     EXPECT_EQ(ret.size(), 4);
 }
 
 TEST(TOP150, NO134_CanCompleteCircuit) {
     class Solution {
-    public:
+       public:
         int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
             std::vector<int> container;
             auto min_gas = INT_MAX;
@@ -421,15 +420,15 @@ TEST(TOP150, NO134_CanCompleteCircuit) {
     };
 
     Solution solution;
-    std::vector<int> gas{1,2,3, 4, 5};
-    std::vector<int> cost{3,4,5,1,2};
+    std::vector<int> gas{1, 2, 3, 4, 5};
+    std::vector<int> cost{3, 4, 5, 1, 2};
     auto ret = solution.canCompleteCircuit(gas, cost);
     EXPECT_EQ(ret, 3);
 }
 
 TEST(TOP150, NO135_Candy) {
     class Solution {
-    public:
+       public:
         int candy(vector<int>& ratings) {
             // 我们先找从左到右满足最少的糖果，再找从右到左的，最后取两边都满足的值(就是最大值)。
             auto n = int(ratings.size());
@@ -459,14 +458,14 @@ TEST(TOP150, NO135_Candy) {
     };
 
     Solution solution;
-    auto ratings = vector<int>{1,0,2};
+    auto ratings = vector<int>{1, 0, 2};
     auto ret = solution.candy(ratings);
     EXPECT_EQ(ret, 5);
 }
 
 TEST(TOP150, NO42_Trap) {
     class Solution {
-    public:
+       public:
         int trap(vector<int>& height) {
             int ret = 0;
 
@@ -493,18 +492,18 @@ TEST(TOP150, NO42_Trap) {
     };
 
     Solution solution;
-    std::vector<int> height{0,1,0,2,1,0,1,3,2,1,2,1};
+    std::vector<int> height{0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1};
     auto ret = solution.trap(height);
     EXPECT_EQ(ret, 6);
 }
 
 TEST(TOP150, NO13_RomainToInt) {
     class Solution {
-    public:
+       public:
         int romanToInt(string s) {
             auto ret = 0;
 
-            for (auto i = 0; i < s.size(); ) {
+            for (auto i = 0; i < s.size();) {
                 if (s[i] == 'M') {
                     ret += 1000;
                     i++;
@@ -514,38 +513,38 @@ TEST(TOP150, NO13_RomainToInt) {
                 } else if (s[i] == 'C') {
                     if (i < s.size() - 1 && s[i + 1] == 'M') {
                         ret += 900;
-                        i+=2;
+                        i += 2;
                     } else if (i < s.size() - 1 && s[i + 1] == 'D') {
                         ret += 400;
-                        i+=2;
+                        i += 2;
                     } else {
                         ret += 100;
                         i++;
                     }
-                }else if (s[i] == 'L') {
+                } else if (s[i] == 'L') {
                     ret += 50;
                     i++;
-                }else if (s[i] == 'X') {
+                } else if (s[i] == 'X') {
                     if (i < s.size() - 1 && s[i + 1] == 'L') {
                         ret += 40;
-                        i+=2;
+                        i += 2;
                     } else if (i < s.size() - 1 && s[i + 1] == 'C') {
                         ret += 90;
-                        i+=2;
+                        i += 2;
                     } else {
                         ret += 10;
                         i++;
                     }
-                }else if (s[i] == 'V') {
+                } else if (s[i] == 'V') {
                     ret += 5;
                     i++;
-                }else if (s[i] == 'I') {
+                } else if (s[i] == 'I') {
                     if (i < s.size() - 1 && s[i + 1] == 'V') {
                         ret += 4;
-                        i+=2;
-                    } else if (i < s.size() - 1 && s[i+1] == 'X') {
+                        i += 2;
+                    } else if (i < s.size() - 1 && s[i + 1] == 'X') {
                         ret += 9;
-                        i+=2;
+                        i += 2;
                     } else {
                         ret += 1;
                         i++;
@@ -564,7 +563,7 @@ TEST(TOP150, NO13_RomainToInt) {
 
 TEST(TOP150, NO12_IntToRoman) {
     class Solution {
-    public:
+       public:
         string intToRoman(int num) {
             std::string ret;
 
@@ -572,10 +571,10 @@ TEST(TOP150, NO12_IntToRoman) {
             std::vector<std::string> signs{"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
 
             for (int i = 0; i < nums.size(); i++) {
-               while (num >= nums[i]) {
-                   num -= nums[i];
-                   ret += signs[i];
-               }
+                while (num >= nums[i]) {
+                    num -= nums[i];
+                    ret += signs[i];
+                }
             }
 
             return ret;
@@ -589,7 +588,7 @@ TEST(TOP150, NO12_IntToRoman) {
 
 TEST(TOP150, NO58_LengthOfLastWord) {
     class Solution {
-    public:
+       public:
         int lengthOfLastWord(string s) {
             int idx = s.size() - 1;
             while (s[idx] == ' ' && idx >= 0) {
@@ -600,7 +599,8 @@ TEST(TOP150, NO58_LengthOfLastWord) {
             while (idx >= 0 && s[idx] != ' ') {
                 idx--;
             }
-            return end - idx;;
+            return end - idx;
+            ;
         }
     };
 
@@ -611,7 +611,7 @@ TEST(TOP150, NO58_LengthOfLastWord) {
 
 TEST(TOP150, NO14_LongestCommonPrefix) {
     class Solution {
-    public:
+       public:
         string longestCommonPrefix(vector<string>& strs) {
             if (strs.empty()) {
                 return "";
@@ -644,21 +644,20 @@ TEST(TOP150, NO14_LongestCommonPrefix) {
     };
 
     Solution solution;
-    auto input = std::vector<std::string>{"abab","aba",""};
+    auto input = std::vector<std::string>{"abab", "aba", ""};
     auto ret = solution.longestCommonPrefix(input);
     EXPECT_EQ(ret, "fl");
 }
 
 TEST(TOP150, NO151_ReverseWords) {
     class Solution {
-    public:
+       public:
         string reverseWords(string s) {
             std::vector<std::string> words;
 
             auto pre = 0;
             auto sub = 1;
             while (sub < s.size()) {
-                
             }
 
             std::string ret = "";
@@ -679,27 +678,47 @@ TEST(TOP150, NO151_ReverseWords) {
 
 TEST(TOP150, NO6_Z) {
     class Solution {
-    public:
+       public:
         std::string convert(std::string s, int numRows) {
-            if (numRows == 1) {
+            if (numRows == 1 || numRows >= s.size()) {
                 return s;
             }
 
+            std::vector<std::string> rows(numRows);
+            for (auto& row : rows) {
+                row.reserve(s.size() / numRows + 1);
+            }
+
+            int curRow = 0;
+            bool goingDown = false;
+
+            for (char c : s) {
+                rows[curRow] += c;
+                if (curRow == 0 || curRow == numRows - 1) {
+                    goingDown = !goingDown;
+                }
+                curRow += goingDown ? 1 : -1;
+            }
+
             std::string ret;
-
-            // the first line and last line will have one in one round
-
-            // other columns between first and last contains two in round
-
-            for (auto i = 0; i < numRows; i++) {
-
+            ret.reserve(s.size());
+            for (const auto& row : rows) {
+                ret += row;
             }
 
             return ret;
         }
     };
 
-    Solution solution;
+    Solution s;
+    auto example = "PAYPALISHIRING";
+    auto ret = s.convert(example, 3);
 
-    auto s = 'PAYPALISHIRING';
+    EXPECT_EQ(ret, "PAHNAPLSIIGYIR");
+
+    ret = s.convert(example, 4);
+    EXPECT_EQ(ret, "PINALSIGYAHRPI");
+
+    EXPECT_EQ(s.convert("A", 1), "A");
+    EXPECT_EQ(s.convert("AB", 1), "AB");
 }

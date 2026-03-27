@@ -25,6 +25,7 @@ add_executable(
         ${TEST_FILES}
         top150/test_top_150_array_string.cpp
         tests/3643.cpp
+        tests/2946.cpp
 )
 target_link_libraries(
         tests
