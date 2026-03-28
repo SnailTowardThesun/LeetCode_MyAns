@@ -35,6 +35,7 @@
 
 #include <gtest/gtest.h>
 
+#include <numeric>
 #include <string>
 #include <vector>
 
@@ -43,51 +44,56 @@ using namespace std;
 class SolutionUnionFind {
    public:
     /**
-     * 构建与 LCP 矩阵对应的字典序最小字符串
-     *
-     * @param lcp 给定的 n x n LCP 矩阵
-     * @return 字典序最小的字符串，不存在则返回空字符串
-     */
-    string findTheString(vector<vector<int>>& lcp) { return ""; }
-};
-
-class SolutionGreedy {
-   public:
-    /**
-     * 构建与 LCP 矩阵对应的字典序最小字符串, 贪心算法
+     * 构建与 LCP 矩阵对应的字典序最小字符串, 并查集算法
      *
      * @param lcp 给定的 n x n LCP 矩阵
      * @return 字典序最小的字符串，不存在则返回空字符串
      */
     string findTheString(vector<vector<int>>& lcp) {
         int n = lcp.size();
-        vector<char> container(n, '1');
 
-        char c = 'a';
+        string ret(n, '1');
+        vector<int> container(n, -1);
+        iota(container.begin(), container.end(), 0);
+
+        auto find = [&](auto self, int i) -> int {
+            if (container[i] == i) {
+                return i;
+            }
+
+            container[i] = self(self, container[i]);
+            return container[i];
+        };
+
         for (int i = 0; i < n; i++) {
-            if (container[i] != '1') {
-                continue;
-            }
-
-            if (c > 'z') {
-                std::cout << "c > 'z'" << std::endl;
-                return "";
-            }
-
             for (int j = i; j < n; j++) {
                 if (lcp[i][j] > 0) {
-                    container[j] = c;
+                    int rootI = find(find, i), rootJ = find(find, j);
+                    if (rootI != rootJ) {
+                        container[rootI] = rootJ;  // 合并 i 和 j 的集合
+                    }
                 }
             }
+        }
 
-            c++;
+        char ch = 'a';
+        vector<char> char_map(n, '1');
+        for (int i = 0; i < n; i++) {
+            int root = find(find, i);
+            if (char_map[root] == '1') {
+                if (ch > 'z') {
+                    return "";
+                }
+                char_map[root] = ch++;
+            }
+            ret[i] = char_map[root];
         }
 
         for (int i = n - 1; i >= 0; i--) {
             for (int j = n - 1; j >= 0; j--) {
                 int correct_number = 0;
-                if (container[i] == container[j]) {
-                    if (i == n - 1 && j == n - 1) {
+                if (ret.at(i) == ret.at(j)) {
+                    if (i == n - 1 || j == n - 1) {
                         correct_number = 1;
                     } else {
                         correct_number = lcp[i + 1][j + 1] + 1;
@@ -100,14 +106,66 @@ class SolutionGreedy {
             }
         }
 
-        // convert vector to string
-        string ret(container.begin(), container.end());
         return ret;
     }
 };
 
+class SolutionGreedy {
+   public:
+    /**
+     * 构建与 LCP 矩阵对应的字典序最小字符串, 贪心算法
+     *
+     * @param lcp 给定的 n x n LCP 矩阵
+     * @return 字典序最小的字符串，不存在则返回空字符串
+     */
+    string findTheString(vector<vector<int>>& lcp) {
+        int n = lcp.size();
+        string container(n, '1');
+
+        char c = 'a';
+        for (int i = 0; i < n; i++) {
+            if (container.at(i) != '1') {
+                continue;
+            }
+
+            if (c > 'z') {
+                std::cout << "c > 'z'" << std::endl;
+                return "";
+            }
+
+            for (int j = i; j < n; j++) {
+                if (lcp[i][j] > 0) {
+                    container.at(j) = c;
+                }
+            }
+
+            c++;
+        }
+
+        for (int i = n - 1; i >= 0; i--) {
+            for (int j = n - 1; j >= 0; j--) {
+                int correct_number = 0;
+                if (container.at(i) == container.at(j)) {
+                    if (i == n - 1 || j == n - 1) {
+                        correct_number = 1;
+                    } else {
+                        correct_number = lcp[i + 1][j + 1] + 1;
+                    }
+                }
+
+                if (lcp[i][j] != correct_number) {
+                    return "";
+                }
+            }
+        }
+
+        return container;
+    }
+};
+
 TEST(Daily, 2573) {
-    SolutionGreedy solution;
+    // SolutionGreedy solution;
+    SolutionUnionFind solution;
 
     // 示例 1：交替字母情况
     vector<vector<int>> lcp1 = {{4, 0, 2, 0}, {0, 3, 0, 1}, {2, 0, 2, 0}, {0, 1, 0, 1}};
