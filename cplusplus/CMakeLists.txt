@@ -15,7 +15,7 @@ FetchContent_MakeAvailable(googletest)
 # compile params
 set(CMAKE_CXX_FLAGS "-g -std=c++17 -Wall")
 
-set(TEST_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/tests)
+set(TEST_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/questions)
 file(GLOB TEST_FILES "${TEST_SRC_DIR}/*.cpp")
 
 enable_testing()
@@ -24,9 +24,8 @@ add_executable(
         tests
         ${TEST_FILES}
         top150/test_top_150_array_string.cpp
-        tests/3643.cpp
-        tests/2946.cpp
 )
+
 target_link_libraries(
         tests
         GTest::gtest_main
