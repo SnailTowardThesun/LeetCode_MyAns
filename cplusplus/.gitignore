@@ -53,3 +53,15 @@ cmake_install.cmake
 Makefile
 CTestTestfile.cmake
 Testing/
+
+# Ninja build system files
+.ninja_deps
+.ninja_log
+build.ninja
+cmake_test_discovery_*.json
+
+# Compilation database
+compile_commands.json
+
+# Test executables
+tests
