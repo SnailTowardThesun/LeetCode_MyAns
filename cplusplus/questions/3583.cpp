@@ -53,27 +53,28 @@
  */
 
 #include <gtest/gtest.h>
-#include <vector>
+
 #include <unordered_map>
+#include <vector>
 
 TEST(Daily, 3583) {
     class Solution {
-    public:
-        static std::size_t lower_position(const std::vector<int> &vec, int key) noexcept {
+       public:
+        static std::size_t lower_position(const std::vector<int>& vec, int key) noexcept {
             std::size_t low = 0;
-            std::size_t high = vec.size(); // 开区间 [low, high)
+            std::size_t high = vec.size();  // 开区间 [low, high)
 
             while (low < high) {
                 std::size_t mid = low + (high - low) / 2;
                 if (vec[mid] <= key)
-                    low = mid + 1; // 舍弃左半段
+                    low = mid + 1;  // 舍弃左半段
                 else
-                    high = mid; // 舍弃右半段（含 mid）
+                    high = mid;  // 舍弃右半段（含 mid）
             }
-            return low; // low 即为所求位置
+            return low;  // low 即为所求位置
         }
 
-        int specialTriplets(std::vector<int> &nums) {
+        int specialTriplets(std::vector<int>& nums) {
             if (nums.size() < 2) {
                 return 0;
             }
@@ -90,7 +91,7 @@ TEST(Daily, 3583) {
                 container[nums[i]].push_back(i);
             }
 
-            for (auto &it: container) {
+            for (auto& it : container) {
                 // sort it->second
                 std::sort(it.second.begin(), it.second.end());
             }
@@ -116,8 +117,8 @@ TEST(Daily, 3583) {
     Solution solution;
 
     // auto eg = std::vector<int> {6,3,6};
-    auto eg = std::vector<int>{0, 1, 0, 0};
-    // auto eg = std::vector<int>{8, 4, 2, 8, 4};
+    // auto eg = std::vector<int>{0, 1, 0, 0};
+    auto eg = std::vector<int>{8, 4, 2, 8, 4};
     auto ret = solution.specialTriplets(eg);
     EXPECT_EQ(ret, 2);
 }
