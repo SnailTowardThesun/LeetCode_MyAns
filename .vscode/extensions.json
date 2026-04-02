@@ -5,7 +5,10 @@
         "ms-vscode.cmake-tools",
         "rust-lang.rust-analyzer",
         "vadimcn.vscode-lldb",
-        "twxs.cmake"
-    ],
-    "unwantedRecommendations": []
+        "twxs.cmake",
+        "eamodio.gitlens",
+        "github.copilot",
+        "github.copilot-chat",
+        "matepek.vscode-catch2-test-adapter"
+    ]
 }
