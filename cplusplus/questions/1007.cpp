@@ -1,70 +1,98 @@
+//
+// Created by 韩堃 on 2026/3/22.
+//
+
+/**
+ * @file 1007.cpp
+ * @brief LeetCode 1007. 行相等的最少多米诺旋转
+ *
+ * @题目描述
+ * 在一排多米诺骨牌中，tops[i] 和 bottoms[i] 分别代表第 i 个多米诺骨牌的上半部分和下半部分。
+ * （一个多米诺骨牌是一个有两个数字的瓷砖，数字范围从 1 到 6 - 每个半部分一个数字。）
+ *
+ * 我们可以旋转第 i 个多米诺骨牌，使得 tops[i] 和 bottoms[i] 的值互换。
+ *
+ * 返回使 tops 中所有值相等，或 bottoms 中所有值相等的最少旋转次数。
+ * 如果无法做到，返回 -1。
+ *
+ * @示例
+ * 示例 1：
+ * 输入: tops = [2,1,2,4,2,2], bottoms = [5,2,6,2,3,2]
+ * 输出: 2
+ * 解释:
+ * 第一个图表示 tops 和 bottoms 给出的多米诺骨牌：在进行任何旋转之前。
+ * 如果我们旋转第二个和第四个多米诺骨牌，我们可以使顶行的每个值都等于 2，
+ * 如第二个图所示。
+ *
+ * 示例 2：
+ * 输入: tops = [3,5,1,2,3], bottoms = [3,6,3,3,4]
+ * 输出: -1
+ * 解释:
+ * 在这种情况下，不可能通过旋转多米诺骨牌使一行值相等。
+ *
+ * @解题思路
+ * 1. 关键观察：如果要使所有值相等，那么这个值必须是 tops[0] 或 bottoms[0]
+ *    - 因为第一个多米诺骨牌的上半部分或下半部分最终必须在某一行中
+ *
+ * 2. 算法步骤：
+ *    - 候选目标值：tops[0] 和 bottoms[0]（如果相同则只有一个候选）
+ *    - 对于每个候选值 t：
+ *      a) 遍历所有多米诺骨牌
+ *      b) 如果某个骨牌的上下都不是 t，则该候选不可行
+ *      c) 统计 tops 需要旋转的次数（tops[i] != t 但 bottoms[i] == t）
+ *      d) 统计 bottoms 需要旋转的次数（bottoms[i] != t 但 tops[i] == t）
+ *    - 返回两个统计值中的较小者
+ *
+ * 3. 复杂度分析：
+ *    - 时间复杂度: O(n)，只需遍历数组常数次
+ *    - 空间复杂度: O(1)，只使用常数额外空间
+ */
+
 #include <gtest/gtest.h>
 #include <vector>
 
-// Demonstrate some basic assertions.
-TEST(HelloTest, BasicAssertions) {
-    /**
-     * 1007. Minimum Domino Rotations For Equal Row
-     *
-     * In a row of dominoes, tops[i] and bottoms[i] represent the top and bottom halves of the ith domino. (A domino is a tile with two numbers from 1 to 6 - one on each half of the tile.)
-     *
-     * We may rotate the ith domino, so that tops[i] and bottoms[i] swap values.
-     *
-     * Return the minimum number of rotations so that all the values in tops are the same, or all the values in bottoms are the same.
-     *
-     * If it cannot be done, return -1.
-     *
-     * Example 1:
-     * Input: tops = [2,1,2,4,2,2], bottoms = [5,2,6,2,3,2]
-     * Output: 2
-     * Explanation:
-     * The first figure represents the dominoes as given by tops and bottoms: before we do any rotations.
-     * If we rotate the second and fourth dominoes, we can make every value in the top row equal to 2, as indicated by the second figure.
-     *
-     * Example 2:
-     * Input: tops = [3,5,1,2,3], bottoms = [3,6,3,3,4]
-     * Output: -1
-     * Explanation:
-     * In this case, it is not possible to rotate the dominoes to make one row of values equal.
-     **/
-    class Solution {
-    public:
-        int minDominoRotations(std::vector<int>& tops, std::vector<int>& bottoms) {
-            auto length = (int)tops.size();
+using namespace std;
 
-            auto target = std::vector<int>{tops[0], bottoms[0]};
-            if (target.at(0) == target.at(1)) {
-                target.pop_back();
-            }
-            auto result = INT_MAX;
+class Solution {
+public:
+    int minDominoRotations(vector<int>& tops, vector<int>& bottoms) {
+        auto length = (int)tops.size();
 
-            for (auto &t : target) {
-                auto top_rotation_times = 0;
-                auto bottom_rotation_times = 0;
-                for (auto i = 0; i< length; i++) {
-                    if (tops[i] != t && bottoms[i] != t) {
-                        top_rotation_times = INT_MAX;
-                        break;
-                    }
-
-                    if (tops[i] == t && bottoms[i] != t) {
-                        bottom_rotation_times++;
-                    }
-
-                    if (tops[i] != t && bottoms[i] == t) {
-                        top_rotation_times++;
-                    }
-                }
-
-                if (top_rotation_times != INT_MAX){
-                    result = std::min(result, top_rotation_times);
-                    result = std::min(result, bottom_rotation_times);
-                }
-            }
-
-            return result == INT_MAX ? -1 : result;
+        auto target = vector<int>{tops[0], bottoms[0]};
+        if (target.at(0) == target.at(1)) {
+            target.pop_back();
         }
-    };
+        auto result = INT_MAX;
+
+        for (auto &t : target) {
+            auto top_rotation_times = 0;
+            auto bottom_rotation_times = 0;
+            for (auto i = 0; i< length; i++) {
+                if (tops[i] != t && bottoms[i] != t) {
+                    top_rotation_times = INT_MAX;
+                    break;
+                }
+
+                if (tops[i] == t && bottoms[i] != t) {
+                    bottom_rotation_times++;
+                }
+
+                if (tops[i] != t && bottoms[i] == t) {
+                    top_rotation_times++;
+                }
+            }
+
+            if (top_rotation_times != INT_MAX){
+                result = std::min(result, top_rotation_times);
+                result = std::min(result, bottom_rotation_times);
+            }
+        }
+
+        return result == INT_MAX ? -1 : result;
+    }
+};
+
+TEST(Daily, 1007) {
     Solution s;
     std::vector<int> tops = {1,2,1,1,1,2,2,2};
     std::vector<int> bottoms = {2,1,2,2,2,2,2,2};
