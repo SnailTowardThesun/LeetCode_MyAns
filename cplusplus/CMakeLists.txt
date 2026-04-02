@@ -13,7 +13,7 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 # compile params
-set(CMAKE_CXX_FLAGS "-g -std=c++17 -Wall")
+set(CMAKE_CXX_FLAGS "-g -std=c++14 -Wall")
 
 set(TEST_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/questions)
 file(GLOB TEST_FILES "${TEST_SRC_DIR}/*.cpp")
