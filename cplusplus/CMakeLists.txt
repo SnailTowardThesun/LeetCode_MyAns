@@ -13,17 +13,24 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 # compile params
-set(CMAKE_CXX_FLAGS "-g -std=c++14 -Wall")
+set(CMAKE_CXX_FLAGS "-g -std=c++17 -Wall")
 
 set(TEST_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/questions)
 file(GLOB TEST_FILES "${TEST_SRC_DIR}/*.cpp")
+
+# Top 150 题目文件
+set(TOP150_ARRAY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/top150/array)
+set(TOP150_STRING_DIR ${CMAKE_CURRENT_SOURCE_DIR}/top150/string)
+file(GLOB TOP150_ARRAY_FILES "${TOP150_ARRAY_DIR}/*.cpp")
+file(GLOB TOP150_STRING_FILES "${TOP150_STRING_DIR}/*.cpp")
 
 enable_testing()
 
 add_executable(
         tests
         ${TEST_FILES}
-        top150/test_top_150_array_string.cpp
+        ${TOP150_ARRAY_FILES}
+        ${TOP150_STRING_FILES}
 )
 
 target_link_libraries(
