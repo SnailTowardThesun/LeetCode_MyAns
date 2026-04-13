@@ -11,12 +11,13 @@
 返回 abs(i - start) 的最小值。
 
 解题思路：
-1. 遍历数组，收集所有等于 target 的元素的下标
-2. 遍历这些下标，计算每个下标与 start 的距离的绝对值
-3. 找出最小的距离并返回
+1. 遍历数组，对于每个等于 target 的元素
+2. 计算当前元素下标与 start 的距离的绝对值
+3. 维护并更新最小距离
+4. 遍历完成后返回最小距离
 
 时间复杂度：O(n)，其中 n 是数组的长度
-空间复杂度：O(k)，其中 k 是等于 target 的元素的个数
+空间复杂度：O(1)，只使用了常数级的额外空间
 */
 
 #include <gtest/gtest.h>
@@ -29,17 +30,13 @@ using namespace std;
 class Solution {
    public:
     int getMinDistance(vector<int>& nums, int target, int start) {
-        vector<int> container;
+        int ret = INT_MAX;
         for (int i = 0; i < nums.size(); ++i) {
             if (nums[i] == target) {
-                container.push_back(i);
+                ret = min(ret, abs(i - start));
             }
         }
 
-        int ret = INT_MAX;
-        for (auto i : container) {
-            ret = min(ret, abs(i - start));
-        }
         return ret;
     }
 };
