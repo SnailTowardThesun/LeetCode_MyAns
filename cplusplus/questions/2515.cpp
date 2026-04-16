@@ -25,13 +25,14 @@
 */
 
 #include <gtest/gtest.h>
+
 #include <vector>
 
 using namespace std;
 
 class Solution {
-public:
-    int closestTarget(vector<string> &words, string target, int startIndex) {
+   public:
+    int closestTarget(vector<string>& words, string target, int startIndex) {
         vector<int> poss;
         for (int i = 0; i < words.size(); ++i) {
             if (words[i] == target) {
@@ -44,13 +45,11 @@ public:
         }
 
         int ret = INT_MAX;
-        for (auto pos: poss) {
-            int tmp = 0;
-            if (pos >= startIndex) {
-               tmp = min(pos-startIndex, int(startIndex + words.size() - pos));
-            } else {
-               tmp = min(startIndex - pos, int(pos + words.size() - startIndex));
-            }
+        int n = words.size();
+        for (auto pos : poss) {
+            int direct_dist = abs(pos - startIndex);
+            int circular_dist = n - direct_dist;
+            int tmp = min(direct_dist, circular_dist);
             ret = min(ret, tmp);
         }
 
@@ -60,7 +59,8 @@ public:
 
 TEST(Daily, 2515) {
     Solution s;
-    auto words = vector<string>{"hsdqinnoha","mqhskgeqzr","zemkwvqrww","zemkwvqrww","daljcrktje","fghofclnwp","djwdworyka","cxfpybanhd","fghofclnwp","fghofclnwp"};
+    auto words = vector<string>{"hsdqinnoha", "mqhskgeqzr", "zemkwvqrww", "zemkwvqrww", "daljcrktje",
+                                "fghofclnwp", "djwdworyka", "cxfpybanhd", "fghofclnwp", "fghofclnwp"};
     auto target = "zemkwvqrww";
     auto startIndex = 8;
 
