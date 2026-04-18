@@ -1,0 +1,9 @@
+{
+  "name": "leetcode-cplusplus",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "cmake -B build && cmake --build build",
+    "test": "cd build && ctest",
+    "lint": "clang-format -i src/*.cpp"
+  }
+}

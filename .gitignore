@@ -61,6 +61,7 @@ coverage/
 
 # Package manager files
 node_modules/
+package-lock.json
 
 # Backup files
 *.backup
@@ -70,3 +71,6 @@ node_modules/
 cplusplus/_deps
 cplusplus/lib
 cplusplus/bin
+
+# CMake
+*cmake-build-debug*

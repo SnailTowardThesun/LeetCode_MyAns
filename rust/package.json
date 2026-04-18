@@ -1,0 +1,9 @@
+{
+  "name": "leetcode-rust",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "cargo build",
+    "test": "cargo test",
+    "lint": "cargo fmt"
+  }
+}

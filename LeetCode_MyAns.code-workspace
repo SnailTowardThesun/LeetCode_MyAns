@@ -12,6 +12,10 @@
       "name": "Rust Solutions",
       "path": "rust",
     },
+    {
+      "name": "Trunk",
+      "path": "trunk",
+    }
   ],
   "settings": {
     "editor.formatOnSave": true,

@@ -1,0 +1,9 @@
+{
+  "name": "leetcode-trunk",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "g++ -o objs/hello_test src/test_main.cpp",
+    "test": "./objs/hello_test",
+    "lint": "echo 'No linting configured for trunk'"
+  }
+}

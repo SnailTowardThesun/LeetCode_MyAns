@@ -1,0 +1,19 @@
+{
+  "name": "leetcode-myans",
+  "private": true,
+  "workspaces": [
+    "cplusplus",
+    "rust",
+    "trunk"
+  ],
+  "devDependencies": {
+    "turbo": "latest"
+  },
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "test": "turbo test",
+    "lint": "turbo lint"
+  },
+  "packageManager": "npm@10.5.0"
+}
