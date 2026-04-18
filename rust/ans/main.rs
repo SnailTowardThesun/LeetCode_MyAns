@@ -1,8 +1,4 @@
 #![allow(dead_code)]
-
-mod daily;
-mod offer;
-
 use std::collections::HashMap;
 
 /**
