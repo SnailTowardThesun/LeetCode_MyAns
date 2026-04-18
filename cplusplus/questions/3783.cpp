@@ -1,0 +1,68 @@
+/**
+ * @file 3783.cpp
+ * @brief LeetCode 3783. 镜像距离
+ *
+ * @题目描述
+ * 给定一个整数 n，返回 n 与其"镜像数"的差的绝对值。
+ * 镜像数的定义：将整数 n 的各位数字逆序排列后得到的新整数。
+ *
+ * @示例
+ * 示例 1：
+ * 输入: n = 25
+ * 输出: 27
+ * 解释: 25 的镜像数是 52，|25 - 52| = 27
+ *
+ * 示例 2：
+ * 输入: n = 123
+ * 输出: 108
+ * 解释: 123 的镜像数是 321，|123 - 321| = 198
+ *
+ * @解题思路
+ * 1. 问题分析：
+ *    - 镜像数即将数字逆序后得到的数
+ *    - 需要计算原数与镜像数的差的绝对值
+ *
+ * 2. 算法步骤：
+ *    a) 将整数 n 转换为字符串
+ *    b) 反转字符串得到镜像数的字符表示
+ *    c) 将反转后的字符串转换回整数
+ *    d) 计算两个整数的差的绝对值
+ *
+ * 3. 实现细节：
+ *    - 使用 to_string 将整数转为字符串
+ *    - 使用 reverse 反转字符串
+ *    - 使用 stoi 将字符串转回整数
+ *    - 使用 abs 计算绝对值
+ *
+ * 4. 复杂度分析：
+ *    - 时间复杂度: O(d)，d 为数字的位数
+ *    - 空间复杂度: O(d)，需要字符串存储
+ */
+
+//
+// Created by 韩堃 on 2026/4/18.
+//
+
+#include <gtest/gtest.h>
+
+#include <algorithm>
+#include <cstdlib>
+#include <vector>
+
+using namespace std;
+
+class Solution {
+   public:
+    int mirrorDistance(int n) {
+        string tmp = to_string(n);
+        reverse(tmp.begin(), tmp.end());
+        return abs(n - stoi(tmp));
+    }
+};
+
+TEST(Daily, 3783) {
+    Solution s;
+    auto example = 25;
+    auto ret = s.mirrorDistance(example);
+    EXPECT_EQ(27, ret);
+}
