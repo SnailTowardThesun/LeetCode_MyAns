@@ -1,0 +1,79 @@
+//
+// Created by 韩堃 on 2026/4/18.
+//
+
+/**
+ * @file 9.cpp
+ * @brief LeetCode 9. 回文数
+ *
+ * @题目描述
+ * 给你一个整数 x，如果 x 是一个回文整数，返回 true；否则，返回 false。
+ * 回文数是指正序（从左向右）和倒序（从右向左）读都是一样的整数。
+ *
+ * @示例
+ * 示例 1：
+ * 输入：x = 121
+ * 输出：true
+ *
+ * 示例 2：
+ * 输入：x = -121
+ * 输出：false
+ * 解释：从左向右读，为 -121；从右向左读，为 121-。因此不是回文数
+ *
+ * 示例 3：
+ * 输入：x = 10
+ * 输出：false
+ * 解释：从右向左读，为 01-。因此不是回文数
+ *
+ * @解题思路
+ * 1. 反转一半数字法：
+ *    - 如果是负数或末尾是 0（但不是 0本身），返回 false
+ *    - 反转数字的后半部分
+ *    - 比较前半部分和后半部分
+ *
+ * 2. 算法步骤：
+ *    - 处理负数和末尾为 0 的情况
+ *    - 反转数字的后半部分
+ *    - 比较原数字的前半部分和反转后的后半部分
+ *
+ * 3. 复杂度分析：
+ *    - 时间复杂度: O(log n)
+ *    - 空间复杂度: O(1)
+ */
+
+#include <gtest/gtest.h>
+
+using namespace std;
+
+TEST(Daily, 9) {
+    class Solution {
+    public:
+        bool isPalindrome(int x) {
+            if (x < 0 || (x != 0 && (x % 10 == 0))) return false;
+            if (x == 0) return true;
+            int rX = 0;
+            while (rX < x) {
+                rX = rX * 10 + x % 10;
+                x = x / 10;
+            }
+            return rX == x || rX / 10 == x;
+        }
+    };
+
+    Solution s;
+    
+    // 测试用例 1
+    EXPECT_TRUE(s.isPalindrome(121));
+    
+    // 测试用例 2
+    EXPECT_FALSE(s.isPalindrome(-121));
+    
+    // 测试用例 3
+    EXPECT_FALSE(s.isPalindrome(10));
+    
+    // 测试用例 4
+    EXPECT_TRUE(s.isPalindrome(0));
+    
+    // 测试用例 5
+    EXPECT_TRUE(s.isPalindrome(12321));
+}

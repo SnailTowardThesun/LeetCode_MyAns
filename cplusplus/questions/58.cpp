@@ -1,0 +1,87 @@
+//
+// Created by 韩堃 on 2026/4/18.
+//
+
+/**
+ * @file 58.cpp
+ * @brief LeetCode 58. 最后一个单词的长度
+ *
+ * @题目描述
+ * 给你一个字符串 s，由若干单词组成，单词之间用空格隔开。
+ * 返回字符串中最后一个单词的长度。
+ * 单词是指仅由字母组成、不含任何空格的字符序列。
+ *
+ * @示例
+ * 示例 1：
+ * 输入：s = "Hello World"
+ * 输出：5
+ * 解释：最后一个单词是 "World"，长度为 5
+ *
+ * 示例 2：
+ * 输入：s = "   fly me   to   the moon  "
+ * 输出：4
+ * 解释：最后一个单词是 "moon"，长度为 4
+ *
+ * 示例 3：
+ * 输入：s = "luffy is still joyboy"
+ * 输出：6
+ * 解释：最后一个单词是 "joyboy"，长度为 6
+ *
+ * @解题思路
+ * 1. 从后往前遍历：
+ *    - 先跳过尾部的空格
+ *    - 然后统计非空格字符的数量
+ *
+ * 2. 算法步骤：
+ *    - 从字符串末尾开始向前遍历
+ *    - 跳过末尾的空格
+ *    - 统计连续的非空格字符数量
+ *    - 返回计数
+ *
+ * 3. 复杂度分析：
+ *    - 时间复杂度: O(n)，其中 n 是字符串的长度
+ *    - 空间复杂度: O(1)，只使用常数级别的额外空间
+ */
+
+#include <gtest/gtest.h>
+#include <string>
+
+using namespace std;
+
+TEST(Daily, 58) {
+    class Solution {
+    public:
+        int lengthOfLastWord(string s) {
+            int count = 0;
+            int i = s.length() - 1;
+
+            while (i >= 0 && s[i] == ' ') {
+                i--;
+            }
+
+            while (i >= 0 && s[i] != ' ') {
+                count++;
+                i--;
+            }
+
+            return count;
+        }
+    };
+
+    Solution s;
+    
+    // 测试用例 1
+    EXPECT_EQ(s.lengthOfLastWord("Hello World"), 5);
+    
+    // 测试用例 2
+    EXPECT_EQ(s.lengthOfLastWord("   fly me   to   the moon  "), 4);
+    
+    // 测试用例 3
+    EXPECT_EQ(s.lengthOfLastWord("luffy is still joyboy"), 6);
+    
+    // 测试用例 4
+    EXPECT_EQ(s.lengthOfLastWord("a"), 1);
+    
+    // 测试用例 5
+    EXPECT_EQ(s.lengthOfLastWord(""), 0);
+}
