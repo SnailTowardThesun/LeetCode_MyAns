@@ -29,7 +29,7 @@ npm run lint
 ### 项目结构
 - `cplusplus/` - C++ 实现的 LeetCode 题解
 - `rust/` - Rust 实现的 LeetCode 题解
-- `trunk/` - 其他代码
+
 
 ### 各项目命令
 
@@ -43,7 +43,4 @@ npm run lint
 - 测试：`npm run test --workspace=rust`
 - 格式化：`npm run lint --workspace=rust`
 
-#### Trunk 项目
-- 构建：`npm run build --workspace=trunk`
-- 测试：`npm run test --workspace=trunk`
-- 格式化：`npm run lint --workspace=trunk`
+

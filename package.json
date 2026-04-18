@@ -3,8 +3,7 @@
   "private": true,
   "workspaces": [
     "cplusplus",
-    "rust",
-    "trunk"
+    "rust"
   ],
   "devDependencies": {
     "turbo": "latest"
