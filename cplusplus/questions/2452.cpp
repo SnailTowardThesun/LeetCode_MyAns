@@ -23,36 +23,37 @@
 // 5. 时间复杂度：O(n * m * k)，空间复杂度：O(1)
 // 编辑定义：改变任意一个字符为另一个不同字符为一次编辑
 
-#include <gtest/gtest.h>
-#include <climits>
-#include <vector>
-#include <string>
+#pragma once
 
-using namespace std;
+#include <gtest/gtest.h>
+#include <string>
+#include <vector>
 
 class Solution {
 public:
-    bool isValid(string s, string p) {
+    bool isValid(const std::string& s, const std::string& p) {
+        if (s.size() != p.size()) return false;
+
         int diffs = 0;
         for (int i = 0; i < p.size(); ++i) {
-            if (s.at(i) != p[i]) {
-                diffs++;
-            }
-
-            if (diffs > 2) {
-                break;
+            if (s[i] != p[i]) {
+                if (++diffs > 2) {
+                    return false;
+                }
             }
         }
 
-        return diffs <= 2;
+        return true;
     }
 
-    vector<string> twoEditWords(vector<string> &queries, vector<string> &dictionary) {
-        vector<string> ret;
-        for (int i = 0; i < queries.size(); ++i) {
-            for (int j = 0; j < dictionary.size(); ++j) {
-                if (isValid(queries[i], dictionary[j])) {
-                    ret.push_back(queries[i]);
+    std::vector<std::string> twoEditWords(const std::vector<std::string>& queries, const std::vector<std::string>& dictionary) {
+        std::vector<std::string> ret;
+        ret.reserve(queries.size());
+
+        for (auto& q : queries) {
+            for (auto& d : dictionary) {
+                if (isValid(q, d)) {
+                    ret.push_back(q);
                     break;
                 }
             }
@@ -64,9 +65,34 @@ public:
 
 TEST(Daily, 2452) {
     Solution s;
-    auto queries = vector<string>{"word", "note", "ants", "wood"};
-    auto dictionary = vector<string>{"wood", "joke", "moat"};
 
-    auto ret = s.twoEditWords(queries, dictionary);
-    EXPECT_EQ(ret.size(), 3);
+    // Example 1
+    auto ret1 = s.twoEditWords(
+        std::vector<std::string>{"word", "note", "ants", "wood"},
+        std::vector<std::string>{"wood", "joke", "moat"}
+    );
+    EXPECT_EQ(ret1.size(), 3);
+    EXPECT_EQ(ret1[0], "word");
+    EXPECT_EQ(ret1[1], "note");
+    EXPECT_EQ(ret1[2], "wood");
+
+    // Example 2: no match
+    auto ret2 = s.twoEditWords(std::vector<std::string>{"yes"}, std::vector<std::string>{"not"});
+    EXPECT_EQ(ret2.size(), 0);
+
+    // Edge: exact match
+    auto ret3 = s.twoEditWords(std::vector<std::string>{"hello"}, std::vector<std::string>{"hello"});
+    EXPECT_EQ(ret3.size(), 1);
+
+    // Edge: 0 edits needed
+    auto ret4 = s.twoEditWords(std::vector<std::string>{"abc"}, std::vector<std::string>{"abc", "def"});
+    EXPECT_EQ(ret4.size(), 1);
+    EXPECT_EQ(ret4[0], "abc");
+
+    // Edge: exactly 2 edits
+    auto ret5 = s.twoEditWords(std::vector<std::string>{"aaa"}, std::vector<std::string>{"bbb"});
+    EXPECT_EQ(ret5.size(), 0);
+
+    auto ret6 = s.twoEditWords(std::vector<std::string>{"aab"}, std::vector<std::string>{"bbba"});
+    EXPECT_EQ(ret6.size(), 0);
 }
