@@ -19,9 +19,9 @@ public:
             return colors.size() - 1;
         }
         int ret = INT_MIN;
-        for (int i = 1; i < colors.size()-1; i++) {
+        for (int i = 1; i < static_cast<int>(colors.size())-1; i++) {
             if (colors[i] != colors[0]) {
-                int tmp = max(i, int(colors.size() - 1 - i));
+                int tmp = max(i, static_cast<int>(colors.size()) - 1 - i);
                 ret = max(ret, tmp);
             }
         }

@@ -1,7 +1,9 @@
 //
 // Created by 韩堃 on 2026/4/17.
 //
-// 题目：最小镜像对距离
+// 3761. 最小镜像对距离
+// 题目：https://leetcode.com/problems/minimum-mirror-reverse-distance/
+// 题目描述：
 // 描述：给定一个整数数组 nums，找到两个元素 nums[i] 和 nums[j]，使得 nums[i] 是 nums[j] 的镜像（即 nums[i]
 // 的数字反转后等于 nums[j]），
 //       且 |i - j| 最小。返回这个最小距离。如果不存在这样的镜像对，返回 -1。
