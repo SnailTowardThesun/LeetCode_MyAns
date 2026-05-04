@@ -21,11 +21,35 @@
 // F(3) = (0 * 3) + (1 * 2) + (2 * 6) + (3 * 4) = 0 + 2 + 12 + 12 = 26
 // 最大值是 F(3) = 26
 //
-// 解题思路（数学推导）：
-// 1. 计算初始 F(0) 和总和 totalSum
-// 2. 通过数学公式推导 F(k) 与 F(k-1) 的关系：
-//    F(k) = F(k-1) + totalSum - n * nums[n-k]
-// 3. 遍历计算所有 F(k)，记录最大值
+// 解题思路（完整数学推导）：
+//
+// 定义：
+// - 原数组：nums[0], nums[1], ..., nums[n-1]
+// - totalSum = nums[0] + nums[1] + ... + nums[n-1]
+// - F(0) = 0*nums[0] + 1*nums[1] + 2*nums[2] + ... + (n-1)*nums[n-1]
+//
+// 顺时针旋转 1 次后（相当于将最后一个元素移到最前面）：
+// F(1) = 0*nums[n-1] + 1*nums[0] + 2*nums[1] + ... + (n-1)*nums[n-2]
+//
+// 推导 F(1) - F(0)：
+// F(1) = 0*nums[n-1] + 1*nums[0] + 2*nums[1] + 3*nums[2] + ... + (n-1)*nums[n-2]
+// F(0) = 0*nums[0] + 1*nums[1] + 2*nums[2] + ... + (n-2)*nums[n-2] + (n-1)*nums[n-1]
+// F(1) - F(0) = [1*nums[0]+2*nums[1]+...+(n-1)*nums[n-2]] - [1*nums[1]+...+(n-2)*nums[n-2]+(n-1)*nums[n-1]]
+//             = nums[0] + nums[1] + nums[2] + ... + nums[n-2] - (n-1)*nums[n-1]
+//             = (totalSum - nums[n-1]) - (n-1)*nums[n-1]
+//             = totalSum - nums[n-1] - n*nums[n-1] + nums[n-1]
+//             = totalSum - n*nums[n-1]
+//
+// 因此得到递推公式：
+// F(1) = F(0) + totalSum - n*nums[n-1]
+//
+// 同理可推导出：
+// F(k) = F(k-1) + totalSum - n*nums[n-k]
+//
+// 步骤：
+// 1. 计算 F(0) 和 totalSum
+// 2. 利用递推公式依次计算 F(1), F(2), ..., F(n-1)
+// 3. 记录最大值
 //
 // 时间复杂度：O(n)，空间复杂度：O(1)
 //
