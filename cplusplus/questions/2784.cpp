@@ -49,7 +49,7 @@ using namespace std;
 
 class Solution {
 public:
-    bool isGood(vector<int>& nums) {
+    bool isGood(const vector<int>& nums) {
         int n = nums.size() - 1;
         vector<int> cnt(201);
 
@@ -74,8 +74,8 @@ public:
 TEST(Daily, 2784) {
     Solution s;
 
-    EXPECT_TRUE(s.isGood({1, 3, 3, 2}));
-    EXPECT_FALSE(s.isGood({2, 1, 3}));
-    EXPECT_TRUE(s.isGood({1, 1}));
-    EXPECT_FALSE(s.isGood({3, 4, 4, 1, 2, 1}));
+    EXPECT_TRUE(s.isGood(vector<int>{1, 3, 3, 2}));
+    EXPECT_FALSE(s.isGood(vector<int>{2, 1, 3}));
+    EXPECT_TRUE(s.isGood(vector<int>{1, 1}));
+    EXPECT_FALSE(s.isGood(vector<int>{3, 4, 4, 1, 2, 1}));
 }
