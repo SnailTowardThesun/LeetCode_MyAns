@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.28)
 
-Project(LeetCode_Ans_Cplusplus)
+project(LeetCode_Ans_Cplusplus)
 
 include (FetchContent)
 FetchContent_Declare(
@@ -19,18 +19,15 @@ set(TEST_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/questions)
 file(GLOB TEST_FILES "${TEST_SRC_DIR}/*.cpp")
 
 # Top 150 题目文件
-set(TOP150_ARRAY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/top150/array)
-set(TOP150_STRING_DIR ${CMAKE_CURRENT_SOURCE_DIR}/top150/string)
-file(GLOB TOP150_ARRAY_FILES "${TOP150_ARRAY_DIR}/*.cpp")
-file(GLOB TOP150_STRING_FILES "${TOP150_STRING_DIR}/*.cpp")
+set(TOP150_DIR ${CMAKE_CURRENT_SOURCE_DIR}/top150)
+file(GLOB_RECURSE TOP150_FILES "${TOP150_DIR}/**.cpp")
+list(APPEND TEST_FILES ${TOP150_FILES})
 
 enable_testing()
 
 add_executable(
         tests
         ${TEST_FILES}
-        ${TOP150_ARRAY_FILES}
-        ${TOP150_STRING_FILES}
 )
 
 target_link_libraries(
