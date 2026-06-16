@@ -49,8 +49,8 @@ public:
             if (i == '*') {
                 if (ret.size() > 0) {
                     ret.pop_back();
-                    continue;
                 }
+                continue;
             }
 
             if (i == '#') {
@@ -72,7 +72,7 @@ public:
 
 TEST(Daily, 3612) {
     Solution s;
-    auto eg = "a#b%*";
+    auto eg = "%#*gm#xib";
     auto ret = s.processStr(eg);
     EXPECT_EQ("ba", ret);
 }
