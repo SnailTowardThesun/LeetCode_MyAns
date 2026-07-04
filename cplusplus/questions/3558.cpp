@@ -71,9 +71,12 @@ public:
 
 TEST(Daily, 3558) {
     Solution s;
-    vector<vector<int>> edges1{{1,2}, {1,3}, {1,4}};
-    EXPECT_EQ(s.assign_edge_weights(edges1), 4);
+    vector<vector<int>> edges1{{1,2}};
+    EXPECT_EQ(s.assign_edge_weights(edges1), 1);
     
-    vector<vector<int>> edges2{{1,2}, {2,3}, {3,4}};
-    EXPECT_EQ(s.assign_edge_weights(edges2), 4);
+    vector<vector<int>> edges2{{1,2}, {1,3}, {3,4}, {3,5}};
+    EXPECT_EQ(s.assign_edge_weights(edges2), 2);
+    
+    vector<vector<int>> edges3{{1,2}, {2,3}, {3,4}};
+    EXPECT_EQ(s.assign_edge_weights(edges3), 4);
 }

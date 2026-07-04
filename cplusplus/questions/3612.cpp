@@ -72,7 +72,7 @@ public:
 
 TEST(Daily, 3612) {
     Solution s;
-    auto eg = "%#*gm#xib";
+    auto eg = "a#b%*";
     auto ret = s.processStr(eg);
     EXPECT_EQ("ba", ret);
 }
