@@ -6,7 +6,7 @@
     "rust"
   ],
   "devDependencies": {
-    "turbo": "latest"
+    "turbo": "^2.10.8"
   },
   "scripts": {
     "build": "turbo build",
