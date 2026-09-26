@@ -39,44 +39,37 @@
 
 using namespace std;
 
-TEST(TOP150, No238_ProductExceptSelf) {
-    class Solution {
-    public:
-        vector<int> product_except_self(vector<int>& nums) {
-            std::vector<int> ret(nums.begin(), nums.end());
 
-            int zero_count = 0;
-            int64_t total = 1;
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int> &nums) {
+        vector<int> left;
+        vector<int> right;
+        int n = nums.size();
 
-            for (auto i = 0; i < nums.size(); i++) {
-                if (nums[i] == 0) {
-                    zero_count++;
-                } else {
-                    total *= nums[i];
-                }
-            }
-
-            if (zero_count >= 2) {
-                return std::vector<int>(nums.size(), 0);
-            }
-
-            for (auto i = 0; i < nums.size(); i++) {
-                if (zero_count == 1) {
-                    if (nums[i] == 0) {
-                        ret[i] = total;
-                    } else {
-                        ret[i] = 0;
-                    }
-                } else {
-                    ret[i] = total / nums[i];
-                }
-            }
-
-            return ret;
+        left.push_back(nums[0]);
+        right.push_back(nums[n - 1]);
+        for (int i = 1; i < n; i++) {
+            left.push_back(nums[i] * left[left.size() - 1]);
         }
-    };
+
+        for (int i = n - 2; i >= 0; i--) {
+            right.push_back(nums[i] * right[right.size() - 1]);
+        }
+
+        vector<int> ret;
+        ret.push_back(right[n-2]);
+        for (int i = 1; i < n - 1; i++) {
+            ret.push_back(left[i-1] * right[n-i-2]);
+        }
+        ret.push_back(left[n-2]);
+        return ret;
+    }
+};
+
+TEST(TOP150, No238_ProductExceptSelf) {
     Solution solution;
     std::vector<int> nums{1, 2, 3, 4};
-    auto ret = solution.product_except_self(nums);
+    auto ret = solution.productExceptSelf(nums);
     EXPECT_EQ(ret.size(), 4);
 }

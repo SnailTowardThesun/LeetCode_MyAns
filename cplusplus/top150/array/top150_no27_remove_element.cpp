@@ -40,22 +40,25 @@
 
 using namespace std;
 
-TEST(TOP150, No27_RemoveElement) {
-    class Solution {
-    public:
-        int remove_element(vector<int>& nums, int val) {
-            for (auto it = nums.begin(); it != nums.end();) {
-                if (*it == val) {
-                    it = nums.erase(it);
-                } else {
-                    it++;
-                }
+class Solution {
+public:
+    int remove_element(vector<int> &nums, int val) {
+        int target = 0;
+
+        for (auto i = 0; i < nums.size()-target;) {
+            if (nums[i] == val) {
+                target += 1;
+                std::swap(nums[i], nums[nums.size() - target]);
+            } else {
+                i++;
             }
-
-            return nums.size();
         }
-    };
 
+        return nums.size() - target;
+    }
+};
+
+TEST(TOP150, No27_RemoveElement) {
     Solution solution;
 
     vector<int> nums{3, 2, 2, 3};

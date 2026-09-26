@@ -40,10 +40,34 @@
 
 using namespace std;
 
+class Solution {
+public:
+    int removeDuplicates(vector<int> &nums) {
+        vector<int> container;
+        container.reserve(nums.size());
+
+        container.emplace_back(nums[0]);
+        container.emplace_back(nums[1]);
+
+        for (auto i = 2; i < nums.size(); i++) {
+            if (nums[i - 1] == nums[i - 2]) {
+                if (nums[i] != nums[i - 1] && nums[i] != nums[i - 2]) {
+                    container.emplace_back(nums[i]);
+                }
+            }else {
+                container.emplace_back(nums[i]);
+            }
+        }
+
+        nums.insert(nums.begin(), container.begin(), container.end());
+        return container.size();
+    }
+};
+
 TEST(TOP150, No80_RemoveDuplicatesII) {
     class Solution {
     public:
-        int remove_duplicates(vector<int>& nums) {
+        int remove_duplicates(vector<int> &nums) {
             for (auto it = nums.begin(); it < nums.end() - 2;) {
                 if (*it == *(it + 2)) {
                     it + 2 = nums.erase(it + 2);

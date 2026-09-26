@@ -49,34 +49,25 @@ using namespace std;
 TEST(TOP150, No14_LongestCommonPrefix) {
     class Solution {
     public:
-        string longest_common_prefix(vector<string>& strs) {
-            if (strs.empty()) {
-                return "";
+        string longest_common_prefix(vector<string> &strs) {
+            string ret = "";
+            int steps = INT_MAX;
+            for (auto i = 0; i < strs.size(); i++) {
+                steps = min(int(strs[i].size()), steps);
             }
 
-            auto pos = 0;
-            auto is_end = false;
-            while (pos < strs[0].size()) {
-                auto t = strs[0].at(pos);
-                for (auto i : strs) {
-                    if (pos > int(i.size()) - 1) {
-                        is_end = true;
-                        break;
-                    }
-
-                    if (i.at(pos) != t) {
-                        is_end = true;
-                        break;
+            for (auto i = 0; i < steps; i++) {
+                char c = strs[0][i];
+                for (auto j = 1; j < strs.size(); j++) {
+                    if (strs[j][i] != c) {
+                        return ret;
                     }
                 }
 
-                if (is_end) {
-                    break;
-                }
-
-                pos++;
+                ret += c;
             }
-            return strs[0].substr(0, pos);
+
+            return ret;
         }
     };
 

@@ -42,26 +42,26 @@
 
 using namespace std;
 
-TEST(TOP150, No55_CanJump) {
-    class Solution {
-    public:
-        bool can_jump(vector<int>& nums) {
-            auto right_most = 0;
-            for (auto i = 0; i < nums.size(); i++) {
-                if (i <= right_most) {
-                    right_most = std::max(right_most, i + nums[i]);
-                    if (right_most >= nums.size() - 1) {
-                        return true;
-                    }
-                }
+
+class Solution {
+public:
+    bool canJump(vector<int>& nums) {
+        int right_most = nums[0];
+        for (int i = 1; i < nums.size(); i++) {
+            if (i > right_most) {
+                return false;
             }
 
-            return false;
+            right_most = std::max(right_most, i + nums[i]);
         }
-    };
 
+        return true;
+    }
+};
+
+TEST(TOP150, No55_CanJump) {
     Solution solution;
     vector<int> nums{2, 3, 1, 1, 4};
-    auto ret = solution.can_jump(nums);
+    auto ret = solution.canJump(nums);
     EXPECT_EQ(ret, true);
 }

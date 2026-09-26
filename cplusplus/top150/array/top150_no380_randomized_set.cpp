@@ -48,45 +48,43 @@
  */
 
 #include <gtest/gtest.h>
-#include <set>
-#include <cstdlib>
-#include <iterator>
+#include <unordered_set>
 
 using namespace std;
 
+class RandomizedSet {
+    unordered_set<int> container;
+
+public:
+    RandomizedSet() {
+    }
+
+    bool insert(int val) {
+        if (container.find(val) != container.end()) {
+            return false;
+        }
+
+        container.insert(val);
+        return true;
+    }
+
+    bool remove(int val) {
+        if (container.find(val) == container.end()) {
+            return false;
+        }
+
+        container.erase(val);
+        return true;
+    }
+
+    int getRandom() {
+        int seed = rand() % container.size();
+        vector<int> t{container.begin(), container.end()};
+        return t[seed];
+    }
+};
+
 TEST(TOP150, No380_RandomizedSet) {
-    class RandomizedSet {
-    private:
-        std::set<int> container;
-
-    public:
-        RandomizedSet() {}
-
-        bool insert(int val) {
-            if (container.find(val) == container.end()) {
-                container.insert(val);
-                return true;
-            }
-
-            return false;
-        }
-
-        bool remove(int val) {
-            if (container.find(val) != container.end()) {
-                container.erase(val);
-                return true;
-            }
-
-            return false;
-        }
-
-        int get_random() {
-            auto it = container.begin();
-            std::advance(it, rand() % container.size());
-            return *it;
-        }
-    };
-
     RandomizedSet randomizedSet;
 
     bool param_1 = randomizedSet.insert(1);
@@ -97,7 +95,7 @@ TEST(TOP150, No380_RandomizedSet) {
     bool param_3 = randomizedSet.insert(2);
     EXPECT_EQ(param_3, true);
 
-    auto ret = randomizedSet.get_random();
+    auto ret = randomizedSet.getRandom();
     EXPECT_TRUE(ret == 2 || ret == 1);
 
     auto param_4 = randomizedSet.remove(1);
@@ -106,6 +104,6 @@ TEST(TOP150, No380_RandomizedSet) {
     auto param_5 = randomizedSet.insert(2);
     EXPECT_EQ(param_5, false);
 
-    ret = randomizedSet.get_random();
+    ret = randomizedSet.getRandom();
     EXPECT_TRUE(ret == 2);
 }

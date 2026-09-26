@@ -44,24 +44,27 @@
 
 using namespace std;
 
-TEST(TOP150, No26_RemoveDuplicatesFromSortedArray) {
-    class Solution {
-    public:
-        int remove_duplicates(vector<int>& nums) {
-            for (auto it = nums.begin(); it != nums.end() - 1;) {
-                if (*it == *(it + 1)) {
-                    it = nums.erase(it);
-                } else {
-                    it++;
-                }
+class Solution {
+public:
+    int removeDuplicates(vector<int> &nums) {
+        vector<int> container;
+        container.reserve(nums.size());
+
+        container.emplace_back(nums[0]);
+        for (auto i = 1; i < nums.size(); i++) {
+            if (nums[i] != nums[i-1]) {
+                container.emplace_back(nums[i]);
             }
-
-            return nums.size();
         }
-    };
 
+        nums.insert(nums.begin(), container.begin(), container.end());
+        return container.size();
+    }
+};
+
+TEST(TOP150, No26_RemoveDuplicatesFromSortedArray) {
     Solution solution;
     std::vector<int> nums{1, 1, 2};
-    auto ret = solution.remove_duplicates(nums);
+    auto ret = solution.removeDuplicates(nums);
     assert(ret == 2);
 }

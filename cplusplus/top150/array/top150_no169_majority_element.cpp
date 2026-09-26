@@ -45,30 +45,27 @@
 
 using namespace std;
 
-TEST(TOP150, No169_MajorityElement) {
-    class Solution {
-    public:
-        int majority_element(vector<int>& nums) {
-            auto candidate = -1;
-            auto count = 0;
-            for (auto& i : nums) {
-                if (count == 0) {
-                    candidate = i;
-                    count = 1;
-                } else if (candidate == i) {
-                    count++;
-                } else {
-                    count--;
-                }
+class Solution {
+public:
+    int majorityElement(vector<int> &nums) {
+        unordered_map<int, int> candidate;
+        for (auto i : nums) {
+            candidate[i]++;
+            if (candidate[i] > nums.size() / 2) {
+                return i;
             }
-
-            return candidate;
         }
-    };
+
+        return -1;
+    }
+};
+
+TEST(TOP150, No169_MajorityElement) {
+
 
     Solution solution;
     std::vector<int> nums{3, 2, 3};
-    auto ret = solution.majority_element(nums);
+    auto ret = solution.majorityElement(nums);
 
     EXPECT_EQ(ret, 3);
 }

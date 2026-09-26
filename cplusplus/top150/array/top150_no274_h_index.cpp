@@ -43,25 +43,24 @@
 
 using namespace std;
 
-TEST(TOP150, No274_HIndex) {
-    class Solution {
-    public:
-        int h_index(vector<int>& citations) {
-            std::sort(citations.begin(), citations.end(), std::greater<int>());
-            auto ret = 0;
-
-            for (auto i = 0; i < citations.size(); i++) {
-                if (citations[i] > ret) {
-                    ret++;
-                }
+class Solution {
+public:
+    int hIndex(vector<int> &citations) {
+        int n = int(citations.size());
+        sort(citations.begin(), citations.end());
+        for (int i = 0; i < n; i++) {
+            int target = n - i;
+            if (citations[i] >= target) {
+                return target;
             }
-
-            return ret;
         }
-    };
+        return 0;
+    }
+};
 
+TEST(TOP150, No274_HIndex) {
     Solution solution;
     std::vector<int> citations{3, 0, 6, 1, 5};
-    auto ret = solution.h_index(citations);
+    auto ret = solution.hIndex(citations);
     EXPECT_EQ(ret, 3);
 }

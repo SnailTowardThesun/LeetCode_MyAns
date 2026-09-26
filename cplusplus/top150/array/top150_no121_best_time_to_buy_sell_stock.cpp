@@ -43,27 +43,27 @@
 
 using namespace std;
 
-TEST(TOP150, No121_MaxProfit) {
-    class Solution {
-    public:
-        int max_profit(vector<int>& prices) {
-            auto ret = 0;
-            auto min_price = prices[0];
-            for (auto i = 1; i < prices.size(); i++) {
-                if (prices[i] < min_price) {
-                    min_price = prices[i];
-                } else {
-                    ret = std::max(ret, prices[i] - min_price);
-                }
+class Solution {
+public:
+    int maxProfit(vector<int> &prices) {
+        int ret = 0;
+        int preMin = prices[0];
+        for (auto i = 1;i < prices.size(); i++) {
+            if (prices[i] > preMin) {
+                ret = std::max(ret, prices[i] - preMin);
+            } else {
+                preMin = prices[i];
             }
-
-            return ret;
         }
-    };
 
+        return ret;
+    }
+};
+
+TEST(TOP150, No121_MaxProfit) {
     Solution solution;
     std::vector<int> prices{7, 1, 5, 3, 6, 4};
-    auto ret = solution.max_profit(prices);
+    auto ret = solution.maxProfit(prices);
 
     EXPECT_EQ(ret, 5);
 }

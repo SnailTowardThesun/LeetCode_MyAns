@@ -48,40 +48,41 @@
 
 using namespace std;
 
-TEST(TOP150, No88_MergeTwoSortedLists) {
-    class Solution {
-    public:
-        void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
-            std::vector<int> container;
-            container.reserve(m + n);
+class Solution {
+public:
+    void merge(vector<int> &nums1, int m, vector<int> &nums2, int n) {
+        vector<int> container;
 
-            int pos1 = 0, pos2 = 0;
-            while (pos1 < m && pos2 < n) {
-                if (nums1[pos1] < nums2[pos2]) {
-                    container.emplace_back(nums1[pos1++]);
-                } else {
-                    container.emplace_back(nums2[pos2++]);
-                }
+        int i = 0, j = 0;
+
+        for (; i < m && j < n;) {
+            if (nums1[i] < nums2[j]) {
+                container.emplace_back(nums1[i]);
+                i++;
+            } else {
+                container.emplace_back(nums2[j]);
+                j++;
             }
-
-            while (pos1 < m) {
-                container.emplace_back(nums1[pos1++]);
-            }
-
-            while (pos2 < n) {
-                container.emplace_back(nums2[pos2++]);
-            }
-
-            nums1 = container;
         }
-    };
 
+        for (; i < m; i++) {
+            container.emplace_back(nums1[i]);
+        }
+
+        for (; j < n; j++) {
+            container.emplace_back(nums2[j]);
+        }
+        nums1 = std::move(container);
+    }
+};
+
+TEST(TOP150, No88_MergeTwoSortedLists) {
     Solution solution;
     vector<int> nums1{1, 3, 5};
     vector<int> nums2{2, 4, 6};
 
     solution.merge(nums1, 3, nums2, 3);
-    for (auto& i : nums1) {
+    for (auto &i: nums1) {
         cout << i << ", ";
     }
 

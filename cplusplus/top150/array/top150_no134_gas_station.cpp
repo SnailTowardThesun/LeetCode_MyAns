@@ -58,29 +58,53 @@
 
 using namespace std;
 
-TEST(TOP150, No134_CanCompleteCircuit) {
-    class Solution {
-    public:
-        int can_complete_circuit(vector<int>& gas, vector<int>& cost) {
-            auto min_gas = INT_MAX;
-            auto min_idx = 0;
-            auto left = 0;
+class Solution {
+public:
+    int canCompleteCircuit(vector<int> &gas, vector<int> &cost) {
+        int n = gas.size();
+        for (auto i = 0; i < n; ) {
+            int tmp_total = 0;
+            int tmp_cost = 0;
+            int j = 0;
+            for (; j < n; j++) {
+                tmp_total += gas[(j + i) % n];
+                tmp_cost += cost[(j + i) % n];
 
-            for (auto i = 0; i < gas.size(); i++) {
-                left += gas[i] - cost[i];
-                if (min_gas > left) {
-                    min_gas = left;
-                    min_idx = i;
+                if (tmp_total < tmp_cost) {
+                    break;
                 }
             }
 
-            return left < 0 ? -1 : (min_idx + 1) % gas.size();
-        }
-    };
+            if (j == n && tmp_total >= tmp_cost) {
+                return i;
+            }
 
+            i += j + 1;
+        }
+        return -1;
+    }
+};
+
+TEST(TOP150, No134_CanCompleteCircuit) {
     Solution solution;
-    std::vector<int> gas{1, 2, 3, 4, 5};
-    std::vector<int> cost{3, 4, 5, 1, 2};
-    auto ret = solution.can_complete_circuit(gas, cost);
-    EXPECT_EQ(ret, 3);
+
+    // 用户给出的用例：差值 [-1,-1,-1,1,-4,-1,68]，只有从 6 号站出发可行
+    std::vector<int> gas{1, 2, 3, 4, 5, 5, 70};
+    std::vector<int> cost{2, 3, 4, 3, 9, 6, 2};
+    EXPECT_EQ(solution.canCompleteCircuit(gas, cost), 6);
+
+    // 官方示例 1
+    std::vector<int> gas1{1, 2, 3, 4, 5};
+    std::vector<int> cost1{3, 4, 5, 1, 2};
+    EXPECT_EQ(solution.canCompleteCircuit(gas1, cost1), 3);
+
+    // 官方示例 2：总油量 < 总消耗，无解
+    std::vector<int> gas2{2, 3, 4};
+    std::vector<int> cost2{3, 4, 3};
+    EXPECT_EQ(solution.canCompleteCircuit(gas2, cost2), -1);
+
+    // 边界：每段都恰好耗光（中途油量为 0 合法），起点 0 可行
+    std::vector<int> gas3{2, 2};
+    std::vector<int> cost3{2, 2};
+    EXPECT_EQ(solution.canCompleteCircuit(gas3, cost3), 0);
 }

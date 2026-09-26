@@ -45,34 +45,30 @@
 
 using namespace std;
 
-TEST(TOP150, No42_TrapRainWater) {
-    class Solution {
-    public:
-        int trap(vector<int>& height) {
-            int ret = 0;
+class Solution {
+public:
+    int trap(vector<int>& height) {
+        int n = height.size() - 1;
+        int left = 0, right = n, leftMax = 0, rightMax = 0;
+        int ret = 0;
+        while(left < right) {
+            leftMax = max(leftMax, height[left]);
+            rightMax = max(rightMax, height[right]);
 
-            int left_point = 0;
-            int right_point = static_cast<int>(height.size()) - 1;
-
-            int left_max = 0;
-            int right_max = 0;
-
-            while (left_point < right_point) {
-                left_max = std::max(left_max, height[left_point]);
-                right_max = std::max(right_max, height[right_point]);
-                if (left_max < right_max) {
-                    ret += (left_max - height[left_point]);
-                    left_point++;
-                } else {
-                    ret += (right_max - height[right_point]);
-                    right_point--;
-                }
+            if (leftMax < rightMax) {
+                ret += leftMax - height[left];
+                left++;
+            } else {
+                ret += rightMax - height[right];
+                right--;
             }
-
-            return ret;
         }
-    };
 
+        return ret;
+    }
+};
+
+TEST(TOP150, No42_TrapRainWater) {
     Solution solution;
     std::vector<int> height{0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1};
     auto ret = solution.trap(height);

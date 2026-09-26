@@ -44,27 +44,26 @@
 
 using namespace std;
 
-TEST(TOP150, No45_JumpGameII) {
-    class Solution {
-    public:
-        int jump(vector<int>& nums) {
-            auto max_pos = 0;
-            auto end = 0;
-            auto ret = 0;
-
-            for (auto i = 0; i < nums.size() - 1; i++) {
-                if (max_pos >= i) {
-                    max_pos = std::max(max_pos, i + nums[i]);
-                    if (i == end) {
-                        end = max_pos;
-                        ret++;
-                    }
+class Solution {
+public:
+    int jump(vector<int> &nums) {
+        int n = nums.size();
+        vector<int> dp(n, INT_MAX);
+        dp[0] = 0;
+        for (auto i = 1; i < n; i++) {
+            for (auto j = 0; j < i; j++) {
+                if (nums[j] + j >= i) {
+                    dp[i] = std::min(dp[i], dp[j]);
                 }
             }
 
-            return ret;
+            dp[i] += 1;
         }
-    };
+        return dp[n - 1];
+    }
+};
+
+TEST(TOP150, No45_JumpGameII) {
     Solution solution;
     std::vector<int> nums{2, 3, 1, 1, 4};
     auto ret = solution.jump(nums);

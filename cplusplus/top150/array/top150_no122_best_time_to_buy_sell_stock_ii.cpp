@@ -48,42 +48,27 @@
 #include <gtest/gtest.h>
 #include <vector>
 #include <algorithm>
-#include <iostream>
 
 using namespace std;
 
-TEST(TOP150, No122_MaxProfitII) {
-    class Solution {
-    public:
-        int max_profit(vector<int>& prices) {
-            auto n = prices.size();
-            std::vector<std::vector<int> > dp(n, std::vector<int>(2, 0));
 
-            dp[0][0] = 0;
-            dp[0][1] = -prices[0];
-            for (int i = 1; i < n; i++) {
-                dp[i][0] = std::max(dp[i - 1][0], dp[i - 1][1] + prices[i]);
-                dp[i][1] = std::max(dp[i - 1][1], dp[i - 1][0] - prices[i]);
-            }
-
-            std::cout << "0: " << std::endl;
-            for (auto i = 0; i < n; i++) {
-                std::cout << dp[i][0] << ", ";
-            }
-
-            std::cout << std::endl;
-
-            std::cout << "1: " << std::endl;
-            for (auto i = 0; i < n; i++) {
-                std::cout << dp[i][1] << ", ";
-            }
-
-            return dp[n - 1][0];
+class Solution {
+public:
+    int maxProfit(vector<int> &prices) {
+        vector dp(prices.size(), vector<int>(2, 0));
+        dp[0][0] = 0;
+        dp[0][1] = -prices[0];
+        for (auto i = 1; i < prices.size(); i++) {
+            dp[i][0] = std::max(dp[i - 1][0], dp[i - 1][1] + prices[i]);
+            dp[i][1] = std::max(dp[i - 1][1], dp[i - 1][0] - prices[i]);
         }
-    };
+        return dp[prices.size() - 1][0];
+    }
+};
 
+TEST(TOP150, No122_MaxProfitII) {
     Solution solution;
     std::vector<int> prices{7, 1, 5, 3, 6, 4};
-    auto ret = solution.max_profit(prices);
+    auto ret = solution.maxProfit(prices);
     EXPECT_EQ(ret, 7);
 }

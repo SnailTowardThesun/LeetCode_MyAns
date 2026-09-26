@@ -49,17 +49,22 @@
 
 using namespace std;
 
-TEST(TOP150, No189_RotateArray) {
-    class Solution {
-    public:
-        void rotate(vector<int>& nums, int k) {
-            auto real_steps = k % nums.size();
-            std::vector<int> container(nums.end() - real_steps, nums.end());
-            container.insert(container.end(), nums.begin(), nums.end() - real_steps);
-            nums = container;
-        }
-    };
 
+class Solution {
+public:
+    void rotate(vector<int> &nums, int k) {
+        int step = k % nums.size();
+        vector<int> container;
+        container.reserve(nums.size());
+        container.insert(container.end(), nums.end() - step, nums.end());
+        container.insert(container.end(), nums.begin(), nums.end() - step);
+
+        nums = container;
+        return;
+    }
+};
+
+TEST(TOP150, No189_RotateArray) {
     Solution solution;
     std::vector<int> nums{-1, -100, 3, 99};
     auto k = 2;

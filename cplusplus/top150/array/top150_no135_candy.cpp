@@ -42,39 +42,48 @@
 
 using namespace std;
 
-TEST(TOP150, No135_Candy) {
-    class Solution {
-    public:
-        int candy(vector<int>& ratings) {
-            // 我们先找从左到右满足最少的糖果，再找从右到左的，最后取两边都满足的值(就是最大值)。
-            auto n = int(ratings.size());
-            std::vector<int> left_container(n, 1);
-            for (auto i = 1; i < n; i++) {
-                if (ratings[i] > ratings[i - 1]) {
-                    left_container[i] = left_container[i - 1] + 1;
-                } else {
-                    left_container[i] = 1;
-                }
-            }
+class Solution {
+public:
+    int candy(vector<int> &ratings) {
+        int n = ratings.size();
+        // 每人先发 1 颗
+        vector<int> candies(n, 1);
 
-            std::vector<int> right_container(n, 1);
-            for (int i = n - 2; i >= 0; i--) {
-                if (ratings[i] > ratings[i + 1]) {
-                    right_container[i] = right_container[i + 1] + 1;
-                } else {
-                    right_container[i] = 1;
-                }
+        // 从左到右：评分比左边高，则比左边多 1 颗
+        for (int i = 1; i < n; i++) {
+            if (ratings[i] > ratings[i - 1]) {
+                candies[i] = candies[i - 1] + 1;
             }
-            auto ret = 0;
-            for (auto i = 0; i < n; i++) {
-                ret += std::max(left_container[i], right_container[i]);
-            }
-            return ret;
         }
-    };
 
+        // 从右到左：评分比右边高，则至少比右边多 1 颗，取两种约束的最大值
+        int ret = candies[n - 1];
+        for (int i = n - 2; i >= 0; i--) {
+            if (ratings[i] > ratings[i + 1]) {
+                candies[i] = max(candies[i], candies[i + 1] + 1);
+            }
+            ret += candies[i];
+        }
+
+        return ret;
+    }
+};
+
+TEST(TOP150, No135_Candy) {
     Solution solution;
+    // 示例 1
     auto ratings = vector<int>{1, 0, 2};
-    auto ret = solution.candy(ratings);
-    EXPECT_EQ(ret, 5);
+    EXPECT_EQ(solution.candy(ratings), 5);
+
+    // 示例 2：相等评分不强制递增
+    auto ratings2 = vector<int>{1, 2, 2};
+    EXPECT_EQ(solution.candy(ratings2), 4);
+
+    // 边界：单人
+    auto ratings3 = vector<int>{0};
+    EXPECT_EQ(solution.candy(ratings3), 1);
+
+    // 递减序列：糖果数为 4+3+2+1
+    auto ratings4 = vector<int>{4, 3, 2, 1};
+    EXPECT_EQ(solution.candy(ratings4), 10);
 }
