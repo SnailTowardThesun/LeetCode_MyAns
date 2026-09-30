@@ -28,6 +28,8 @@ enable_testing()
 add_executable(
         tests
         ${TEST_FILES}
+        questions/1614.cpp
+        questions/1111.cpp
 )
 
 target_link_libraries(
