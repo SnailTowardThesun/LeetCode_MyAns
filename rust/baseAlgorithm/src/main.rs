@@ -1,4 +1,3 @@
-
 /**
  * bubble sort
  */
@@ -16,7 +15,7 @@ fn bubbleSort(array: Vec<i32>) -> Vec<i32> {
 }
 
 #[test]
-fn test_bubble_sort () {
+fn test_bubble_sort() {
     let demo = vec![3, 5, 6, 1, 0, 2, 9];
     let array = bubbleSort(demo);
 
@@ -32,7 +31,7 @@ fn selectSort(array: Vec<i32>) -> Vec<i32> {
     let mut array = array;
 
     for i in 0..array.len() {
-        for j in (i+1)..array.len() {
+        for j in (i + 1)..array.len() {
             if array[j] < array[i] {
                 array.swap(i, j);
             }
@@ -86,7 +85,7 @@ fn mergeSort(array: Vec<i32>) -> Vec<i32> {
     let mut array = array;
     let mid = array.len() / 2;
     if mid == 0 {
-        return array
+        return array;
     }
 
     let mut left_array = mergeSort(array[..mid].to_owned());
@@ -132,7 +131,6 @@ fn test_merge_sort() {
     }
 }
 
-
 /**
  * quick sort
  */
@@ -159,9 +157,8 @@ fn test_quick_sort() {
     println!("{:?}", demo);
 }
 
-use std::rc::Rc;
 use std::cell::RefCell;
-
+use std::rc::Rc;
 
 #[derive(Debug, PartialEq, Eq)]
 pub struct TreeNode {
@@ -204,7 +201,7 @@ fn test_binary_tree_pre_order() {
 }
 
 struct UnionFind {
-    root: Vec<i32>
+    root: Vec<i32>,
 }
 
 impl UnionFind {
@@ -213,9 +210,9 @@ impl UnionFind {
         let r2 = self.find(target2 as usize);
         if r1 != r2 {
             for i in 0..self.root.len() {
-               if self.root[i] == r2 {
-                   self.root[i] = r1;
-               }
+                if self.root[i] == r2 {
+                    self.root[i] = r1;
+                }
             }
         }
 
@@ -229,24 +226,21 @@ impl UnionFind {
         return self.root[t];
     }
 
-    fn connected(&self, t1: i32, t2: i32) -> bool{
+    fn connected(&self, t1: i32, t2: i32) -> bool {
         self.root[t1 as usize] == self.root[t2 as usize]
     }
 
     fn new(size: usize) -> UnionFind {
-
-        let mut obj = UnionFind{
-            root: vec![0; size]
+        let mut obj = UnionFind {
+            root: vec![0; size],
         };
 
         for i in 0..obj.root.len() {
             obj.root[i] = i as i32;
         }
 
-        return obj
+        return obj;
     }
-
-
 }
 #[test]
 fn test_union_find() {
@@ -262,15 +256,13 @@ fn test_union_find() {
     println!("{}", obj.connected(1, 5));
     println!("{}", obj.connected(5, 7));
     println!("{}", obj.connected(4, 9));
-
 }
 
 struct QuickUnion {
-    root: Vec<i32>
+    root: Vec<i32>,
 }
 
 impl QuickUnion {
-
     fn union(&mut self, target1: i32, target2: i32) {
         let r1 = self.find(target1 as usize);
         let r2 = self.find(target2 as usize);
@@ -291,21 +283,20 @@ impl QuickUnion {
         return self.find(self.root[t] as usize);
     }
 
-    fn connected(&self, t1: i32, t2: i32) -> bool{
+    fn connected(&self, t1: i32, t2: i32) -> bool {
         self.find(t1 as usize) == self.find(t2 as usize)
     }
 
     fn new(size: usize) -> QuickUnion {
-
-        let mut obj = QuickUnion{
-            root: vec![0; size]
+        let mut obj = QuickUnion {
+            root: vec![0; size],
         };
 
         for i in 0..obj.root.len() {
             obj.root[i] = i as i32;
         }
 
-        return obj
+        return obj;
     }
 }
 
@@ -327,7 +318,7 @@ fn test_quick_union() {
 
 struct OrderedUnion {
     root: Vec<i32>,
-    rank: Vec<i32>
+    rank: Vec<i32>,
 }
 
 impl OrderedUnion {
@@ -342,7 +333,7 @@ impl OrderedUnion {
                 self.root[r1 as usize] = r2
             } else {
                 self.root[r2 as usize] = r1;
-                self.rank[r2 as usize]+=1;
+                self.rank[r2 as usize] += 1;
             }
         }
 
@@ -362,23 +353,23 @@ impl OrderedUnion {
         return self.root[t];
     }
 
-    fn connected(&mut self, t1: i32, t2: i32) -> bool{
+    fn connected(&mut self, t1: i32, t2: i32) -> bool {
         self.find(t1 as usize) == self.find(t2 as usize)
     }
 
-    fn new(size: usize) -> OrderedUnion{
-
-        let mut obj = OrderedUnion{
+    fn new(size: usize) -> OrderedUnion {
+        let mut obj = OrderedUnion {
             root: vec![0; size],
-            rank: vec![1; size]
+            rank: vec![1; size],
         };
 
         for i in 0..obj.root.len() {
             obj.root[i] = i as i32;
         }
 
-        return obj
-    }}
+        return obj;
+    }
+}
 
 #[test]
 fn test_ordered_union() {
@@ -395,7 +386,6 @@ fn test_ordered_union() {
     println!("{}", obj.connected(5, 7));
     println!("{}", obj.connected(4, 9));
 }
-
 
 fn main() {
     println!("Hello base algorithm");
