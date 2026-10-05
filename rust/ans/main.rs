@@ -471,7 +471,7 @@ fn test_reverse() {
 * Input: "   -42"
 * Output: -42
 * Explanation: The first non-whitespace character is '-', which is the minus sign.
-*              Then take as many numerical digits as possible, which gets 42.
+* Then take as many numerical digits as possible, which gets 42.
 * Example 3:
 *
 * Input: "4193 with words"
@@ -482,13 +482,13 @@ fn test_reverse() {
 * Input: "words and 987"
 * Output: 0
 * Explanation: The first non-whitespace character is 'w', which is not a numerical
-*              digit or a +/- sign. Therefore no valid conversion could be performed.
+* digit or a +/- sign. Therefore no valid conversion could be performed.
 * Example 5:
 *
 * Input: "-91283472332"
 * Output: -2147483648
 * Explanation: The number "-91283472332" is out of the range of a 32-bit signed integer.
-*              Thefore INT_MIN (−231) is returned.
+* Therefore INT_MIN (−231) is returned.
 */
 fn my_atoi(str: String) -> i32 {
     let mut ret: i64 = 0;
