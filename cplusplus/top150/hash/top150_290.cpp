@@ -52,7 +52,12 @@ public:
 
 TEST(top150, 290) {
     Solution solution;
-    auto pattern = "abba", s = "dog dog dog dog";
-    auto ret = solution.wordPattern(pattern, s);
+    string pattern = "abba";
+    string sentence = "dog cat cat dog";
+    auto ret = solution.wordPattern(pattern, sentence);
     EXPECT_TRUE(ret);
+
+    string duplicate_pattern = "abba";
+    string duplicate_sentence = "dog dog dog dog";
+    EXPECT_FALSE(solution.wordPattern(duplicate_pattern, duplicate_sentence));
 }

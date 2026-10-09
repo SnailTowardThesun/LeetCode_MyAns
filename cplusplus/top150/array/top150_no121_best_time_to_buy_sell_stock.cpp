@@ -43,6 +43,8 @@
 
 using namespace std;
 
+namespace {
+
 class Solution {
 public:
     int maxProfit(vector<int> &prices) {
@@ -67,3 +69,5 @@ TEST(TOP150, No121_MaxProfit) {
 
     EXPECT_EQ(ret, 5);
 }
+
+}  // namespace

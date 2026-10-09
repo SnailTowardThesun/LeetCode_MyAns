@@ -6,6 +6,8 @@
 
 using namespace std;
 
+namespace {
+
 /**
  * Definition for a binary tree node.
  */
@@ -86,4 +88,10 @@ TEST(Top150, 105) {
     vector<int> inorder{9, 3, 15, 20, 7};
     auto ret = s.buildTree(preorder, inorder);
     EXPECT_EQ(ret->val, 3);
+    EXPECT_EQ(ret->left->val, 9);
+    EXPECT_EQ(ret->right->val, 20);
+    EXPECT_EQ(ret->right->left->val, 15);
+    EXPECT_EQ(ret->right->right->val, 7);
 }
+
+}  // namespace

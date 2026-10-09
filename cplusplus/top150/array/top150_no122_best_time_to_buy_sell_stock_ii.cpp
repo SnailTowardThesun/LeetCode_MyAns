@@ -52,6 +52,8 @@
 using namespace std;
 
 
+namespace {
+
 class Solution {
 public:
     int maxProfit(vector<int> &prices) {
@@ -68,7 +70,13 @@ public:
 
 TEST(TOP150, No122_MaxProfitII) {
     Solution solution;
-    std::vector<int> prices{7, 1, 5, 3, 6, 4};
-    auto ret = solution.maxProfit(prices);
-    EXPECT_EQ(ret, 7);
+    std::vector<int> prices1{7, 1, 5, 3, 6, 4};
+    std::vector<int> prices2{1, 2, 3, 4, 5};
+    std::vector<int> prices3{7, 6, 4, 3, 1};
+
+    EXPECT_EQ(solution.maxProfit(prices1), 7);
+    EXPECT_EQ(solution.maxProfit(prices2), 4);
+    EXPECT_EQ(solution.maxProfit(prices3), 0);
 }
+
+}  // namespace
