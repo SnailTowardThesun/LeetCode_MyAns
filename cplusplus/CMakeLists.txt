@@ -28,7 +28,6 @@ enable_testing()
 add_executable(
         tests
         ${TEST_FILES}
-        top150/binary_tree/top150_106.cpp
 )
 
 target_link_libraries(
