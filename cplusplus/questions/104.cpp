@@ -35,6 +35,7 @@
  */
 
 #include <gtest/gtest.h>
+
 #include <algorithm>
 
 using namespace std;
@@ -46,17 +47,20 @@ struct TreeNode {
     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
 
-TEST(Daily, 104) {
-    class Solution {
-    public:
-        int maxDepth(TreeNode* root) {
-            if (root == NULL) return 0;
-            return max(maxDepth(root->left), maxDepth(root->right)) + 1;
-        }
-    };
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+class Solution {
+   public:
+    int maxDepth(TreeNode* root) {
+        if (root == NULL) return 0;
+        return max(maxDepth(root->left), maxDepth(root->right)) + 1;
+    }
+};
+}  // namespace
 
+TEST(Daily, 104) {
     Solution s;
-    
+
     // 测试用例 1
     TreeNode* root1 = new TreeNode(3);
     root1->left = new TreeNode(9);
@@ -64,15 +68,15 @@ TEST(Daily, 104) {
     root1->right->left = new TreeNode(15);
     root1->right->right = new TreeNode(7);
     EXPECT_EQ(s.maxDepth(root1), 3);
-    
+
     // 测试用例 2
     TreeNode* root2 = new TreeNode(1);
     root2->right = new TreeNode(2);
     EXPECT_EQ(s.maxDepth(root2), 2);
-    
+
     // 测试用例 3
     EXPECT_EQ(s.maxDepth(NULL), 0);
-    
+
     // 测试用例 4
     TreeNode* root4 = new TreeNode(1);
     EXPECT_EQ(s.maxDepth(root4), 1);

@@ -47,6 +47,8 @@
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
    public:
     int distinctSubseqII(string s) {
@@ -61,6 +63,7 @@ class Solution {
         return accumulate(dp[s.size()].begin(), dp[s.size()].end(), 0LL) % MOD;
     }
 };
+}  // namespace
 
 TEST(Daily, 940) {
     Solution s;

@@ -27,11 +27,14 @@
 // - 空间复杂度：O(1)，不计返回数组。
 
 #include <gtest/gtest.h>
+
 #include <stack>
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     vector<int> maxDepthAfterSplit(string seq) {
         vector<int> ret(seq.size(), 0);
 
@@ -49,10 +52,11 @@ public:
         return ret;
     }
 };
+}  // namespace
 
 TEST(Daily, 1111) {
     Solution s;
     auto seq = "(()())";
     auto ret = s.maxDepthAfterSplit(seq);
-    EXPECT_EQ(vector<int>({0,1,1,1,1,0}), ret);
+    EXPECT_EQ(vector<int>({0, 1, 1, 1, 1, 0}), ret);
 }

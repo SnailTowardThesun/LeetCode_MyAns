@@ -41,9 +41,11 @@
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
-    void dfs(string path, vector<string> &container, int n, int left, int right) {
+   public:
+    void dfs(string path, vector<string>& container, int n, int left, int right) {
         if (left > n) {
             return;
         }
@@ -88,6 +90,7 @@ public:
         return ret;
     }
 };
+}  // namespace
 
 TEST(Daily, 22) {
     Solution s;

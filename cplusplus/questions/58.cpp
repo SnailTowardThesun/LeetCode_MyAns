@@ -44,44 +44,48 @@
  */
 
 #include <gtest/gtest.h>
+
 #include <string>
 
 using namespace std;
 
-TEST(Daily, 58) {
-    class Solution {
-    public:
-        int lengthOfLastWord(string s) {
-            int count = 0;
-            int i = s.length() - 1;
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+class Solution {
+   public:
+    int lengthOfLastWord(string s) {
+        int count = 0;
+        int i = s.length() - 1;
 
-            while (i >= 0 && s[i] == ' ') {
-                i--;
-            }
-
-            while (i >= 0 && s[i] != ' ') {
-                count++;
-                i--;
-            }
-
-            return count;
+        while (i >= 0 && s[i] == ' ') {
+            i--;
         }
-    };
 
+        while (i >= 0 && s[i] != ' ') {
+            count++;
+            i--;
+        }
+
+        return count;
+    }
+};
+}  // namespace
+
+TEST(Daily, 58) {
     Solution s;
-    
+
     // 测试用例 1
     EXPECT_EQ(s.lengthOfLastWord("Hello World"), 5);
-    
+
     // 测试用例 2
     EXPECT_EQ(s.lengthOfLastWord("   fly me   to   the moon  "), 4);
-    
+
     // 测试用例 3
     EXPECT_EQ(s.lengthOfLastWord("luffy is still joyboy"), 6);
-    
+
     // 测试用例 4
     EXPECT_EQ(s.lengthOfLastWord("a"), 1);
-    
+
     // 测试用例 5
     EXPECT_EQ(s.lengthOfLastWord(""), 0);
 }

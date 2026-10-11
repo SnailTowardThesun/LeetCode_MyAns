@@ -24,13 +24,15 @@
  *           时间复杂度: O((num2-num1) * log(num2))，空间复杂度: O(log(num2))。
  */
 #include <gtest/gtest.h>
+
 #include <string>
 #include <vector>
 using namespace std;
 
-
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     int helper(int n) {
         string num = to_string(n);
         int ret = 0;
@@ -38,11 +40,11 @@ public:
         for (int i = 1; i < num.size() - 1; i++) {
             bool p = false;
             bool v = false;
-            if (num.at(i) > num.at(i-1) && num.at(i) > num.at(i+1)) {
+            if (num.at(i) > num.at(i - 1) && num.at(i) > num.at(i + 1)) {
                 p = true;
             }
 
-            if (num.at(i) < num.at(i-1) && num.at(i) < num.at(i + 1)) {
+            if (num.at(i) < num.at(i - 1) && num.at(i) < num.at(i + 1)) {
                 v = true;
             }
 
@@ -62,6 +64,7 @@ public:
         return ret;
     }
 };
+}  // namespace
 
 TEST(Daily, 3751) {
     Solution s;

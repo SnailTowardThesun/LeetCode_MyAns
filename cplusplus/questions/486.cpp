@@ -39,6 +39,8 @@
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
    public:
     int dfs(vector<int>& nums, int l, int r, vector<vector<int>>& memory) {
@@ -63,6 +65,7 @@ class Solution {
         return dfs(nums, 0, n - 1, memory) >= 0;
     }
 };
+}  // namespace
 
 TEST(Daily, 486) {
     Solution s;

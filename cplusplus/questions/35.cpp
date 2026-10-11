@@ -40,32 +40,34 @@
 
 using namespace std;
 
-TEST(Daily, 35) {
-    class Solution {
-    public:
-        int searchInsert(int A[], int n, int target) {
-            int i = 0;
-            for (i = 0; i < n; i++)
-                if (target <= A[i])
-                    return i;
-            return i;
-        }
-    };
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+class Solution {
+   public:
+    int searchInsert(int A[], int n, int target) {
+        int i = 0;
+        for (i = 0; i < n; i++)
+            if (target <= A[i]) return i;
+        return i;
+    }
+};
+}  // namespace
 
+TEST(Daily, 35) {
     Solution s;
-    
+
     // 测试用例 1
     int A1[] = {1, 3, 5, 6};
     EXPECT_EQ(s.searchInsert(A1, 4, 5), 2);
-    
+
     // 测试用例 2
     int A2[] = {1, 3, 5, 6};
     EXPECT_EQ(s.searchInsert(A2, 4, 2), 1);
-    
+
     // 测试用例 3
     int A3[] = {1, 3, 5, 6};
     EXPECT_EQ(s.searchInsert(A3, 4, 7), 4);
-    
+
     // 测试用例 4
     int A4[] = {1, 3, 5, 6};
     EXPECT_EQ(s.searchInsert(A4, 4, 0), 0);

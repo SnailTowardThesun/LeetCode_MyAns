@@ -50,11 +50,13 @@
 
 #include <gtest/gtest.h>
 
-#include <vector>
 #include <climits>
+#include <vector>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
    public:
     int maximumAmount(vector<vector<int>>& coins) {
@@ -100,6 +102,7 @@ class Solution {
         return ret;
     }
 };
+}  // namespace
 
 TEST(Daily, 3418) {
     Solution s;

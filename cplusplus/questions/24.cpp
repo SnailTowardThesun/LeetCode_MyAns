@@ -44,31 +44,37 @@ using namespace std;
 
 struct ListNode {
     int val;
-    struct ListNode *next;
+    struct ListNode* next;
 };
 
-struct ListNode *swapPairs(struct ListNode *head) {
-    struct ListNode *cur = NULL, *next = NULL, *tmp = NULL, *pre = NULL;
-    cur = head;
-    if (cur != NULL && cur->next != NULL)
-        head = cur->next;
-    while (cur != NULL) {
-        if (cur->next == NULL) {
-            return head;
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+class Solution {
+   public:
+    struct ListNode* swapPairs(struct ListNode* head) {
+        struct ListNode *cur = NULL, *next = NULL, *tmp = NULL, *pre = NULL;
+        cur = head;
+        if (cur != NULL && cur->next != NULL) head = cur->next;
+        while (cur != NULL) {
+            if (cur->next == NULL) {
+                return head;
+            }
+            next = cur->next;
+            if (pre != NULL) pre->next = next;
+            tmp = next->next;
+            next->next = cur;
+            cur->next = tmp;
+            pre = cur;
+            cur = cur->next;
         }
-        next = cur->next;
-        if (pre != NULL)
-            pre->next = next;
-        tmp = next->next;
-        next->next = cur;
-        cur->next = tmp;
-        pre = cur;
-        cur = cur->next;
+        return head;
     }
-    return head;
-}
+};
+}  // namespace
 
 TEST(Daily, 24) {
+    Solution s;
+
     // 测试用例 1
     ListNode* head1 = new ListNode();
     head1->val = 1;
@@ -78,21 +84,21 @@ TEST(Daily, 24) {
     head1->next->next->val = 3;
     head1->next->next->next = new ListNode();
     head1->next->next->next->val = 4;
-    
-    ListNode* result1 = swapPairs(head1);
+
+    ListNode* result1 = s.swapPairs(head1);
     EXPECT_EQ(result1->val, 2);
     EXPECT_EQ(result1->next->val, 1);
     EXPECT_EQ(result1->next->next->val, 4);
     EXPECT_EQ(result1->next->next->next->val, 3);
-    
+
     // 测试用例 2
     ListNode* head2 = NULL;
-    ListNode* result2 = swapPairs(head2);
+    ListNode* result2 = s.swapPairs(head2);
     EXPECT_EQ(result2, nullptr);
-    
+
     // 测试用例 3
     ListNode* head3 = new ListNode();
     head3->val = 1;
-    ListNode* result3 = swapPairs(head3);
+    ListNode* result3 = s.swapPairs(head3);
     EXPECT_EQ(result3->val, 1);
 }

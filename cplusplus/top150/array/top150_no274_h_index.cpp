@@ -38,14 +38,17 @@
  */
 
 #include <gtest/gtest.h>
-#include <vector>
+
 #include <algorithm>
+#include <vector>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
-    int hIndex(vector<int> &citations) {
+   public:
+    int hIndex(vector<int>& citations) {
         int n = int(citations.size());
         sort(citations.begin(), citations.end());
         for (int i = 0; i < n; i++) {
@@ -57,6 +60,7 @@ public:
         return 0;
     }
 };
+}  // namespace
 
 TEST(TOP150, No274_HIndex) {
     Solution solution;

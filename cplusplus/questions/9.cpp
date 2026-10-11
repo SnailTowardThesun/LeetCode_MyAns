@@ -45,35 +45,38 @@
 
 using namespace std;
 
-TEST(Daily, 9) {
-    class Solution {
-    public:
-        bool isPalindrome(int x) {
-            if (x < 0 || (x != 0 && (x % 10 == 0))) return false;
-            if (x == 0) return true;
-            int rX = 0;
-            while (rX < x) {
-                rX = rX * 10 + x % 10;
-                x = x / 10;
-            }
-            return rX == x || rX / 10 == x;
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+class Solution {
+   public:
+    bool isPalindrome(int x) {
+        if (x < 0 || (x != 0 && (x % 10 == 0))) return false;
+        if (x == 0) return true;
+        int rX = 0;
+        while (rX < x) {
+            rX = rX * 10 + x % 10;
+            x = x / 10;
         }
-    };
+        return rX == x || rX / 10 == x;
+    }
+};
+}  // namespace
 
+TEST(Daily, 9) {
     Solution s;
-    
+
     // 测试用例 1
     EXPECT_TRUE(s.isPalindrome(121));
-    
+
     // 测试用例 2
     EXPECT_FALSE(s.isPalindrome(-121));
-    
+
     // 测试用例 3
     EXPECT_FALSE(s.isPalindrome(10));
-    
+
     // 测试用例 4
     EXPECT_TRUE(s.isPalindrome(0));
-    
+
     // 测试用例 5
     EXPECT_TRUE(s.isPalindrome(12321));
 }

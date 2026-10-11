@@ -55,6 +55,8 @@
 #include <vector>
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
    public:
     // 改变方向的函数
@@ -145,6 +147,7 @@ class Solution {
         return max_distance;
     }
 };
+}  // namespace
 
 // 优化版本
 class SolutionOptimse {

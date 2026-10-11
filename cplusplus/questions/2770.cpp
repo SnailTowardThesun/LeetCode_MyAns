@@ -51,14 +51,17 @@
  */
 
 #include <gtest/gtest.h>
+
 #include <climits>
 #include <vector>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
-    int dfs(vector<int> &nums, int j, int target, vector<int> &container) {
+   public:
+    int dfs(vector<int>& nums, int j, int target, vector<int>& container) {
         if (j == 0) {
             return 0;
         }
@@ -78,7 +81,7 @@ public:
         return res;
     }
 
-    int maximumJumps(vector<int> &nums, int target) {
+    int maximumJumps(vector<int>& nums, int target) {
         auto container = vector<int>(nums.size());
 
         auto ret = dfs(nums, nums.size() - 1, target, container);
@@ -86,6 +89,7 @@ public:
         return ret < 0 ? -1 : ret;
     }
 };
+}  // namespace
 
 TEST(Daily, 2770) {
     Solution s;

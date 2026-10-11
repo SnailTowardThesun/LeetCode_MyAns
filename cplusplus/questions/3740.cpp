@@ -12,21 +12,24 @@
 
 解题思路：
 1. 使用哈希表记录每个元素出现的所有位置
-2. 对于每个元素，如果它出现了至少3次（因为需要计算两个距离），则计算相邻两次出现的距离的两倍（因为题目要求的是相同元素之间的最小距离，这里可能是指连续三个相同元素之间的中间距离）
+2.
+对于每个元素，如果它出现了至少3次（因为需要计算两个距离），则计算相邻两次出现的距离的两倍（因为题目要求的是相同元素之间的最小距离，这里可能是指连续三个相同元素之间的中间距离）
 3. 遍历所有元素的位置列表，计算最小距离
 4. 如果没有找到符合条件的距离，返回 -1
 */
 
 #include <gtest/gtest.h>
 
-#include <vector>
-#include <unordered_map>
 #include <climits>
+#include <unordered_map>
+#include <vector>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     int minimumDistance(vector<int>& nums) {
         unordered_map<int, std::vector<int>> container;
         for (int i = 0; i < nums.size(); ++i) {
@@ -44,10 +47,11 @@ public:
         return ret == INT_MAX ? -1 : ret;
     }
 };
+}  // namespace
 
 TEST(Daily, 3740) {
     Solution s;
-    vector<int> nums{1,2,1,1,3};
+    vector<int> nums{1, 2, 1, 1, 3};
     auto ret = s.minimumDistance(nums);
     EXPECT_EQ(ret, 6);
 }

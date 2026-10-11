@@ -44,13 +44,16 @@
  */
 
 #include <gtest/gtest.h>
+
 #include <vector>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
-    void merge(vector<int> &nums1, int m, vector<int> &nums2, int n) {
+   public:
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
         vector<int> container;
 
         int i = 0, j = 0;
@@ -75,6 +78,7 @@ public:
         nums1 = std::move(container);
     }
 };
+}  // namespace
 
 TEST(TOP150, No88_MergeTwoSortedLists) {
     Solution solution;
@@ -82,7 +86,7 @@ TEST(TOP150, No88_MergeTwoSortedLists) {
     vector<int> nums2{2, 4, 6};
 
     solution.merge(nums1, 3, nums2, 3);
-    for (auto &i: nums1) {
+    for (auto& i : nums1) {
         cout << i << ", ";
     }
 

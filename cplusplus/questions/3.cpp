@@ -42,30 +42,32 @@
  */
 
 #include <gtest/gtest.h>
-#include <string>
+
 #include <cstring>
+#include <string>
 
 using namespace std;
 
-TEST(Daily, 3) {
-    class Solution {
-    public:
-        int lengthOfLongestSubstring(string s) {
-            int result = 0;
-            int locs[256];
-            memset(locs, -1, sizeof(locs));
-            int idx = -1, max = 0;
-            for (int i = 0; i < s.size(); i++) {
-                if (locs[s[i]] > idx)
-                    idx = locs[s[i]];
-                if (i - idx > max)
-                    max = i - idx;
-                locs[s[i]] = i;
-            }
-            return max;
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 方法产生 ODR 冲突
+namespace {
+class Solution {
+   public:
+    int lengthOfLongestSubstring(string s) {
+        int result = 0;
+        int locs[256];
+        memset(locs, -1, sizeof(locs));
+        int idx = -1, max = 0;
+        for (int i = 0; i < s.size(); i++) {
+            if (locs[s[i]] > idx) idx = locs[s[i]];
+            if (i - idx > max) max = i - idx;
+            locs[s[i]] = i;
         }
-    };
+        return max;
+    }
+};
+}  // namespace
 
+TEST(Daily, 3) {
     Solution s;
 
     // 测试用例 1

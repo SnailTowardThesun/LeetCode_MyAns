@@ -26,11 +26,14 @@
 #pragma once
 
 #include <gtest/gtest.h>
+
 #include <string>
 #include <vector>
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     bool isValid(const std::string& s, const std::string& p) {
         if (s.size() != p.size()) return false;
 
@@ -46,7 +49,8 @@ public:
         return true;
     }
 
-    std::vector<std::string> twoEditWords(const std::vector<std::string>& queries, const std::vector<std::string>& dictionary) {
+    std::vector<std::string> twoEditWords(const std::vector<std::string>& queries,
+                                          const std::vector<std::string>& dictionary) {
         std::vector<std::string> ret;
         ret.reserve(queries.size());
 
@@ -62,15 +66,14 @@ public:
         return ret;
     }
 };
+}  // namespace
 
 TEST(Daily, 2452) {
     Solution s;
 
     // Example 1
-    auto ret1 = s.twoEditWords(
-        std::vector<std::string>{"word", "note", "ants", "wood"},
-        std::vector<std::string>{"wood", "joke", "moat"}
-    );
+    auto ret1 = s.twoEditWords(std::vector<std::string>{"word", "note", "ants", "wood"},
+                               std::vector<std::string>{"wood", "joke", "moat"});
     EXPECT_EQ(ret1.size(), 3);
     EXPECT_EQ(ret1[0], "word");
     EXPECT_EQ(ret1[1], "note");

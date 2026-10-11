@@ -41,55 +41,58 @@
  */
 
 #include <gtest/gtest.h>
-#include <vector>
+
 #include <map>
+#include <vector>
 
 using namespace std;
 
-TEST(Daily, 128) {
-    class Solution {
-    public:
-        map<int, int> mp;
-        int longestConsecutiveSequence(vector<int> &nums) {
-            for (int i = 0; i < nums.size(); i++)
-                mp[nums[i]] = 1;
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+class Solution {
+   public:
+    map<int, int> mp;
+    int longestConsecutiveSequence(vector<int>& nums) {
+        for (int i = 0; i < nums.size(); i++) mp[nums[i]] = 1;
 
-            int result = 0;
-            for (int i = 0; i < nums.size(); i++) {
-                int sum = 1;
-                if (mp.count(nums[i]) && mp[nums[i]]) {
-                    mp[nums[i]] = 0;
-                    int left = nums[i] - 1;
-                    while (mp.count(left) && mp[left]) {
-                        mp[left--] = 0;
-                        sum++;
-                    }
-                    int right = nums[i] + 1;
-                    while (mp.count(right) && mp[right]) {
-                        mp[right++] = 0;
-                        sum++;
-                    }
+        int result = 0;
+        for (int i = 0; i < nums.size(); i++) {
+            int sum = 1;
+            if (mp.count(nums[i]) && mp[nums[i]]) {
+                mp[nums[i]] = 0;
+                int left = nums[i] - 1;
+                while (mp.count(left) && mp[left]) {
+                    mp[left--] = 0;
+                    sum++;
                 }
-                if (result < sum) result = sum;
+                int right = nums[i] + 1;
+                while (mp.count(right) && mp[right]) {
+                    mp[right++] = 0;
+                    sum++;
+                }
             }
-            return result;
+            if (result < sum) result = sum;
         }
-    };
+        return result;
+    }
+};
+}  // namespace
 
+TEST(Daily, 128) {
     Solution s;
-    
+
     // 测试用例 1
     vector<int> nums1 = {100, 4, 200, 1, 3, 2};
     EXPECT_EQ(s.longestConsecutiveSequence(nums1), 4);
-    
+
     // 测试用例 2
     vector<int> nums2 = {0, 3, 7, 2, 1};
     EXPECT_EQ(s.longestConsecutiveSequence(nums2), 4);
-    
+
     // 测试用例 3
     vector<int> nums3 = {0};
     EXPECT_EQ(s.longestConsecutiveSequence(nums3), 1);
-    
+
     // 测试用例 4
     vector<int> nums4 = {1, 2, 3, 4, 5};
     EXPECT_EQ(s.longestConsecutiveSequence(nums4), 5);

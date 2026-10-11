@@ -37,47 +37,51 @@
  */
 
 #include <gtest/gtest.h>
-#include <vector>
+
 #include <stack>
+#include <vector>
 
 using namespace std;
 
-TEST(Daily, 84) {
-    class Solution {
-    public:
-        int largestRectangleArea(vector<int>& heights) {
-            stack<int> st;
-            int maxArea = 0;
-            int n = heights.size();
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+class Solution {
+   public:
+    int largestRectangleArea(vector<int>& heights) {
+        stack<int> st;
+        int maxArea = 0;
+        int n = heights.size();
 
-            for (int i = 0; i <= n; i++) {
-                int curHeight = (i == n) ? 0 : heights[i];
-                while (!st.empty() && heights[st.top()] > curHeight) {
-                    int h = heights[st.top()];
-                    st.pop();
-                    int width = st.empty() ? i : i - st.top() - 1;
-                    maxArea = max(maxArea, h * width);
-                }
-                st.push(i);
+        for (int i = 0; i <= n; i++) {
+            int curHeight = (i == n) ? 0 : heights[i];
+            while (!st.empty() && heights[st.top()] > curHeight) {
+                int h = heights[st.top()];
+                st.pop();
+                int width = st.empty() ? i : i - st.top() - 1;
+                maxArea = max(maxArea, h * width);
             }
-            return maxArea;
+            st.push(i);
         }
-    };
+        return maxArea;
+    }
+};
+}  // namespace
 
+TEST(Daily, 84) {
     Solution s;
-    
+
     // 测试用例 1
     vector<int> heights1 = {2, 1, 5, 6, 2, 3};
     EXPECT_EQ(s.largestRectangleArea(heights1), 10);
-    
+
     // 测试用例 2
     vector<int> heights2 = {2, 4};
     EXPECT_EQ(s.largestRectangleArea(heights2), 4);
-    
+
     // 测试用例 3
     vector<int> heights3 = {1, 1};
     EXPECT_EQ(s.largestRectangleArea(heights3), 2);
-    
+
     // 测试用例 4
     vector<int> heights4 = {5, 4, 3, 2, 1};
     EXPECT_EQ(s.largestRectangleArea(heights4), 9);

@@ -47,12 +47,15 @@
  */
 
 #include <gtest/gtest.h>
+
 #include <vector>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     vector<int> findThePrefixCommonArray(vector<int>& A, vector<int>& B) {
         int n = static_cast<int>(A.size());
         vector<int> ans(n);
@@ -70,6 +73,7 @@ public:
         return ans;
     }
 };
+}  // namespace
 
 TEST(Daily, 2657) {
     Solution s;

@@ -36,13 +36,16 @@
  */
 
 #include <gtest/gtest.h>
+
 #include <vector>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
-    int removeDuplicates(vector<int> &nums) {
+   public:
+    int removeDuplicates(vector<int>& nums) {
         vector<int> container;
         container.reserve(nums.size());
 
@@ -54,7 +57,7 @@ public:
                 if (nums[i] != nums[i - 1] && nums[i] != nums[i - 2]) {
                     container.emplace_back(nums[i]);
                 }
-            }else {
+            } else {
                 container.emplace_back(nums[i]);
             }
         }
@@ -63,11 +66,12 @@ public:
         return container.size();
     }
 };
+}  // namespace
 
 TEST(TOP150, No80_RemoveDuplicatesII) {
     class Solution {
-    public:
-        int remove_duplicates(vector<int> &nums) {
+       public:
+        int remove_duplicates(vector<int>& nums) {
             for (auto it = nums.begin(); it < nums.end() - 2;) {
                 if (*it == *(it + 2)) {
                     it + 2 = nums.erase(it + 2);

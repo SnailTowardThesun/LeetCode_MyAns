@@ -43,9 +43,11 @@
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
-    bool containsNearbyDuplicate(vector<int> &nums, int k) {
+   public:
+    bool containsNearbyDuplicate(vector<int>& nums, int k) {
         unordered_map<int, int> container;
         for (auto i = 0; i < nums.size(); i++) {
             if (container.find(nums[i]) != container.end()) {
@@ -60,6 +62,7 @@ public:
         return false;
     }
 };
+}  // namespace
 
 TEST(top150, 219) {
     Solution s;

@@ -44,46 +44,54 @@
  */
 
 #include <gtest/gtest.h>
+
 #include <climits>
 
 using namespace std;
 
-int myAtoi(char *str) {
-    if (str == NULL) return 0;
-    bool isPositive = true;
-    long long result = 0;
-    const char* ss = (const char*)str;
-    while (*ss == ' ') ss++;
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+class Solution {
+   public:
+    int myAtoi(char* str) {
+        if (str == NULL) return 0;
+        bool isPositive = true;
+        long long result = 0;
+        const char* ss = (const char*)str;
+        while (*ss == ' ') ss++;
 
-    if (*ss == '+') {
-        isPositive = true;
-        ss++;
+        if (*ss == '+') {
+            isPositive = true;
+            ss++;
+        } else if (*ss == '-') {
+            isPositive = false;
+            ss++;
+        }
+        while (*ss >= '0' && *ss <= '9') {
+            result = result * 10 + (*ss - '0');
+            if (result > INT_MAX) return isPositive ? INT_MAX : INT_MIN;
+            ss++;
+        }
+        return isPositive ? result : 0 - result;
     }
-    else if (*ss == '-') {
-        isPositive = false;
-        ss++;
-    }
-    while (*ss >= '0' && *ss <= '9') {
-        result = result * 10 + (*ss - '0');
-        if (result > INT_MAX) return isPositive ? INT_MAX : INT_MIN;
-        ss++;
-    }
-    return isPositive ? result : 0 - result;
-}
+};
+}  // namespace
 
 TEST(Daily, 8) {
+    Solution s;
+
     // 测试用例 1
-    EXPECT_EQ(myAtoi("42"), 42);
-    
+    EXPECT_EQ(s.myAtoi("42"), 42);
+
     // 测试用例 2
-    EXPECT_EQ(myAtoi("   -42"), -42);
-    
+    EXPECT_EQ(s.myAtoi("   -42"), -42);
+
     // 测试用例 3
-    EXPECT_EQ(myAtoi("4193 with words"), 4193);
-    
+    EXPECT_EQ(s.myAtoi("4193 with words"), 4193);
+
     // 测试用例 4
-    EXPECT_EQ(myAtoi("words and 987"), 0);
-    
+    EXPECT_EQ(s.myAtoi("words and 987"), 0);
+
     // 测试用例 5
-    EXPECT_EQ(myAtoi("-91283472332"), -2147483648);
+    EXPECT_EQ(s.myAtoi("-91283472332"), -2147483648);
 }

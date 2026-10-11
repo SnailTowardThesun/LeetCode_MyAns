@@ -18,7 +18,7 @@
  * 示例 1：
  * 输入: s = "a#b%*"
  * 输出: "ba"
- * 解释: a→"a", #→""(清空), b→"b", %→"ba"(反转) ... 
+ * 解释: a→"a", #→""(清空), b→"b", %→"ba"(反转) ...
  *        （实际处理过程中 '#' 操作使空串翻倍仍为空，后续拼接和反转得到最终结果）
  *
  * @解题思路
@@ -35,17 +35,20 @@
  */
 
 #include <gtest/gtest.h>
-#include <vector>
+
 #include <algorithm>
+#include <vector>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     string processStr(string s) {
         string ret = "";
 
-        for (auto i: s) {
+        for (auto i : s) {
             if (i == '*') {
                 if (ret.size() > 0) {
                     ret.pop_back();
@@ -69,6 +72,7 @@ public:
         return ret;
     }
 };
+}  // namespace
 
 TEST(Daily, 3612) {
     Solution s;

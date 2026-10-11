@@ -25,23 +25,26 @@
 // - 空间复杂度: O(n)
 
 #include <gtest/gtest.h>
+
 #include <unordered_map>
 #include <vector>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     vector<long long> distance(vector<int>& nums) {
         // 使用哈希表存储每个数值对应的所有下标
         unordered_map<int, std::vector<long long>> container;
-        for (long long i = 0 ; i < nums.size(); ++i) {
+        for (long long i = 0; i < nums.size(); ++i) {
             container[nums[i]].push_back(i);
         }
 
         std::vector<long long> ret(nums.size(), 0);
         // 对每个数值的下标列表计算距离和
-        for (auto &it : container) {
+        for (auto& it : container) {
             // 如果只有一个下标，距离和为0
             if (it.second.size() == 1) {
                 continue;
@@ -49,7 +52,7 @@ public:
 
             // 计算所有下标的总和
             long long total_sum = 0;
-            for (auto &iit: it.second) {
+            for (auto& iit : it.second) {
                 total_sum += iit;
             }
 
@@ -67,18 +70,18 @@ public:
 
                 prefix_sum += it.second[i];
             }
-
         }
 
         return ret;
     }
 };
+}  // namespace
 
 TEST(Daily, 2615) {
     Solution s;
     // 测试用例1：基本示例
-    auto nums1 = vector<int>{1,3,1,1,2};
-    auto ret1= s.distance(nums1);
+    auto nums1 = vector<int>{1, 3, 1, 1, 2};
+    auto ret1 = s.distance(nums1);
     EXPECT_EQ(ret1.size(), 5);
     EXPECT_EQ(ret1[0], 5);
     EXPECT_EQ(ret1[1], 0);
@@ -87,17 +90,17 @@ TEST(Daily, 2615) {
     EXPECT_EQ(ret1[4], 0);
 
     // 测试用例2：所有元素相同
-    auto nums2 = vector<int>{2,2,2,2};
-    auto ret2= s.distance(nums2);
+    auto nums2 = vector<int>{2, 2, 2, 2};
+    auto ret2 = s.distance(nums2);
     EXPECT_EQ(ret2.size(), 4);
-    EXPECT_EQ(ret2[0], 6); // |0-1| + |0-2| + |0-3| = 1+2+3=6
-    EXPECT_EQ(ret2[1], 4); // |1-0| + |1-2| + |1-3| = 1+1+2=4
-    EXPECT_EQ(ret2[2], 4); // |2-0| + |2-1| + |2-3| = 2+1+1=4
-    EXPECT_EQ(ret2[3], 6); // |3-0| + |3-1| + |3-2| = 3+2+1=6
+    EXPECT_EQ(ret2[0], 6);  // |0-1| + |0-2| + |0-3| = 1+2+3=6
+    EXPECT_EQ(ret2[1], 4);  // |1-0| + |1-2| + |1-3| = 1+1+2=4
+    EXPECT_EQ(ret2[2], 4);  // |2-0| + |2-1| + |2-3| = 2+1+1=4
+    EXPECT_EQ(ret2[3], 6);  // |3-0| + |3-1| + |3-2| = 3+2+1=6
 
     // 测试用例3：所有元素都不同
-    auto nums3 = vector<int>{1,2,3,4,5};
-    auto ret3= s.distance(nums3);
+    auto nums3 = vector<int>{1, 2, 3, 4, 5};
+    auto ret3 = s.distance(nums3);
     EXPECT_EQ(ret3.size(), 5);
     for (auto val : ret3) {
         EXPECT_EQ(val, 0);

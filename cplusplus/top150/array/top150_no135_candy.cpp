@@ -37,14 +37,17 @@
  */
 
 #include <gtest/gtest.h>
-#include <vector>
+
 #include <algorithm>
+#include <vector>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
-    int candy(vector<int> &ratings) {
+   public:
+    int candy(vector<int>& ratings) {
         int n = ratings.size();
         // 每人先发 1 颗
         vector<int> candies(n, 1);
@@ -68,6 +71,7 @@ public:
         return ret;
     }
 };
+}  // namespace
 
 TEST(TOP150, No135_Candy) {
     Solution solution;

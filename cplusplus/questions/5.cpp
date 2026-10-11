@@ -36,51 +36,55 @@
  */
 
 #include <gtest/gtest.h>
+
 #include <string>
 
 using namespace std;
 
-TEST(Daily, 5) {
-    class Solution {
-    public:
-        string longestPalindrome(string s) {
-            if (s.empty()) return "";
-            int start = 0, maxLen = 0;
-            
-            for (int i = 0; i < s.size(); i++) {
-                // 奇数长度的回文串
-                int len1 = expandAroundCenter(s, i, i);
-                // 偶数长度的回文串
-                int len2 = expandAroundCenter(s, i, i + 1);
-                int len = max(len1, len2);
-                if (len > maxLen) {
-                    start = i - (len - 1) / 2;
-                    maxLen = len;
-                }
-            }
-            return s.substr(start, maxLen);
-        }
-        
-        int expandAroundCenter(string s, int left, int right) {
-            while (left >= 0 && right < s.size() && s[left] == s[right]) {
-                left--;
-                right++;
-            }
-            return right - left - 1;
-        }
-    };
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+class Solution {
+   public:
+    string longestPalindrome(string s) {
+        if (s.empty()) return "";
+        int start = 0, maxLen = 0;
 
+        for (int i = 0; i < s.size(); i++) {
+            // 奇数长度的回文串
+            int len1 = expandAroundCenter(s, i, i);
+            // 偶数长度的回文串
+            int len2 = expandAroundCenter(s, i, i + 1);
+            int len = max(len1, len2);
+            if (len > maxLen) {
+                start = i - (len - 1) / 2;
+                maxLen = len;
+            }
+        }
+        return s.substr(start, maxLen);
+    }
+
+    int expandAroundCenter(string s, int left, int right) {
+        while (left >= 0 && right < s.size() && s[left] == s[right]) {
+            left--;
+            right++;
+        }
+        return right - left - 1;
+    }
+};
+}  // namespace
+
+TEST(Daily, 5) {
     Solution s;
-    
+
     // 测试用例 1
     EXPECT_TRUE(s.longestPalindrome("babad") == "bab" || s.longestPalindrome("babad") == "aba");
-    
+
     // 测试用例 2
     EXPECT_EQ(s.longestPalindrome("cbbd"), "bb");
-    
+
     // 测试用例 3
     EXPECT_EQ(s.longestPalindrome("a"), "a");
-    
+
     // 测试用例 4
     EXPECT_EQ(s.longestPalindrome("ac"), "a");
 }

@@ -24,13 +24,15 @@
 // - 空间复杂度：O(n)。
 
 #include <gtest/gtest.h>
+
 #include <stack>
 
 using namespace std;
 
-
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     int evalRPN(vector<string>& tokens) {
         stack<int> container;
         container.emplace(stoi(tokens[0]));
@@ -82,10 +84,11 @@ public:
         return ret;
     }
 };
+}  // namespace
 
-TEST(top150,150) {
+TEST(top150, 150) {
     Solution s;
-    vector<string> tokens{"2","1","+","3","*"};
+    vector<string> tokens{"2", "1", "+", "3", "*"};
     auto ret = s.evalRPN(tokens);
     EXPECT_EQ(ret, 9);
 }

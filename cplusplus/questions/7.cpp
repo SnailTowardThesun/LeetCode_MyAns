@@ -41,39 +41,43 @@
  */
 
 #include <gtest/gtest.h>
+
 #include <climits>
 
 using namespace std;
 
-TEST(Daily, 7) {
-    class Solution {
-    public:
-        int reverse(int x) {
-            long num = abs((long)x);
-            long new_num = 0;
-            while (num) {
-                new_num = new_num * 10 + num % 10;
-                num /= 10;
-            }
-            if (new_num > INT_MAX) return 0;
-            return (x < 0 ? 0 - new_num : new_num);
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+class Solution {
+   public:
+    int reverse(int x) {
+        long num = abs((long)x);
+        long new_num = 0;
+        while (num) {
+            new_num = new_num * 10 + num % 10;
+            num /= 10;
         }
-    };
+        if (new_num > INT_MAX) return 0;
+        return (x < 0 ? 0 - new_num : new_num);
+    }
+};
+}  // namespace
 
+TEST(Daily, 7) {
     Solution s;
-    
+
     // 测试用例 1
     EXPECT_EQ(s.reverse(123), 321);
-    
+
     // 测试用例 2
     EXPECT_EQ(s.reverse(-123), -321);
-    
+
     // 测试用例 3
     EXPECT_EQ(s.reverse(120), 21);
-    
+
     // 测试用例 4
     EXPECT_EQ(s.reverse(0), 0);
-    
+
     // 测试用例 5
     EXPECT_EQ(s.reverse(-2147483648), 0);
 }

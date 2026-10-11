@@ -49,13 +49,16 @@
  */
 
 #include <gtest/gtest.h>
+
 #include <vector>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
-    vector<int> leftRightDifference(vector<int> &nums) {
+   public:
+    vector<int> leftRightDifference(vector<int>& nums) {
         int n = nums.size();
 
         vector<int> left_pre(n, 0);
@@ -76,10 +79,11 @@ public:
         return ret;
     }
 };
+}  // namespace
 
 TEST(Daily, 2574) {
     Solution s;
     vector<int> nums{10, 4, 8, 3};
     auto ret = s.leftRightDifference(nums);
-    EXPECT_EQ(vector<int>({15,1,11,22}), ret);
+    EXPECT_EQ(vector<int>({15, 1, 11, 22}), ret);
 }

@@ -45,8 +45,10 @@
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 方法产生 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     vector<string> fullJustify(vector<string>& words, int maxWidth) {
         vector<string> result;
         int n = words.size();
@@ -94,6 +96,7 @@ public:
         return result;
     }
 };
+}  // namespace
 
 TEST(Daily, 68) {
     Solution s;
@@ -124,8 +127,8 @@ TEST(Daily, 68) {
     }
 
     // 测试用例 3：普通行 + 最后一行左对齐
-    vector<string> words3 = {"Science", "is", "what", "we", "understand", "well", "enough",
-                             "to", "explain", "to", "a", "computer."};
+    vector<string> words3 = {"Science", "is", "what",    "we", "understand", "well",
+                             "enough",  "to", "explain", "to", "a",          "computer."};
     auto ret3 = s.fullJustify(words3, 20);
     EXPECT_EQ(ret3.size(), 4);
     EXPECT_EQ(ret3[0], "Science  is  what we");
@@ -133,4 +136,3 @@ TEST(Daily, 68) {
     EXPECT_EQ(ret3[2], "enough to explain to");
     EXPECT_EQ(ret3[3], "a computer.         ");  // 最后一行左对齐，补 9 个尾部空格
 }
-

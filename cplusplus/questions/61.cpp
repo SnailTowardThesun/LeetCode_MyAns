@@ -46,27 +46,27 @@
  */
 
 #include <gtest/gtest.h>
+
 #include <vector>
 
 using namespace std;
 
 struct ListNode {
     int val;
-    ListNode *next;
+    ListNode* next;
 
-    ListNode() : val(0), next(nullptr) {
-    }
+    ListNode() : val(0), next(nullptr) {}
 
-    ListNode(int x) : val(x), next(nullptr) {
-    }
+    ListNode(int x) : val(x), next(nullptr) {}
 
-    ListNode(int x, ListNode *next) : val(x), next(next) {
-    }
+    ListNode(int x, ListNode* next) : val(x), next(next) {}
 };
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
-    ListNode *rotateRight(ListNode *head, int k) {
+   public:
+    ListNode* rotateRight(ListNode* head, int k) {
         if (head == nullptr) {
             return head;
         }
@@ -82,9 +82,9 @@ public:
         ret_container.insert(ret_container.begin(), container.begin() + steps, container.end());
         ret_container.insert(ret_container.end(), container.begin(), container.begin() + steps);
 
-        ListNode *ret = new ListNode();
-        ListNode *pos = ret;
-        for (auto i: ret_container) {
+        ListNode* ret = new ListNode();
+        ListNode* pos = ret;
+        for (auto i : ret_container) {
             pos->next = new ListNode(i);
             pos = pos->next;
         }
@@ -92,6 +92,7 @@ public:
         return ret->next;
     }
 };
+}  // namespace
 
 TEST(Daily, 61) {
     // head = [1,2,3,4,5], k = 2

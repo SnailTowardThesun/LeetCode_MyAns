@@ -50,9 +50,11 @@
 #include <vector>
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
-    vector<long long> resultArray(vector<int> &nums, int k) {
+   public:
+    vector<long long> resultArray(vector<int>& nums, int k) {
         // ret[r]：所有位置上，乘积模 k 余 r 的子数组个数之和
         vector<long long> ret(k, 0);
 
@@ -67,7 +69,7 @@ public:
             // 把当前元素接到上一位置结尾的每个子数组后面
             for (int r = 0; r < k; r++) {
                 if (dp[r] > 0) {
-                    int next_val = (1LL * val * r ) % k;
+                    int next_val = (1LL * val * r) % k;
                     next_dp[next_val] += dp[r];
                 }
             }
@@ -83,13 +85,14 @@ public:
         return ret;
     }
 };
+}  // namespace
 
 TEST(Daily, 3524) {
     Solution s;
     vector<int> nums{1, 2, 3, 4, 5};
     int k = 3;
     auto ret = s.resultArray(nums, k);
-    EXPECT_EQ(vector<long long>({9,2,4}), ret);
+    EXPECT_EQ(vector<long long>({9, 2, 4}), ret);
 
     // 示例 2：共 21 个非空子数组，按余数分类为 [18,1,2,0]
     vector<int> nums2{1, 2, 4, 8, 16, 32};

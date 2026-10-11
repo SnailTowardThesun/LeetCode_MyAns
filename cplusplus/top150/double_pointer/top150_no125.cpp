@@ -15,14 +15,17 @@
 //
 
 #include <gtest/gtest.h>
-#include <vector>
+
 #include <cctype>
+#include <vector>
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     bool isPalindrome(string s) {
-        string helper= "";
+        string helper = "";
         for (auto i : s) {
             if (i >= 'a' && i <= 'z') {
                 helper += i;
@@ -42,9 +45,10 @@ public:
         return true;
     }
 };
+}  // namespace
 
 TEST(top150, 125) {
     Solution s;
-    auto  ret= s.isPalindrome("A man, a plan, a canal: Panama");
+    auto ret = s.isPalindrome("A man, a plan, a canal: Panama");
     EXPECT_TRUE(ret);
 }

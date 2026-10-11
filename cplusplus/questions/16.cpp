@@ -43,53 +43,57 @@
  */
 
 #include <gtest/gtest.h>
-#include <vector>
+
 #include <limits>
+#include <vector>
 
 using namespace std;
 
-TEST(Daily, 16) {
-    class Solution {
-    public:
-        int threeSumClosest(vector<int>& nums, int target) {
-            int ret = std::numeric_limits<int>::max() - abs(target);
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+class Solution {
+   public:
+    int threeSumClosest(vector<int>& nums, int target) {
+        int ret = std::numeric_limits<int>::max() - abs(target);
 
-            std::sort(nums.begin(), nums.end());
-            int pos = 0;
+        std::sort(nums.begin(), nums.end());
+        int pos = 0;
 
-            while ((pos < nums.size() - 1) && (nums[pos] < target || ret == std::numeric_limits<int>::max() - abs(target))) {
-                int leftPointer = pos + 1;
-                int rightPointer = nums.size() - 1;
-                while (leftPointer != rightPointer) {
-                    auto tmpResult = nums[pos] + nums[leftPointer] + nums[rightPointer];
-                    ret = abs(tmpResult - target) < abs(ret - target) ? tmpResult : ret;
-                    if (ret == target) {
-                        break;
-                    }
-                    if (tmpResult < target) {
-                        leftPointer++;
-                    }
-                    else {
-                        rightPointer--;
-                    }
+        while ((pos < nums.size() - 1) &&
+               (nums[pos] < target || ret == std::numeric_limits<int>::max() - abs(target))) {
+            int leftPointer = pos + 1;
+            int rightPointer = nums.size() - 1;
+            while (leftPointer != rightPointer) {
+                auto tmpResult = nums[pos] + nums[leftPointer] + nums[rightPointer];
+                ret = abs(tmpResult - target) < abs(ret - target) ? tmpResult : ret;
+                if (ret == target) {
+                    break;
                 }
-                pos++;
+                if (tmpResult < target) {
+                    leftPointer++;
+                } else {
+                    rightPointer--;
+                }
             }
-
-            return ret;
+            pos++;
         }
-    };
 
+        return ret;
+    }
+};
+}  // namespace
+
+TEST(Daily, 16) {
     Solution s;
-    
+
     // 测试用例 1
     vector<int> nums1 = {-1, 2, 1, -4};
     EXPECT_EQ(s.threeSumClosest(nums1, 1), 2);
-    
+
     // 测试用例 2
     vector<int> nums2 = {0, 0, 0};
     EXPECT_EQ(s.threeSumClosest(nums2, 1), 0);
-    
+
     // 测试用例 3
     vector<int> nums3 = {1, 1, 1, 0};
     EXPECT_EQ(s.threeSumClosest(nums3, -100), 2);

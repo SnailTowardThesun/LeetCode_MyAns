@@ -40,18 +40,21 @@
  */
 
 #include <gtest/gtest.h>
-#include <vector>
+
 #include <algorithm>
+#include <vector>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     int trap(vector<int>& height) {
         int n = height.size() - 1;
         int left = 0, right = n, leftMax = 0, rightMax = 0;
         int ret = 0;
-        while(left < right) {
+        while (left < right) {
             leftMax = max(leftMax, height[left]);
             rightMax = max(rightMax, height[right]);
 
@@ -67,6 +70,7 @@ public:
         return ret;
     }
 };
+}  // namespace
 
 TEST(TOP150, No42_TrapRainWater) {
     Solution solution;

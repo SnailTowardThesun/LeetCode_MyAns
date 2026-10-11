@@ -41,44 +41,47 @@
 
 using namespace std;
 
-TEST(Daily, 80) {
-    class Solution {
-    public:
-        int removeDuplicates(int A[], int n) {
-            if (A == NULL || n == 0) return 0;
-            int startPosition = 0;
-            bool isRepeated = false;
-            for (int i = 1; i < n; i++) {
-                if (A[i] != A[startPosition]) {
-                    isRepeated = false;
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+class Solution {
+   public:
+    int removeDuplicates(int A[], int n) {
+        if (A == NULL || n == 0) return 0;
+        int startPosition = 0;
+        bool isRepeated = false;
+        for (int i = 1; i < n; i++) {
+            if (A[i] != A[startPosition]) {
+                isRepeated = false;
+                startPosition++;
+                A[startPosition] = A[i];
+            } else {
+                if (isRepeated == false) {
                     startPosition++;
                     A[startPosition] = A[i];
-                } else {
-                    if (isRepeated == false) {
-                        startPosition++;
-                        A[startPosition] = A[i];
-                        isRepeated = true;
-                    }
+                    isRepeated = true;
                 }
             }
-            return startPosition + 1;
         }
-    };
+        return startPosition + 1;
+    }
+};
+}  // namespace
 
+TEST(Daily, 80) {
     Solution s;
-    
+
     // 测试用例 1
     int A1[] = {1, 1, 1, 2, 2, 3};
     EXPECT_EQ(s.removeDuplicates(A1, 6), 5);
-    
+
     // 测试用例 2
     int A2[] = {0, 0, 1, 1, 1, 1, 2, 3, 3};
     EXPECT_EQ(s.removeDuplicates(A2, 9), 7);
-    
+
     // 测试用例 3
     int A3[] = {1, 1};
     EXPECT_EQ(s.removeDuplicates(A3, 2), 2);
-    
+
     // 测试用例 4
     int A4[] = {1};
     EXPECT_EQ(s.removeDuplicates(A4, 1), 1);

@@ -41,6 +41,8 @@
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
    public:
     bool isRectangleOverlap(vector<int>& rec1, vector<int>& rec2) {
@@ -56,6 +58,7 @@ class Solution {
         return max_left < min_right && max_bottom < min_top;
     }
 };
+}  // namespace
 
 TEST(Daily, 836) {
     Solution s;

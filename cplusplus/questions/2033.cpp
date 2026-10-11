@@ -38,26 +38,29 @@
 //
 
 #include <gtest/gtest.h>
+
 #include <vector>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     int minOperations(vector<vector<int>>& grid, int x) {
         int m = grid.size();
         int n = grid[0].size();
 
         int t = grid[0][0] % x;
 
-        vector<int> container(m*n, 0);
+        vector<int> container(m * n, 0);
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (grid[i][j] % x != t) {
                     return -1;
                 }
 
-                container[i*n+j] = grid[i][j];
+                container[i * n + j] = grid[i][j];
             }
         }
 
@@ -72,10 +75,11 @@ public:
         return ret / x;
     }
 };
+}  // namespace
 
 TEST(Daily, 2033) {
     Solution s;
-    auto grid = vector<vector<int>> {{2,4},{6,8}};
+    auto grid = vector<vector<int>>{{2, 4}, {6, 8}};
     auto x = 2;
     auto ret = s.minOperations(grid, x);
     EXPECT_EQ(4, ret);

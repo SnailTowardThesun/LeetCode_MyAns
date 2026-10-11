@@ -39,11 +39,14 @@
  */
 
 #include <gtest/gtest.h>
+
 #include <unordered_set>
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     int lengthOfLongestSubstring(string s) {
         if (s.size() < 1) {
             return 0;
@@ -70,6 +73,7 @@ public:
         return ret;
     }
 };
+}  // namespace
 
 TEST(top150, 3) {
     Solution s;

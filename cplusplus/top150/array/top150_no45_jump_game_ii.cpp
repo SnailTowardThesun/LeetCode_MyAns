@@ -39,14 +39,17 @@
  */
 
 #include <gtest/gtest.h>
-#include <vector>
+
 #include <algorithm>
+#include <vector>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
-    int jump(vector<int> &nums) {
+   public:
+    int jump(vector<int>& nums) {
         int n = nums.size();
         vector<int> dp(n, INT_MAX);
         dp[0] = 0;
@@ -62,6 +65,7 @@ public:
         return dp[n - 1];
     }
 };
+}  // namespace
 
 TEST(TOP150, No45_JumpGameII) {
     Solution solution;

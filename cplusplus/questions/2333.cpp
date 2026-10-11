@@ -33,9 +33,11 @@
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
-    long long minSumSquareDiff(vector<int> &nums1, vector<int> &nums2, int k1, int k2) {
+   public:
+    long long minSumSquareDiff(vector<int>& nums1, vector<int>& nums2, int k1, int k2) {
         int n = nums1.size();
         long long ret = 0;
         vector<long long> arr(1e5 + 1, 0);
@@ -44,12 +46,11 @@ public:
             arr[abs(nums1[i] - nums2[i])]++;
         }
 
-
         int step = k1 + k2;
         for (int i = arr.size() - 1; i > 0 && step > 0; i--) {
             int change = step < arr[i] ? step : arr[i];
             step -= change;
-            arr[i-1] += change;
+            arr[i - 1] += change;
             arr[i] -= change;
         }
 
@@ -57,15 +58,15 @@ public:
             ret += i * i * arr[i];
         }
 
-
         return ret;
     }
 };
+}  // namespace
 
 TEST(Daily, 2333) {
     Solution s;
-    vector<int> nums1{7,11,4,19,11,5,6,1,8};
-    vector<int> nums2{4,7,6,16,12,9,10,2,10};
+    vector<int> nums1{7, 11, 4, 19, 11, 5, 6, 1, 8};
+    vector<int> nums2{4, 7, 6, 16, 12, 9, 10, 2, 10};
     auto k1 = 3, k2 = 6;
     auto ret = s.minSumSquareDiff(nums1, nums2, k1, k2);
     EXPECT_EQ(ret, 27);

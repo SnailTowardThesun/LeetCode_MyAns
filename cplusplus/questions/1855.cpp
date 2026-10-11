@@ -38,6 +38,8 @@
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
    public:
     int maxDistance(vector<int>& nums1, vector<int>& nums2) {
@@ -53,6 +55,7 @@ class Solution {
         return ret;
     }
 };
+}  // namespace
 
 class Solution2 {
    public:

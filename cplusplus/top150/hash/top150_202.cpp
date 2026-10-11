@@ -48,8 +48,10 @@
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     bool isHappy(int n) {
         int fast = n;
         int slow = n;
@@ -75,6 +77,7 @@ public:
         return slow == 1;
     }
 };
+}  // namespace
 
 TEST(top150, 202) {
     Solution s;

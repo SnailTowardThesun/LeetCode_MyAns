@@ -41,13 +41,16 @@
  */
 
 #include <gtest/gtest.h>
+
 #include <vector>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
-    int majorityElement(vector<int> &nums) {
+   public:
+    int majorityElement(vector<int>& nums) {
         unordered_map<int, int> candidate;
         for (auto i : nums) {
             candidate[i]++;
@@ -59,10 +62,9 @@ public:
         return -1;
     }
 };
+}  // namespace
 
 TEST(TOP150, No169_MajorityElement) {
-
-
     Solution solution;
     std::vector<int> nums{3, 2, 3};
     auto ret = solution.majorityElement(nums);

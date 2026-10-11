@@ -49,13 +49,16 @@
  */
 
 #include <gtest/gtest.h>
-#include <vector>
+
 #include <climits>
+#include <vector>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     int minDominoRotations(vector<int>& tops, vector<int>& bottoms) {
         auto length = (int)tops.size();
 
@@ -65,10 +68,10 @@ public:
         }
         auto result = INT_MAX;
 
-        for (auto &t : target) {
+        for (auto& t : target) {
             auto top_rotation_times = 0;
             auto bottom_rotation_times = 0;
-            for (auto i = 0; i< length; i++) {
+            for (auto i = 0; i < length; i++) {
                 if (tops[i] != t && bottoms[i] != t) {
                     top_rotation_times = INT_MAX;
                     break;
@@ -83,7 +86,7 @@ public:
                 }
             }
 
-            if (top_rotation_times != INT_MAX){
+            if (top_rotation_times != INT_MAX) {
                 result = std::min(result, top_rotation_times);
                 result = std::min(result, bottom_rotation_times);
             }
@@ -92,10 +95,11 @@ public:
         return result == INT_MAX ? -1 : result;
     }
 };
+}  // namespace
 
 TEST(Daily, 1007) {
     Solution s;
-    std::vector<int> tops = {1,2,1,1,1,2,2,2};
-    std::vector<int> bottoms = {2,1,2,2,2,2,2,2};
+    std::vector<int> tops = {1, 2, 1, 1, 1, 2, 2, 2};
+    std::vector<int> bottoms = {2, 1, 2, 2, 2, 2, 2, 2};
     ASSERT_EQ(s.minDominoRotations(tops, bottoms), 1);
 }

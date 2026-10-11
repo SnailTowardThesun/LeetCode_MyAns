@@ -49,32 +49,36 @@
  */
 
 #include <gtest/gtest.h>
+
 #include <vector>
 using namespace std;
 
-TEST(Daily, 2946) {
-    class Solution {
-    public:
-        bool areSimilar(vector<vector<int>>& mat, int k) {
-            int  n = mat.size();
-            int  m = mat[0].size();
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+class Solution {
+   public:
+    bool areSimilar(vector<vector<int>>& mat, int k) {
+        int n = mat.size();
+        int m = mat[0].size();
 
-            auto actual_step = k % m;
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < m; j++) {
-                    if (mat[i][j] != mat[i][(j + actual_step)%m]) {
-                        return false;
-                    }
+        auto actual_step = k % m;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (mat[i][j] != mat[i][(j + actual_step) % m]) {
+                    return false;
                 }
             }
-            return true;
         }
-    };
+        return true;
+    }
+};
+}  // namespace
 
+TEST(Daily, 2946) {
     Solution s;
     // auto mat = vector<vector<int>>{{1,2,3}, {4,5,6}, {7,8,9}};
-    auto mat = vector<vector<int>>{{5,4,5,10,5} };
-    auto ret= s.areSimilar(mat, 9);
+    auto mat = vector<vector<int>>{{5, 4, 5, 10, 5}};
+    auto ret = s.areSimilar(mat, 9);
 
     EXPECT_EQ(ret, false);
 }

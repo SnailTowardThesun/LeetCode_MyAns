@@ -20,6 +20,7 @@
 // - 空间复杂度：O(k)，k 为字符种类数（哈希表大小）。
 
 #include <gtest/gtest.h>
+
 #include <climits>
 #include <string>
 #include <unordered_map>
@@ -27,8 +28,10 @@
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     string minWindow(string s, string t) {
         int m = s.size();
         int n = t.size();
@@ -39,7 +42,7 @@ public:
 
         // t 中每个字符的需求量
         unordered_map<char, int> lookup;
-        for (auto i: t) {
+        for (auto i : t) {
             lookup[i]++;
         }
 
@@ -81,6 +84,7 @@ public:
         return best_left == -1 ? "" : s.substr(best_left, best_len);
     }
 };
+}  // namespace
 
 TEST(top150, 76) {
     Solution s;

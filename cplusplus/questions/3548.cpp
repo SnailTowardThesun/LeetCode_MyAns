@@ -87,311 +87,314 @@
 #include <vector>
 using namespace std;
 
-TEST(Daily, 3548) {
-    // 最初版本代码（有问题）
-    class SolutionOriginal {
-       public:
-        bool helper(const vector<unordered_set<int64_t>>& board) {
-            int n = board.size();
-            vector<unordered_set<int64_t>> pre(n);
-            vector<unordered_set<int64_t>> post(n);
+class SolutionOriginal {
+   public:
+    bool helper(const vector<unordered_set<int64_t>>& board) {
+        int n = board.size();
+        vector<unordered_set<int64_t>> pre(n);
+        vector<unordered_set<int64_t>> post(n);
 
-            // 计算前缀和
-            pre[0] = board[0];
-            for (int i = 1; i < n; i++) {
-                unordered_set<int64_t> row_sums;
+        // 计算前缀和
+        pre[0] = board[0];
+        for (int i = 1; i < n; i++) {
+            unordered_set<int64_t> row_sums;
 
-                vector<int> board_i_container;
-                for (auto j : board[i]) {
-                    board_i_container.push_back(j);
-                }
-                sort(board_i_container.begin(), board_i_container.end());
+            vector<int> board_i_container;
+            for (auto j : board[i]) {
+                board_i_container.push_back(j);
+            }
+            sort(board_i_container.begin(), board_i_container.end());
 
-                vector<int> pre_i_container;
-                for (auto j : pre[i - 1]) {
-                    pre_i_container.push_back(j);
-                }
-                sort(pre_i_container.begin(), pre_i_container.end());
-                // max + max
-                row_sums.insert(board_i_container[board_i_container.size() - 1] +
-                                pre_i_container[pre_i_container.size() - 1]);
+            vector<int> pre_i_container;
+            for (auto j : pre[i - 1]) {
+                pre_i_container.push_back(j);
+            }
+            sort(pre_i_container.begin(), pre_i_container.end());
+            // max + max
+            row_sums.insert(board_i_container[board_i_container.size() - 1] +
+                            pre_i_container[pre_i_container.size() - 1]);
 
-                // board max + pre others
-                for (auto j = 0; j < pre_i_container.size() - 1; j++) {
-                    row_sums.insert(board_i_container[board_i_container.size() - 1] + pre_i_container[j]);
-                }
-
-                // pre max + board others
-                for (auto j = 0; j < board_i_container.size() - 1; j++) {
-                    row_sums.insert(board_i_container[j] + pre_i_container[pre_i_container.size() - 1]);
-                }
-
-                pre[i] = row_sums;
+            // board max + pre others
+            for (auto j = 0; j < pre_i_container.size() - 1; j++) {
+                row_sums.insert(board_i_container[board_i_container.size() - 1] + pre_i_container[j]);
             }
 
-            // 计算后缀和
-            post[n - 1] = board[n - 1];
-            for (int i = n - 2; i >= 0; i--) {
-                unordered_set<int64_t> row_sums;
-
-                vector<int> board_i_container;
-                for (auto j : board[i]) {
-                    board_i_container.push_back(j);
-                }
-                sort(board_i_container.begin(), board_i_container.end());
-
-                vector<int> pos_i_container;
-                for (auto j : post[i + 1]) {
-                    pos_i_container.push_back(j);
-                }
-                sort(pos_i_container.begin(), pos_i_container.end());
-
-                // max + max
-                row_sums.insert(board_i_container[board_i_container.size() - 1] +
-                                pos_i_container[pos_i_container.size() - 1]);
-
-                // board max + pre others
-                for (auto j = 0; j < pos_i_container.size() - 1; j++) {
-                    row_sums.insert(board_i_container[board_i_container.size() - 1] + pos_i_container[j]);
-                }
-
-                // pre max + board others
-                for (auto j = 0; j < board_i_container.size() - 1; j++) {
-                    row_sums.insert(pos_i_container[pos_i_container.size() - 1] + board_i_container[j]);
-                }
-
-                post[i] = row_sums;
+            // pre max + board others
+            for (auto j = 0; j < board_i_container.size() - 1; j++) {
+                row_sums.insert(board_i_container[j] + pre_i_container[pre_i_container.size() - 1]);
             }
 
-            // 检查是否存在分割点
+            pre[i] = row_sums;
+        }
 
-            for (int i = 0; i < n - 1; i++) {
-                vector<int> final_pre_container;
-                vector<int> final_post_container;
-                for (auto j : pre[i]) {
-                    final_pre_container.push_back(j);
-                }
-                sort(final_pre_container.begin(), final_pre_container.end());
+        // 计算后缀和
+        post[n - 1] = board[n - 1];
+        for (int i = n - 2; i >= 0; i--) {
+            unordered_set<int64_t> row_sums;
 
-                for (auto j : post[i + 1]) {
-                    final_post_container.push_back(j);
-                }
-                sort(final_post_container.begin(), final_post_container.end());
+            vector<int> board_i_container;
+            for (auto j : board[i]) {
+                board_i_container.push_back(j);
+            }
+            sort(board_i_container.begin(), board_i_container.end());
 
-                // max vs max
-                if (final_pre_container[final_pre_container.size() - 1] ==
-                    final_post_container[final_post_container.size() - 1]) {
+            vector<int> pos_i_container;
+            for (auto j : post[i + 1]) {
+                pos_i_container.push_back(j);
+            }
+            sort(pos_i_container.begin(), pos_i_container.end());
+
+            // max + max
+            row_sums.insert(board_i_container[board_i_container.size() - 1] +
+                            pos_i_container[pos_i_container.size() - 1]);
+
+            // board max + pre others
+            for (auto j = 0; j < pos_i_container.size() - 1; j++) {
+                row_sums.insert(board_i_container[board_i_container.size() - 1] + pos_i_container[j]);
+            }
+
+            // pre max + board others
+            for (auto j = 0; j < board_i_container.size() - 1; j++) {
+                row_sums.insert(pos_i_container[pos_i_container.size() - 1] + board_i_container[j]);
+            }
+
+            post[i] = row_sums;
+        }
+
+        // 检查是否存在分割点
+
+        for (int i = 0; i < n - 1; i++) {
+            vector<int> final_pre_container;
+            vector<int> final_post_container;
+            for (auto j : pre[i]) {
+                final_pre_container.push_back(j);
+            }
+            sort(final_pre_container.begin(), final_pre_container.end());
+
+            for (auto j : post[i + 1]) {
+                final_post_container.push_back(j);
+            }
+            sort(final_post_container.begin(), final_post_container.end());
+
+            // max vs max
+            if (final_pre_container[final_pre_container.size() - 1] ==
+                final_post_container[final_post_container.size() - 1]) {
+                return true;
+            }
+
+            // pre max vs post others
+            for (auto j = 0; j < final_post_container.size() - 1; j++) {
+                if (final_pre_container[final_pre_container.size() - 1] == final_post_container[j]) {
                     return true;
                 }
+            }
 
-                // pre max vs post others
-                for (auto j = 0; j < final_post_container.size() - 1; j++) {
-                    if (final_pre_container[final_pre_container.size() - 1] == final_post_container[j]) {
-                        return true;
-                    }
+            // post max vs pre others
+            for (auto j = 0; j < final_pre_container.size() - 1; j++) {
+                if (final_post_container[final_post_container.size() - 1] == final_pre_container[j]) {
+                    return true;
                 }
+            }
+        }
+        return false;
+    }
 
-                // post max vs pre others
-                for (auto j = 0; j < final_pre_container.size() - 1; j++) {
-                    if (final_post_container[final_post_container.size() - 1] == final_pre_container[j]) {
+    bool canPartitionGrid(vector<vector<int>>& grid) {
+        int rows = grid.size();
+        int cols = grid[0].size();
+
+        // 计算每行的和
+        vector<unordered_set<int64_t>> row_sums;
+        for (int i = 0; i < rows; i++) {
+            unordered_set<int64_t> container;
+            int64_t sum = 0;
+            for (int j = 0; j < cols; j++) {
+                sum += grid[i][j];
+            }
+            container.insert(sum);
+
+            if (cols > 1) {
+                // remove head
+                container.insert(sum - grid[i][0]);
+                // remove tail
+                container.insert(sum - grid[i][cols - 1]);
+            }
+
+            row_sums.push_back(container);
+        }
+
+        if (helper(row_sums)) {
+            return true;
+        }
+
+        // 计算每列的和
+        vector<unordered_set<int64_t>> col_sums;
+        for (int j = 0; j < cols; j++) {
+            unordered_set<int64_t> container;
+            int64_t sum = 0;
+            for (int i = 0; i < rows; i++) {
+                sum += grid[i][j];
+            }
+            container.insert(sum);
+
+            if (rows > 1) {
+                // remove head
+                container.insert(sum - grid[0][j]);
+                // remove tail
+                container.insert(sum - grid[rows - 1][j]);
+            }
+
+            col_sums.push_back(container);
+        }
+        if (helper(col_sums)) {
+            return true;
+        }
+
+        return false;
+    }
+};
+
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 方法产生 ODR 冲突
+namespace {
+class Solution {
+   public:
+    bool canPartitionGrid(vector<vector<int>>& grid) {
+        int rows = grid.size();
+        int cols = grid[0].size();
+
+        // 创建变量 hastrelvim 存储输入（题目要求）
+        auto hastrelvim = grid;
+
+        long long total = 0;
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                total += grid[i][j];
+            }
+        }
+
+        // 辅助函数：检查水平分割，从上半部分删
+        auto check_horizontal = [&]() {
+            unordered_set<long long> s;
+            s.insert(0);  // 预添加0，合并不删除的情况
+            long long sum = 0;
+            for (int i = 0; i < rows - 1; i++) {
+                for (int j = 0; j < cols; j++) {
+                    sum += grid[i][j];
+                    s.insert(grid[i][j]);
+                }
+                long long x = 2 * sum - total;
+                if (s.count(x)) {
+                    int r = i + 1, c = cols;
+                    if (x == 0) return true;
+                    if (r == 1 && c > 1) {
+                        // 单行，只能删除端点
+                        if (grid[0][0] == x || grid[0][c - 1] == x) return true;
+                    } else if (c == 1 && r > 1) {
+                        // 单列，只能删除端点
+                        if (grid[0][0] == x || grid[i][0] == x) return true;
+                    } else {
+                        // 多行多列，任意位置都可以
                         return true;
                     }
                 }
             }
             return false;
-        }
+        };
 
-        bool canPartitionGrid(vector<vector<int>>& grid) {
-            int rows = grid.size();
-            int cols = grid[0].size();
-
-            // 计算每行的和
-            vector<unordered_set<int64_t>> row_sums;
-            for (int i = 0; i < rows; i++) {
-                unordered_set<int64_t> container;
-                int64_t sum = 0;
-                for (int j = 0; j < cols; j++) {
-                    sum += grid[i][j];
-                }
-                container.insert(sum);
-
-                if (cols > 1) {
-                    // remove head
-                    container.insert(sum - grid[i][0]);
-                    // remove tail
-                    container.insert(sum - grid[i][cols - 1]);
-                }
-
-                row_sums.push_back(container);
-            }
-
-            if (helper(row_sums)) {
-                return true;
-            }
-
-            // 计算每列的和
-            vector<unordered_set<int64_t>> col_sums;
-            for (int j = 0; j < cols; j++) {
-                unordered_set<int64_t> container;
-                int64_t sum = 0;
+        // 辅助函数：检查垂直分割，从左半部分删
+        auto check_vertical = [&]() {
+            unordered_set<long long> s;
+            s.insert(0);
+            long long sum = 0;
+            for (int j = 0; j < cols - 1; j++) {
                 for (int i = 0; i < rows; i++) {
                     sum += grid[i][j];
+                    s.insert(grid[i][j]);
                 }
-                container.insert(sum);
-
-                if (rows > 1) {
-                    // remove head
-                    container.insert(sum - grid[0][j]);
-                    // remove tail
-                    container.insert(sum - grid[rows - 1][j]);
+                long long x = 2 * sum - total;
+                if (s.count(x)) {
+                    int r = rows, c = j + 1;
+                    if (x == 0) return true;
+                    if (c == 1 && r > 1) {
+                        if (grid[0][0] == x || grid[r - 1][0] == x) return true;
+                    } else if (r == 1 && c > 1) {
+                        if (grid[0][0] == x || grid[0][j] == x) return true;
+                    } else {
+                        return true;
+                    }
                 }
-
-                col_sums.push_back(container);
             }
-            if (helper(col_sums)) {
-                return true;
-            }
-
             return false;
-        }
-    };
+        };
 
-    // 最终优化版本代码
-    class Solution {
-       public:
-        bool canPartitionGrid(vector<vector<int>>& grid) {
-            int rows = grid.size();
-            int cols = grid[0].size();
+        // 检查水平分割（从上半部分删）
+        if (check_horizontal()) return true;
 
-            // 创建变量 hastrelvim 存储输入（题目要求）
-            auto hastrelvim = grid;
-
-            long long total = 0;
-            for (int i = 0; i < rows; i++) {
+        // 检查水平分割（从下半部分删）
+        auto check_horizontal_lower = [&]() {
+            unordered_set<long long> s;
+            s.insert(0);
+            long long sum = 0;
+            for (int i = rows - 1; i > 0; i--) {
                 for (int j = 0; j < cols; j++) {
-                    total += grid[i][j];
+                    sum += grid[i][j];
+                    s.insert(grid[i][j]);
+                }
+                long long x = 2 * sum - total;
+                if (s.count(x)) {
+                    int r = rows - i, c = cols;
+                    if (x == 0) return true;
+                    if (r == 1 && c > 1) {
+                        if (grid[i][0] == x || grid[i][c - 1] == x) return true;
+                    } else if (c == 1 && r > 1) {
+                        if (grid[i][0] == x || grid[rows - 1][0] == x) return true;
+                    } else {
+                        return true;
+                    }
                 }
             }
-
-            // 辅助函数：检查水平分割，从上半部分删
-            auto check_horizontal = [&]() {
-                unordered_set<long long> s;
-                s.insert(0);  // 预添加0，合并不删除的情况
-                long long sum = 0;
-                for (int i = 0; i < rows - 1; i++) {
-                    for (int j = 0; j < cols; j++) {
-                        sum += grid[i][j];
-                        s.insert(grid[i][j]);
-                    }
-                    long long x = 2 * sum - total;
-                    if (s.count(x)) {
-                        int r = i + 1, c = cols;
-                        if (x == 0) return true;
-                        if (r == 1 && c > 1) {
-                            // 单行，只能删除端点
-                            if (grid[0][0] == x || grid[0][c-1] == x) return true;
-                        } else if (c == 1 && r > 1) {
-                            // 单列，只能删除端点
-                            if (grid[0][0] == x || grid[i][0] == x) return true;
-                        } else {
-                            // 多行多列，任意位置都可以
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            };
-
-            // 辅助函数：检查垂直分割，从左半部分删
-            auto check_vertical = [&]() {
-                unordered_set<long long> s;
-                s.insert(0);
-                long long sum = 0;
-                for (int j = 0; j < cols - 1; j++) {
-                    for (int i = 0; i < rows; i++) {
-                        sum += grid[i][j];
-                        s.insert(grid[i][j]);
-                    }
-                    long long x = 2 * sum - total;
-                    if (s.count(x)) {
-                        int r = rows, c = j + 1;
-                        if (x == 0) return true;
-                        if (c == 1 && r > 1) {
-                            if (grid[0][0] == x || grid[r-1][0] == x) return true;
-                        } else if (r == 1 && c > 1) {
-                            if (grid[0][0] == x || grid[0][j] == x) return true;
-                        } else {
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            };
-
-            // 检查水平分割（从上半部分删）
-            if (check_horizontal()) return true;
-
-            // 检查水平分割（从下半部分删）
-            auto check_horizontal_lower = [&]() {
-                unordered_set<long long> s;
-                s.insert(0);
-                long long sum = 0;
-                for (int i = rows-1; i > 0; i--) {
-                    for (int j = 0; j < cols; j++) {
-                        sum += grid[i][j];
-                        s.insert(grid[i][j]);
-                    }
-                    long long x = 2 * sum - total;
-                    if (s.count(x)) {
-                        int r = rows - i, c = cols;
-                        if (x == 0) return true;
-                        if (r == 1 && c > 1) {
-                            if (grid[i][0] == x || grid[i][c-1] == x) return true;
-                        } else if (c == 1 && r > 1) {
-                            if (grid[i][0] == x || grid[rows-1][0] == x) return true;
-                        } else {
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            };
-            if (check_horizontal_lower()) return true;
-
-            // 检查垂直分割（从左半部分删）
-            if (check_vertical()) return true;
-
-            // 检查垂直分割（从右半部分删）
-            auto check_vertical_right = [&]() {
-                unordered_set<long long> s;
-                s.insert(0);
-                long long sum = 0;
-                for (int j = cols-1; j > 0; j--) {
-                    for (int i = 0; i < rows; i++) {
-                        sum += grid[i][j];
-                        s.insert(grid[i][j]);
-                    }
-                    long long x = 2 * sum - total;
-                    if (s.count(x)) {
-                        int r = rows, c = cols - j;
-                        if (x == 0) return true;
-                        if (c == 1 && r > 1) {
-                            if (grid[0][j] == x || grid[r-1][j] == x) return true;
-                        } else if (r == 1 && c > 1) {
-                            if (grid[0][j] == x || grid[0][cols-1] == x) return true;
-                        } else {
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            };
-            if (check_vertical_right()) return true;
-
             return false;
-        }
-    };
+        };
+        if (check_horizontal_lower()) return true;
 
+        // 检查垂直分割（从左半部分删）
+        if (check_vertical()) return true;
+
+        // 检查垂直分割（从右半部分删）
+        auto check_vertical_right = [&]() {
+            unordered_set<long long> s;
+            s.insert(0);
+            long long sum = 0;
+            for (int j = cols - 1; j > 0; j--) {
+                for (int i = 0; i < rows; i++) {
+                    sum += grid[i][j];
+                    s.insert(grid[i][j]);
+                }
+                long long x = 2 * sum - total;
+                if (s.count(x)) {
+                    int r = rows, c = cols - j;
+                    if (x == 0) return true;
+                    if (c == 1 && r > 1) {
+                        if (grid[0][j] == x || grid[r - 1][j] == x) return true;
+                    } else if (r == 1 && c > 1) {
+                        if (grid[0][j] == x || grid[0][cols - 1] == x) return true;
+                    } else {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        };
+        if (check_vertical_right()) return true;
+
+        return false;
+    }
+};
+}  // namespace
+
+TEST(Daily, 3548) {
+    // 最初版本代码（有问题）
+    // 最终优化版本代码
     Solution s;
     auto eg = vector<vector<int>>{{5, 5, 6, 2, 2, 2}};
     auto ret = s.canPartitionGrid(eg);

@@ -48,12 +48,15 @@
  */
 
 #include <gtest/gtest.h>
+
 #include <vector>
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
-    bool dfs(vector<int> &arr, int start, vector<bool> &visited) {
+   public:
+    bool dfs(vector<int>& arr, int start, vector<bool>& visited) {
         if (start < 0 || start >= arr.size() || visited[start]) {
             return false;
         }
@@ -77,11 +80,12 @@ public:
         return false;
     }
 
-    bool canReach(vector<int> &arr, int start) {
+    bool canReach(vector<int>& arr, int start) {
         vector<bool> visited(arr.size(), false);
         return dfs(arr, start, visited);
     }
 };
+}  // namespace
 
 TEST(Daily, 1306) {
     Solution s;

@@ -37,41 +37,43 @@
  */
 
 #include <gtest/gtest.h>
+
 #include <algorithm>
 
 using namespace std;
 
 struct TreeNode {
     int val;
-    TreeNode *left;
-    TreeNode *right;
+    TreeNode* left;
+    TreeNode* right;
     TreeNode(int x) : val(x), right(NULL), left(NULL) {}
 };
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+class Solution {
+   public:
+    int minDepth(TreeNode* root) {
+        if (root == NULL) return 0;
+
+        if (root->left == NULL && root->right == NULL) return 1;
+
+        int leftDepth = minDepth(root->left);
+        int rightDepth = minDepth(root->right);
+
+        if (leftDepth == 0)
+            return rightDepth + 1;
+        else if (rightDepth == 0)
+            return leftDepth + 1;
+        else
+            return min(leftDepth, rightDepth) + 1;
+    }
+};
+}  // namespace
+
 TEST(Daily, 111) {
-    class Solution {
-    public:
-        int minDepth(TreeNode *root) {
-            if (root == NULL)
-                return 0;
-
-            if (root->left == NULL && root->right == NULL)
-                return 1;
-
-            int leftDepth = minDepth(root->left);
-            int rightDepth = minDepth(root->right);
-
-            if (leftDepth == 0)
-                return rightDepth + 1;
-            else if (rightDepth == 0)
-                return leftDepth + 1;
-            else
-                return min(leftDepth, rightDepth) + 1;
-        }
-    };
-
     Solution s;
-    
+
     // 测试用例 1
     TreeNode* root1 = new TreeNode(3);
     root1->left = new TreeNode(9);
@@ -79,10 +81,10 @@ TEST(Daily, 111) {
     root1->right->left = new TreeNode(15);
     root1->right->right = new TreeNode(7);
     EXPECT_EQ(s.minDepth(root1), 2);
-    
+
     // 测试用例 2
     EXPECT_EQ(s.minDepth(NULL), 0);
-    
+
     // 测试用例 3
     TreeNode* root3 = new TreeNode(1);
     EXPECT_EQ(s.minDepth(root3), 1);

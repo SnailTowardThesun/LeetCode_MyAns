@@ -24,20 +24,23 @@
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     int sumOfSquares(vector<int>& nums) {
         int n = nums.size();
         int ret = 0;
         for (int i = 1; i <= n; i++) {
             if (n % i == 0) {
-                ret += nums[i-1] * nums[i-1];
+                ret += nums[i - 1] * nums[i - 1];
             }
         }
 
         return ret;
     }
 };
+}  // namespace
 
 TEST(Daily, 2778) {
     Solution s;

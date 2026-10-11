@@ -43,17 +43,20 @@
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     bool checkOverlap(int radius, int xCenter, int yCenter, int x1, int y1, int x2, int y2) {
         // 将圆心钳制到矩形范围内，得到矩形上离圆心最近的点
         int x = clamp(xCenter, x1, x2);
         int y = clamp(yCenter, y1, y2);
 
         // 最近点距离平方 <= 半径平方，即存在公共点；相切（相等）也算重叠
-        return ((x - xCenter)*(x-xCenter) + (y - yCenter) * (y - yCenter)) <= radius * radius;
+        return ((x - xCenter) * (x - xCenter) + (y - yCenter) * (y - yCenter)) <= radius * radius;
     }
 };
+}  // namespace
 
 TEST(Daily, 1401) {
     Solution s;

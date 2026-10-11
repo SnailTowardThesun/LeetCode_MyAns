@@ -49,20 +49,23 @@
 // - 空间复杂度：O(n)，n 为输入长度，递归深度由括号嵌套决定。
 
 #include <gtest/gtest.h>
+
 #include <stack>
 #include <string>
 #include <utility>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     string decodeString(string s) {
         // 栈元素：(进入当前 '[' 之前已累积的字符串, 当前括号的重复次数)
         stack<pair<string, int> > container;
-        string ret;      // 当前正在构造的字符串
-        int times = 0;   // 当前正在解析的重复次数
-        for (auto c: s) {
+        string ret;     // 当前正在构造的字符串
+        int times = 0;  // 当前正在解析的重复次数
+        for (auto c : s) {
             if (c >= '0' && c <= '9') {
                 // 按位累加，支持多位数（如 "12[a]"）
                 times = times * 10 + c - '0';
@@ -91,6 +94,7 @@ public:
         return ret;
     }
 };
+}  // namespace
 
 TEST(Daily, 394) {
     Solution s;

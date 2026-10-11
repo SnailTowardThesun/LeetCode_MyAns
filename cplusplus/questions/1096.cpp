@@ -39,6 +39,7 @@
 // - 空间复杂度：与结果集大小同阶。
 
 #include <gtest/gtest.h>
+
 #include <algorithm>
 #include <stack>
 #include <string>
@@ -48,8 +49,10 @@
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     vector<string> braceExpansionII(string expression) {
         using SET = unordered_set<string>;
         // 栈元素：(进入当前 '{' 前的并集 res, 并列积 cur)
@@ -57,11 +60,11 @@ public:
         SET res;
         SET cur{""};
 
-        for (auto ch: expression) {
+        for (auto ch : expression) {
             if (ch >= 'a' && ch <= 'z') {
                 // 并列：cur 中每个串末尾追加该字母
                 SET tmp;
-                for (auto s: cur) {
+                for (auto s : cur) {
                     tmp.insert(s + ch);
                 }
 
@@ -88,8 +91,8 @@ public:
 
                 // 括号整体作为并列的一项：cur = 外层 cur × sub_arr
                 SET tmp;
-                for (auto i: cur) {
-                    for (auto j: sub_arr) {
+                for (auto i : cur) {
+                    for (auto j : sub_arr) {
                         tmp.insert(i + j);
                     }
                 }
@@ -106,7 +109,7 @@ public:
         return ret;
     }
 };
-
+}  // namespace
 
 TEST(Daily, 1096) {
     Solution s;
@@ -116,8 +119,7 @@ TEST(Daily, 1096) {
     EXPECT_EQ(ret, vector<string>({"ac", "ad", "ae", "bc", "bd", "be"}));
 
     // 示例 2：含去重与字典序
-    EXPECT_EQ(s.braceExpansionII("{{a,z},a{b,c},{ab,z}}"),
-              vector<string>({"a", "ab", "ac", "z"}));
+    EXPECT_EQ(s.braceExpansionII("{{a,z},a{b,c},{ab,z}}"), vector<string>({"a", "ab", "ac", "z"}));
 
     // 简单并列
     EXPECT_EQ(s.braceExpansionII("a{b,c}"), vector<string>({"ab", "ac"}));

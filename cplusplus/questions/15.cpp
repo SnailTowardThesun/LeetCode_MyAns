@@ -47,66 +47,69 @@
  */
 
 #include <gtest/gtest.h>
-#include <vector>
+
 #include <algorithm>
+#include <vector>
 
 using namespace std;
 
-TEST(Daily, 15) {
-    class Solution {
-    public:
-        vector<vector<int>> threeSum(vector<int>& nums) {
-            vector<vector<int>> res;
-            std::sort(nums.begin(), nums.end());
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 方法产生 ODR 冲突
+namespace {
+class Solution {
+   public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int>> res;
+        std::sort(nums.begin(), nums.end());
 
-            for (int k = 0; k < nums.size(); ++k) {
-                if (nums[k] > 0) {
-                    break;
-                }
+        for (int k = 0; k < nums.size(); ++k) {
+            if (nums[k] > 0) {
+                break;
+            }
 
-                if (k > 0 && nums[k] == nums[k - 1]) {
-                    continue;
-                }
+            if (k > 0 && nums[k] == nums[k - 1]) {
+                continue;
+            }
 
-                int target = 0 - nums[k];
-                int i = k + 1, j = nums.size() - 1;
-                while (i < j) {
-                    if (nums[i] + nums[j] == target) {
-                        res.push_back({ nums[k], nums[i], nums[j] });
-                        while (i < j && nums[i] == nums[i + 1]) ++i;
-                        while (i < j && nums[j] == nums[j - 1]) --j;
-                        ++i; --j;
-                    }
-                    else if (nums[i] + nums[j] < target) {
-                        ++i;
-                    }
-                    else {
-                        --j;
-                    }
+            int target = 0 - nums[k];
+            int i = k + 1, j = nums.size() - 1;
+            while (i < j) {
+                if (nums[i] + nums[j] == target) {
+                    res.push_back({nums[k], nums[i], nums[j]});
+                    while (i < j && nums[i] == nums[i + 1]) ++i;
+                    while (i < j && nums[j] == nums[j - 1]) --j;
+                    ++i;
+                    --j;
+                } else if (nums[i] + nums[j] < target) {
+                    ++i;
+                } else {
+                    --j;
                 }
             }
-            return res;
         }
-    };
+        return res;
+    }
+};
+}  // namespace
 
+TEST(Daily, 15) {
     Solution s;
-    
+
     // 测试用例 1
     vector<int> nums1 = {-1, 0, 1, 2, -1, -4};
     auto result1 = s.threeSum(nums1);
     EXPECT_EQ(result1.size(), 2);
-    
+
     // 测试用例 2
     vector<int> nums2 = {0, 1, 1};
     auto result2 = s.threeSum(nums2);
     EXPECT_EQ(result2.size(), 0);
-    
+
     // 测试用例 3
     vector<int> nums3 = {0, 0, 0};
     auto result3 = s.threeSum(nums3);
     EXPECT_EQ(result3.size(), 1);
     EXPECT_EQ(result3[0], vector<int>({0, 0, 0}));
-    
+
     // 测试用例 4
     vector<int> nums4 = {-2, 0, 0, 2, 2};
     auto result4 = s.threeSum(nums4);

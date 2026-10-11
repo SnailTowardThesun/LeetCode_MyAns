@@ -39,33 +39,35 @@
 
 using namespace std;
 
-TEST(Daily, 137) {
-    class Solution {
-    public:
-        int singleNumber(int A[], int n) {
-            int x[32] = {0};
-            for (int i = 0; i < n; i++)
-                for (int j = 0; j < 32; j++) {
-                    x[j] += (A[i] >> j) & 1;
-                    x[j] %= 3;
-                }
-            int res = 0;
-            for (int i = 0; i < 32; i++)
-                res += (x[i] << i);
-            return res;
-        }
-    };
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 方法产生 ODR 冲突
+namespace {
+class Solution {
+   public:
+    int singleNumber(int A[], int n) {
+        int x[32] = {0};
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < 32; j++) {
+                x[j] += (A[i] >> j) & 1;
+                x[j] %= 3;
+            }
+        int res = 0;
+        for (int i = 0; i < 32; i++) res += (x[i] << i);
+        return res;
+    }
+};
+}  // namespace
 
+TEST(Daily, 137) {
     Solution s;
-    
+
     // 测试用例 1
     int A1[] = {2, 2, 2, 3};
     EXPECT_EQ(s.singleNumber(A1, 4), 3);
-    
+
     // 测试用例 2
     int A2[] = {0, 1, 0, 1, 0, 1, 99};
     EXPECT_EQ(s.singleNumber(A2, 7), 99);
-    
+
     // 测试用例 3
     int A3[] = {1, 1, 1, 2};
     EXPECT_EQ(s.singleNumber(A3, 4), 2);

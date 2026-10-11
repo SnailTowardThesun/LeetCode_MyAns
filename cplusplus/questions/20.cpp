@@ -51,12 +51,15 @@
  */
 
 #include <gtest/gtest.h>
+
 #include <stack>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     bool isValid(string s) {
         stack<char> container;
         for (auto ch : s) {
@@ -85,6 +88,7 @@ public:
         return container.empty();
     }
 };
+}  // namespace
 
 TEST(Daily, 20) {
     Solution s;

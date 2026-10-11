@@ -44,42 +44,48 @@
  */
 
 #include <gtest/gtest.h>
-#include <vector>
+
 #include <algorithm>
+#include <vector>
 
 using namespace std;
 
-TEST(Daily, 11) {
-    class Solution {
-    public:
-        int maxArea(vector<int> &height) {
-            int i = 0;
-            int j = height.size() - 1;
-            int result = 0;
-            while (i < j) {
-                int area = (j - i) * min(height[i], height[j]);
-                result = max(result, area);
-                if (height[i] <= height[j]) i++;
-                else j--;
-            }
-            return result;
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 方法产生 ODR 冲突
+namespace {
+class Solution {
+   public:
+    int maxArea(vector<int>& height) {
+        int i = 0;
+        int j = height.size() - 1;
+        int result = 0;
+        while (i < j) {
+            int area = (j - i) * min(height[i], height[j]);
+            result = max(result, area);
+            if (height[i] <= height[j])
+                i++;
+            else
+                j--;
         }
-    };
+        return result;
+    }
+};
+}  // namespace
 
+TEST(Daily, 11) {
     Solution s;
-    
+
     // 测试用例 1
     vector<int> height1 = {1, 8, 6, 2, 5, 4, 8, 3, 7};
     EXPECT_EQ(s.maxArea(height1), 49);
-    
+
     // 测试用例 2
     vector<int> height2 = {1, 1};
     EXPECT_EQ(s.maxArea(height2), 1);
-    
+
     // 测试用例 3
     vector<int> height3 = {4, 3, 2, 1, 4};
     EXPECT_EQ(s.maxArea(height3), 16);
-    
+
     // 测试用例 4
     vector<int> height4 = {1, 2, 1};
     EXPECT_EQ(s.maxArea(height4), 2);

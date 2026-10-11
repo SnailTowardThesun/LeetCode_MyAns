@@ -32,25 +32,29 @@
 // - 空间复杂度：O(1)，只使用常数额外空间。
 
 #include <gtest/gtest.h>
+
 #include <string>
 #include <vector>
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     int reverseDegree(string s) {
         int ret = 0;
         for (int i = 0; i < s.length(); i++) {
             // 反转字母值：a=26..z=1；位置乘数为 1 起始下标 i+1
-            ret += (26 - (s.at(i) - 'a')) * (i+1);
+            ret += (26 - (s.at(i) - 'a')) * (i + 1);
         }
 
         return ret;
     }
 };
+}  // namespace
 
 TEST(Daily, 3498) {
-   string s = "abc";
+    string s = "abc";
     auto ret = Solution().reverseDegree(s);
     EXPECT_EQ(ret, 148);
 

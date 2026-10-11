@@ -50,13 +50,16 @@
  */
 
 #include <gtest/gtest.h>
+
 #include <string>
 #include <vector>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     string convert(string s, int numRows) {
         if (numRows == 1) return s;
 
@@ -66,17 +69,16 @@ public:
 
         for (char c : s) {
             rows[curRow] += c;
-            if (curRow == 0 || curRow == numRows - 1)
-                goingDown = !goingDown;
+            if (curRow == 0 || curRow == numRows - 1) goingDown = !goingDown;
             curRow += goingDown ? 1 : -1;
         }
 
         string result;
-        for (string row : rows)
-            result += row;
+        for (string row : rows) result += row;
         return result;
     }
 };
+}  // namespace
 
 TEST(Daily, 6) {
     Solution s;

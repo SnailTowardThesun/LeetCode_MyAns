@@ -9,9 +9,9 @@
  * @题目描述
  * 在一个大小为 n 且 n 为偶数的链表中，对于满足 0 <= i <= n/2 - 1 的 i，
  * 第 i 个节点（从 0 开始计数）的孪生节点是第 (n-1-i) 个节点。
- * 
+ *
  * 例如：链表有 4 个节点时，索引为 0 和 3 互为孪生，索引为 1 和 2 互为孪生。
- * 
+ *
  * 请你返回链表中所有节点的最大孪生和。
  *
  * @示例
@@ -36,32 +36,35 @@
  *     - 将后半段链表原地反转
  *     - 从前半段和反转后的后半段同步遍历，计算每对孪生节点的和
  *     - 取所有孪生和的最大值
- * 
+ *
  * 方法二（备选）：数组法（代码注释中的原始实现）
  *     - 将链表所有节点值存入 vector
  *     - 用双指针从两端向中间遍历，计算孪生和
  *     - 时间 O(n)，空间 O(n)
- * 
+ *
  * @复杂度分析
  * - 方法一：时间复杂度 O(n)，空间复杂度 O(1)（原地反转）
  * - 方法二：时间复杂度 O(n)，空间复杂度 O(n)（额外数组）
  */
 
 #include <gtest/gtest.h>
-#include <vector>
+
 #include <algorithm>
+#include <vector>
 
 using namespace std;
 
 struct ListNode {
     int val;
-    ListNode *next;
+    ListNode* next;
     ListNode(int x) : val(x), next(NULL) {}
 };
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
-    int pairSum(ListNode *head) {
+   public:
+    int pairSum(ListNode* head) {
         // Step 1: Find the middle of the linked list using slow/fast pointers
         ListNode* slow = head;
         ListNode* fast = head;
@@ -92,8 +95,9 @@ public:
         }
 
         return maxSum;
-     }
+    }
 };
+}  // namespace
 
 TEST(Daily, 2130) {
     Solution s;

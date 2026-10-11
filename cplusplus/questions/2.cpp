@@ -51,87 +51,91 @@
  */
 
 #include <gtest/gtest.h>
+
 #include <vector>
 
 using namespace std;
 
 struct ListNode {
     int val;
-    ListNode *next;
+    ListNode* next;
     ListNode(int x) : val(x), next(NULL) {}
 };
 
-TEST(Daily, 2) {
-    class Solution {
-    public:
-        ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-            if (l1 == NULL || l2 == NULL) return l1 == NULL ? l1 : l2;
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+class Solution {
+   public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        if (l1 == NULL || l2 == NULL) return l1 == NULL ? l1 : l2;
 
-            ListNode* result = new ListNode(0);
-            ListNode* pResult = result;
-            ListNode* p1 = l1;
-            ListNode* p2 = l2;
-            int isBiggerThenTen = 0;
-            while (p1 != NULL && p2 != NULL) {
-                int tmp = 0;
-                tmp = p1->val + p2->val + isBiggerThenTen;
-                ListNode* tmpNode = new ListNode((tmp) % 10);
-                pResult->next = tmpNode;
-                pResult = pResult->next;
-                tmp >= 10 ? isBiggerThenTen = 1 : isBiggerThenTen = 0;
-                p1 = p1->next;
-                p2 = p2->next;
-            }
-            while (p1 != NULL || p2 != NULL || isBiggerThenTen != 0) {
-                int tmp = 0;
-                ListNode* tmpNode = NULL;
-                if (p1 != NULL || p2 != NULL) {
-                    if (p1 == NULL) {
-                        tmp = p2->val + isBiggerThenTen;
-                        tmpNode = new ListNode(tmp % 10);
-                        tmp >= 10 ? isBiggerThenTen = 1 : isBiggerThenTen = 0;
-                        p2 = p2->next;
-                    } else {
-                        tmp = p1->val + isBiggerThenTen;
-                        tmpNode = new ListNode(tmp % 10);
-                        tmp >= 10 ? isBiggerThenTen = 1 : isBiggerThenTen = 0;
-                        p1 = p1->next;
-                    }
-                } else {
-                    tmpNode = new ListNode(isBiggerThenTen);
-                    isBiggerThenTen = 0;
-                }
-                pResult->next = tmpNode;
-                pResult = pResult->next;
-            }
-            return result->next;
+        ListNode* result = new ListNode(0);
+        ListNode* pResult = result;
+        ListNode* p1 = l1;
+        ListNode* p2 = l2;
+        int isBiggerThenTen = 0;
+        while (p1 != NULL && p2 != NULL) {
+            int tmp = 0;
+            tmp = p1->val + p2->val + isBiggerThenTen;
+            ListNode* tmpNode = new ListNode((tmp) % 10);
+            pResult->next = tmpNode;
+            pResult = pResult->next;
+            tmp >= 10 ? isBiggerThenTen = 1 : isBiggerThenTen = 0;
+            p1 = p1->next;
+            p2 = p2->next;
         }
-    };
+        while (p1 != NULL || p2 != NULL || isBiggerThenTen != 0) {
+            int tmp = 0;
+            ListNode* tmpNode = NULL;
+            if (p1 != NULL || p2 != NULL) {
+                if (p1 == NULL) {
+                    tmp = p2->val + isBiggerThenTen;
+                    tmpNode = new ListNode(tmp % 10);
+                    tmp >= 10 ? isBiggerThenTen = 1 : isBiggerThenTen = 0;
+                    p2 = p2->next;
+                } else {
+                    tmp = p1->val + isBiggerThenTen;
+                    tmpNode = new ListNode(tmp % 10);
+                    tmp >= 10 ? isBiggerThenTen = 1 : isBiggerThenTen = 0;
+                    p1 = p1->next;
+                }
+            } else {
+                tmpNode = new ListNode(isBiggerThenTen);
+                isBiggerThenTen = 0;
+            }
+            pResult->next = tmpNode;
+            pResult = pResult->next;
+        }
+        return result->next;
+    }
+};
+}  // namespace
 
+TEST(Daily, 2) {
     Solution s;
-    
+
     // 测试用例 1
     ListNode* l1 = new ListNode(2);
     l1->next = new ListNode(4);
     l1->next->next = new ListNode(3);
-    
+
     ListNode* l2 = new ListNode(5);
     l2->next = new ListNode(6);
     l2->next->next = new ListNode(4);
-    
+
     ListNode* result1 = s.addTwoNumbers(l1, l2);
     EXPECT_EQ(result1->val, 7);
     EXPECT_EQ(result1->next->val, 0);
     EXPECT_EQ(result1->next->next->val, 8);
     EXPECT_EQ(result1->next->next->next, nullptr);
-    
+
     // 测试用例 2
     ListNode* l3 = new ListNode(0);
     ListNode* l4 = new ListNode(0);
     ListNode* result2 = s.addTwoNumbers(l3, l4);
     EXPECT_EQ(result2->val, 0);
     EXPECT_EQ(result2->next, nullptr);
-    
+
     // 清理内存
     delete l1->next->next;
     delete l1->next;

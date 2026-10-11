@@ -42,44 +42,49 @@
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+class Solution {
+   public:
+    int firstMissingPositive(int A[], int n) {
+        for (int i = 0, tmp = -1; i < n; i++) {
+            while (A[i] - 1 >= 0 && A[i] - 1 < n && A[i] - 1 != i) {
+                swap(A, i, A[i] - 1);
+                if (A[i] == tmp)
+                    break;
+                else
+                    tmp = A[i];
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            if (A[i] - 1 != i) return i + 1;
+        }
+        return n + 1;
+    }
+
+    void swap(int A[], int indx1, int indx2) {
+        A[indx1] ^= A[indx2];
+        A[indx2] ^= A[indx1];
+        A[indx1] ^= A[indx2];
+    }
+};
+}  // namespace
+
 TEST(Daily, 41) {
-    class Solution {
-    public:
-        int firstMissingPositive(int A[], int n) {
-            for (int i = 0, tmp = -1; i < n; i++) {
-                while (A[i] - 1 >= 0 && A[i] - 1 < n && A[i] - 1 != i) {
-                    swap(A, i, A[i] - 1);
-                    if (A[i] == tmp) break;
-                    else tmp = A[i];
-                }
-            }
-            for (int i = 0; i < n; i++) {
-                if (A[i] - 1 != i) return i + 1;
-            }
-            return n + 1;
-        }
-
-        void swap(int A[], int indx1, int indx2) {
-            A[indx1] ^= A[indx2];
-            A[indx2] ^= A[indx1];
-            A[indx1] ^= A[indx2];
-        }
-    };
-
     Solution s;
-    
+
     // 测试用例 1
     int A1[] = {1, 2, 0};
     EXPECT_EQ(s.firstMissingPositive(A1, 3), 3);
-    
+
     // 测试用例 2
     int A2[] = {3, 4, -1, 1};
     EXPECT_EQ(s.firstMissingPositive(A2, 4), 2);
-    
+
     // 测试用例 3
     int A3[] = {7, 8, 9, 11, 12};
     EXPECT_EQ(s.firstMissingPositive(A3, 5), 1);
-    
+
     // 测试用例 4
     int A4[] = {1, 1};
     EXPECT_EQ(s.firstMissingPositive(A4, 2), 2);

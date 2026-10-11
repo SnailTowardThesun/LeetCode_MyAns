@@ -46,12 +46,14 @@
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     bool wordPattern(string pattern, string s) {
         vector<string> words;
         string tmp = "";
-        for (auto ch: s) {
+        for (auto ch : s) {
             if (ch == ' ' && !tmp.empty()) {
                 words.emplace_back(tmp);
                 tmp = "";
@@ -90,6 +92,7 @@ public:
         return true;
     }
 };
+}  // namespace
 
 TEST(top150, 290) {
     Solution solution;

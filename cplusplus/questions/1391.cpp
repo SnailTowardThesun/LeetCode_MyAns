@@ -66,26 +66,29 @@
  */
 
 #include <gtest/gtest.h>
+
 #include <vector>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     /**
      * @brief 定义每种街道类型对应的方向集合
      * dirs[street] 包含该街道类型允许的两个方向 (dx, dy)
      * dirs[0] 为空，因为街道类型从 1 开始
      */
     vector<vector<vector<int> > > dirs = {
-         {},
-         {{0, 1}, {0, -1}}, // 1: 左-右
-         {{-1, 0}, {1, 0}}, // 2: 上-下
-         {{0, -1}, {1, 0}}, // 3: 左-下
-         {{0, 1}, {1, 0}}, // 4: 右-下
-         {{-1, 0}, {0, -1}}, // 5: 上-左
-         {{0, 1}, {-1, 0}} // 6: 右-上
-     };
+        {},
+        {{0, 1}, {0, -1}},   // 1: 左-右
+        {{-1, 0}, {1, 0}},   // 2: 上-下
+        {{0, -1}, {1, 0}},   // 3: 左-下
+        {{0, 1}, {1, 0}},    // 4: 右-下
+        {{-1, 0}, {0, -1}},  // 5: 上-左
+        {{0, 1}, {-1, 0}}    // 6: 右-上
+    };
 
     /**
      * @brief 判断下一个街道是否允许沿给定方向的反向进入
@@ -97,7 +100,7 @@ public:
     bool contains(int street, int dx, int dy) {
         auto dir = dirs[street];
         return (dir[0][0] == -dx && dir[0][1] == -dy) || (dir[1][0] == -dx && dir[1][1] == -dy);
-     }
+    }
 
     /**
      * @brief 从 (x, y) 开始深度优先搜索，判断是否能到达右下角
@@ -107,16 +110,16 @@ public:
      * @param y 当前列坐标
      * @return true 如果可以从 (x, y) 到达右下角
      */
-    bool dfs(vector<vector<int> > &grid, vector<vector<int> > &vis, int x, int y) {
+    bool dfs(vector<vector<int> >& grid, vector<vector<int> >& vis, int x, int y) {
         int m = grid.size();
         int n = grid[0].size();
 
         if (x == grid.size() - 1 && y == grid[0].size() - 1) {
             return true;
-         }
+        }
 
         vis[x][y] = 1;
-        for (auto it: dirs[grid[x][y]]) {
+        for (auto it : dirs[grid[x][y]]) {
             int nx = x + it[0];
             int ny = y + it[1];
             if (nx >= 0 && nx < m) {
@@ -125,31 +128,31 @@ public:
                         if (contains(grid[nx][ny], it[0], it[1])) {
                             if (dfs(grid, vis, nx, ny)) {
                                 return true;
-                             }
-                         }
-                     }
-                 }
-             }
-         }
-
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         return false;
-     }
+    }
 
     /**
      * @brief 判断网格中是否存在从左上角到右下角的有效路径
      * @param grid m x n 网格，每个单元格表示街道类型 (1~6)
      * @return true 如果存在有效路径
      */
-    bool hasValidPath(vector<vector<int> > &grid) {
+    bool hasValidPath(vector<vector<int> >& grid) {
         int m = grid.size();
         int n = grid[0].size();
 
         vector<vector<int> > vis(m, vector<int>(n, 0));
 
         return dfs(grid, vis, 0, 0);
-     }
+    }
 };
+}  // namespace
 
 TEST(Daily, 1391) {
     Solution s;

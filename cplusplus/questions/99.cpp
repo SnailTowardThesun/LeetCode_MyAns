@@ -47,38 +47,41 @@ struct TreeNode {
     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+class Solution {
+   public:
+    void findTwoNodes(TreeNode* root, TreeNode*& n1, TreeNode*& n2, TreeNode*& prev) {
+        if (root == NULL) return;
+
+        findTwoNodes(root->left, n1, n2, prev);
+        if (prev != NULL && prev->val > root->val) {
+            n2 = root;
+            if (n1 == NULL) {
+                n1 = prev;
+            }
+        }
+        prev = root;
+        findTwoNodes(root->right, n1, n2, prev);
+    }
+    void recoverTree(TreeNode* root) {
+        TreeNode* n1 = NULL;
+        TreeNode* n2 = NULL;
+        TreeNode* prev = NULL;
+        findTwoNodes(root, n1, n2, prev);
+
+        if (n1 != NULL && n2 != NULL) {
+            int tmp = n2->val;
+            n2->val = n1->val;
+            n1->val = tmp;
+        }
+    }
+};
+}  // namespace
+
 TEST(Daily, 99) {
-    class Solution {
-    public:
-        void findTwoNodes(TreeNode *root, TreeNode *&n1, TreeNode *&n2, TreeNode *&prev) {
-            if (root == NULL) return;
-
-            findTwoNodes(root->left, n1, n2, prev);
-            if (prev != NULL && prev->val > root->val) {
-                n2 = root;
-                if (n1 == NULL) {
-                    n1 = prev;
-                }
-            }
-            prev = root;
-            findTwoNodes(root->right, n1, n2, prev);
-        }
-        void recoverTree(TreeNode* root) {
-            TreeNode *n1 = NULL;
-            TreeNode *n2 = NULL;
-            TreeNode *prev = NULL;
-            findTwoNodes(root, n1, n2, prev);
-
-            if (n1 != NULL && n2 != NULL) {
-                int tmp = n2->val;
-                n2->val = n1->val;
-                n1->val = tmp;
-            }
-        }
-    };
-
     Solution s;
-    
+
     // 测试用例 1
     TreeNode* root1 = new TreeNode(1);
     root1->left = new TreeNode(3);
@@ -86,7 +89,7 @@ TEST(Daily, 99) {
     s.recoverTree(root1);
     EXPECT_EQ(root1->val, 3);
     EXPECT_EQ(root1->left->val, 1);
-    
+
     // 测试用例 2
     TreeNode* root2 = new TreeNode(3);
     root2->left = new TreeNode(1);

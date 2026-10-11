@@ -47,28 +47,31 @@ struct ListNode {
     ListNode* next;
 };
 
-TEST(Daily, 19) {
-    class Solution {
-    public:
-        ListNode* removeNthFromEnd(ListNode* head, int n) {
-            if (head == NULL) return head;
-            ListNode* pr = head;
-            ListNode* pe = head;
-            for (int i = 0; i <= n; i++) {
-                if (!pe) return head->next;
-                pe = pe->next;
-            }
-            while (pe != NULL) {
-                pe = pe->next;
-                pr = pr->next;
-            }
-            pr->next = pr->next->next;
-            return head;
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+class Solution {
+   public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        if (head == NULL) return head;
+        ListNode* pr = head;
+        ListNode* pe = head;
+        for (int i = 0; i <= n; i++) {
+            if (!pe) return head->next;
+            pe = pe->next;
         }
-    };
+        while (pe != NULL) {
+            pe = pe->next;
+            pr = pr->next;
+        }
+        pr->next = pr->next->next;
+        return head;
+    }
+};
+}  // namespace
 
+TEST(Daily, 19) {
     Solution s;
-    
+
     // 测试用例 1
     ListNode* head1 = new ListNode();
     head1->val = 1;
@@ -80,10 +83,10 @@ TEST(Daily, 19) {
     head1->next->next->next->val = 4;
     head1->next->next->next->next = new ListNode();
     head1->next->next->next->next->val = 5;
-    
+
     ListNode* result1 = s.removeNthFromEnd(head1, 2);
     EXPECT_EQ(result1->next->next->next->val, 5);
-    
+
     // 测试用例 2
     ListNode* head2 = new ListNode();
     head2->val = 1;

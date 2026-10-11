@@ -9,9 +9,8 @@
  *
  * @示例
  * 示例 1：
- * 输入: words = ["abcd", "def", "xyz"], weights = [5, 3, 12, 14, 1, 2, 3, 2, 10, 6, 6, 9, 7, 8, 7, 10, 8, 9, 6, 9, 9, 8, 3, 7, 7, 2]
- * 输出: "rij"
- * 解释:
+ * 输入: words = ["abcd", "def", "xyz"], weights = [5, 3, 12, 14, 1, 2, 3, 2, 10, 6, 6, 9, 7, 8, 7, 10, 8, 9, 6, 9, 9,
+ * 8, 3, 7, 7, 2] 输出: "rij" 解释:
  * - "abcd": a(5) + b(3) + c(12) + d(14) = 34, 34 % 26 = 8, 'z' - 8 = 'r'
  * - "def": d(14) + e(1) + f(2) = 17, 17 % 26 = 17, 'z' - 17 = 'i'
  * - "xyz": x(8) + y(7) + z(2) = 17, 17 % 26 = 17, 'z' - 17 = 'j'
@@ -29,13 +28,16 @@
  */
 
 #include <gtest/gtest.h>
-#include <vector>
+
 #include <string>
+#include <vector>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     string map_word_weights(vector<string>& words, vector<int>& weights) {
         string ret;
         for (const auto& word : words) {
@@ -49,6 +51,7 @@ public:
         return ret;
     }
 };
+}  // namespace
 
 TEST(Daily, 3838) {
     Solution s;

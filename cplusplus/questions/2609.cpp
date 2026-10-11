@@ -32,7 +32,7 @@ using namespace std;
 // 缺点: 时间复杂度过高，大数据量会超时
 // ============================================================
 class SolutionV1 {
-public:
+   public:
     vector<vector<int>> constructProductMatrix(vector<vector<int>>& grid) {
         int row = grid.size();
         int col = grid[0].size();
@@ -99,7 +99,7 @@ public:
 // 缺点: 需要额外的 O(n*m) 空间
 // ============================================================
 class SolutionV2 {
-public:
+   public:
     vector<vector<int>> constructProductMatrix(vector<vector<int>>& grid) {
         int row = grid.size();
         int col = grid[0].size();
@@ -173,8 +173,10 @@ public:
 // 特点: 利用结果矩阵本身存储中间值，只用两个变量
 // 优点: 时间和空间都达到最优
 // ============================================================
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     vector<vector<int>> constructProductMatrix(vector<vector<int>>& grid) {
         int row = grid.size();
         int col = grid[0].size();
@@ -235,6 +237,7 @@ public:
         return result;
     }
 };
+}  // namespace
 
 TEST(Daily, 2609) {
     Solution s;

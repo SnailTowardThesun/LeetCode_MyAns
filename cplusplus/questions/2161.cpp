@@ -49,30 +49,34 @@
  */
 
 #include <gtest/gtest.h>
-#include <vector>
+
 #include <algorithm>
+#include <vector>
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
-    vector<int> pivotArray(vector<int> &nums, int pivot) {
+   public:
+    vector<int> pivotArray(vector<int>& nums, int pivot) {
         int pre = 0;
         int last = nums.size() - 1;
         vector<int> ret(nums.size(), pivot);
         for (int i = 0; i < nums.size(); i++) {
             if (nums[i] > pivot) {
-                ret[last--]=nums[i];
+                ret[last--] = nums[i];
             } else if (nums[i] < pivot) {
-                ret[pre++]=nums[i];
+                ret[pre++] = nums[i];
             }
         }
 
         // reverse last
-        std::reverse(ret.begin() + last+1, ret.end());
+        std::reverse(ret.begin() + last + 1, ret.end());
 
         return ret;
     }
 };
+}  // namespace
 
 TEST(Daily, 2161) {
     Solution s;

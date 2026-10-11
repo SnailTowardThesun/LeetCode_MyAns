@@ -53,16 +53,19 @@
  */
 
 #include <gtest/gtest.h>
-#include <vector>
+
 #include <climits>
+#include <vector>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
-    int canCompleteCircuit(vector<int> &gas, vector<int> &cost) {
+   public:
+    int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
         int n = gas.size();
-        for (auto i = 0; i < n; ) {
+        for (auto i = 0; i < n;) {
             int tmp_total = 0;
             int tmp_cost = 0;
             int j = 0;
@@ -84,6 +87,7 @@ public:
         return -1;
     }
 };
+}  // namespace
 
 TEST(TOP150, No134_CanCompleteCircuit) {
     Solution solution;

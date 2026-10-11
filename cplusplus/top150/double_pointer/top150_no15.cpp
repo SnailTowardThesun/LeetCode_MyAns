@@ -14,11 +14,14 @@
 // Created by hankun on 5/31/26.
 //
 #include <gtest/gtest.h>
+
 #include <vector>
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     vector<vector<int>> threeSum(vector<int>& nums) {
         vector<vector<int>> res;
         sort(nums.begin(), nums.end());
@@ -49,7 +52,7 @@ public:
         return res;
     }
 };
-
+}  // namespace
 
 TEST(top150, 15) {
     Solution s;

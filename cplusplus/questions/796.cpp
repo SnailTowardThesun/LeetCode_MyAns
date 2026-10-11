@@ -31,8 +31,10 @@
 #include <gtest/gtest.h>
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     bool rotateString(string s, string goal) {
         if (s.length() != goal.length()) {
             return false;
@@ -42,6 +44,7 @@ public:
         return combined.find(goal) != string::npos;
     }
 };
+}  // namespace
 
 TEST(Daily, 796) {
     Solution sl;

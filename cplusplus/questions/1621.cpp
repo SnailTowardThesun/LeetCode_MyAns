@@ -41,47 +41,51 @@
 // - 空间复杂度：O(n*k)，可利用滚动数组优化到 O(n)。
 
 #include <gtest/gtest.h>
+
 #include <vector>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-    public:
-        int numberOfSets(int n, int k) {
-            const int mod = 1000000007;
-            // dp[i][j]：只使用点 0~i 画 j 条互不重叠线段的方案数
-            vector<vector<long long>> dp(n, vector<long long>(k+1, 0));
+   public:
+    int numberOfSets(int n, int k) {
+        const int mod = 1000000007;
+        // dp[i][j]：只使用点 0~i 画 j 条互不重叠线段的方案数
+        vector<vector<long long>> dp(n, vector<long long>(k + 1, 0));
 
-            // 边界：画 0 条线段只有一种方案
-            // dp[i][0] = 1
-            for (auto i = 0; i < n; i++) {
-                dp[i][0] = 1;
-            }
-
-            for (int j = 1; j <= k; j++) {
-                // i < j 时点不够，方案数为 0，直接从 i = j 开始枚举
-                for (int i = j; i < n; i++) {
-                    long long option1 = dp[i - 1][j];
-                    long long option2 = dp[i - 1][j - 1];
-                    long long option3 = (i >= 2) ? dp[i - 2][j] : 0;
-
-                    // 转移：dp[i][j] = 2*dp[i-1][j] + dp[i-1][j-1] - dp[i-2][j]
-                    long long res =  (2 * option1 + option2 - option3) % mod;
-                    // 修正减法可能导致的负数取模
-                    res = res < 0 ? res + mod : res;
-                    dp[i][j] = res;
-                }
-            }
-
-            return dp[n-1][k];
+        // 边界：画 0 条线段只有一种方案
+        // dp[i][0] = 1
+        for (auto i = 0; i < n; i++) {
+            dp[i][0] = 1;
         }
+
+        for (int j = 1; j <= k; j++) {
+            // i < j 时点不够，方案数为 0，直接从 i = j 开始枚举
+            for (int i = j; i < n; i++) {
+                long long option1 = dp[i - 1][j];
+                long long option2 = dp[i - 1][j - 1];
+                long long option3 = (i >= 2) ? dp[i - 2][j] : 0;
+
+                // 转移：dp[i][j] = 2*dp[i-1][j] + dp[i-1][j-1] - dp[i-2][j]
+                long long res = (2 * option1 + option2 - option3) % mod;
+                // 修正减法可能导致的负数取模
+                res = res < 0 ? res + mod : res;
+                dp[i][j] = res;
+            }
+        }
+
+        return dp[n - 1][k];
+    }
 };
+}  // namespace
 
 TEST(Daily, 1621) {
     Solution s;
     auto n = 4;
     auto k = 2;
-    auto ret= s.numberOfSets(n, k);
+    auto ret = s.numberOfSets(n, k);
     EXPECT_EQ(ret, 5);
 
     // 基本用例：3 个点画 1 条线段，共 C(3,2) = 3 条

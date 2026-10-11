@@ -41,9 +41,11 @@
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
    public:
-    int maximumElementAfterDecrementingAndRearranging(vector<int> &arr) {
+    int maximumElementAfterDecrementingAndRearranging(vector<int>& arr) {
         int n = arr.size();
         sort(arr.begin(), arr.end());
         if (arr[0] != 1) {
@@ -58,6 +60,7 @@ class Solution {
         return arr[n - 1];
     }
 };
+}  // namespace
 
 TEST(Daily, 1846) {
     Solution s;

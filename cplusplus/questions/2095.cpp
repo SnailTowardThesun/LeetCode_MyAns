@@ -44,33 +44,33 @@
  */
 
 #include <gtest/gtest.h>
+
 #include <vector>
 
 using namespace std;
 
 struct ListNode {
     int val;
-    ListNode *next;
+    ListNode* next;
 
-    ListNode() : val(0), next(nullptr) {
-    }
+    ListNode() : val(0), next(nullptr) {}
 
-    ListNode(int x) : val(x), next(nullptr) {
-    }
+    ListNode(int x) : val(x), next(nullptr) {}
 
-    ListNode(int x, ListNode *next) : val(x), next(next) {
-    }
+    ListNode(int x, ListNode* next) : val(x), next(next) {}
 };
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
-    ListNode *deleteMiddle(ListNode *head) {
+   public:
+    ListNode* deleteMiddle(ListNode* head) {
         if (head->next == nullptr) {
             return nullptr;
         }
-        ListNode *pre = head;
-        ListNode *slow = head;
-        ListNode *fast = head;
+        ListNode* pre = head;
+        ListNode* slow = head;
+        ListNode* fast = head;
         while (fast != nullptr && fast->next != nullptr) {
             pre = slow;
             slow = slow->next;
@@ -82,11 +82,12 @@ public:
         return head;
     }
 };
+}  // namespace
 
 TEST(Daily, 2095) {
     Solution s;
 
-    ListNode *head1 = new ListNode(1);
+    ListNode* head1 = new ListNode(1);
     head1->next = new ListNode(3);
     head1->next->next = new ListNode(4);
     head1->next->next->next = new ListNode(7);
@@ -96,14 +97,14 @@ TEST(Daily, 2095) {
     auto result1 = s.deleteMiddle(head1);
     EXPECT_EQ(result1->next->next->val, 4);
 
-    ListNode *head2 = new ListNode(1);
+    ListNode* head2 = new ListNode(1);
     head2->next = new ListNode(2);
     head2->next->next = new ListNode(3);
     head2->next->next->next = new ListNode(4);
     auto result2 = s.deleteMiddle(head2);
     EXPECT_EQ(result2->next->next->val, 4);
 
-    ListNode *head3 = new ListNode(1);
+    ListNode* head3 = new ListNode(1);
     auto result3 = s.deleteMiddle(head3);
     EXPECT_EQ(result3, nullptr);
 }

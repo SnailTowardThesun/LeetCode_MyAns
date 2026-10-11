@@ -39,51 +39,56 @@ using namespace std;
 
 // 方法一：排序法（原始实现）
 /*
-class Solution {
-public:
-    bool helper(vector<char> s1, vector<char> s2) {
-        std::sort(s1.begin(), s1.end());
-        std::sort(s2.begin(), s2.end());
-        if (s1.size() != s2.size()) {
-            return false;
-        }
-
-        std::string tmp1(s1.begin(), s1.end());
-        std::string tmp2(s2.begin(), s2.end());
-        if (tmp1 != tmp2) {
-            return false;
-        }
-
-        return true;
-    }
-
-    bool checkStrings(string s1, string s2) {
-        vector<char> s1_1, s1_2;
-        vector<char> s2_1, s2_2;
-        for (auto i = 0; i < s1.length(); i++) {
-            if (i % 2 == 0) {
-                s1_2.push_back(s1[i]);
-                s2_2.push_back(s2[i]);
-            } else {
-                s1_1.push_back(s1[i]);
-                s2_1.push_back(s2[i]);
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+    class Solution {
+    public:
+        bool helper(vector<char> s1, vector<char> s2) {
+            std::sort(s1.begin(), s1.end());
+            std::sort(s2.begin(), s2.end());
+            if (s1.size() != s2.size()) {
+                return false;
             }
+
+            std::string tmp1(s1.begin(), s1.end());
+            std::string tmp2(s2.begin(), s2.end());
+            if (tmp1 != tmp2) {
+                return false;
+            }
+
+            return true;
         }
 
-        if (!helper(s1_1, s2_1)) {
-            return false;
-        }
+        bool checkStrings(string s1, string s2) {
+            vector<char> s1_1, s1_2;
+            vector<char> s2_1, s2_2;
+            for (auto i = 0; i < s1.length(); i++) {
+                if (i % 2 == 0) {
+                    s1_2.push_back(s1[i]);
+                    s2_2.push_back(s2[i]);
+                } else {
+                    s1_1.push_back(s1[i]);
+                    s2_1.push_back(s2[i]);
+                }
+            }
 
-        if (!helper(s1_2, s2_2)) {
-            return false;
-        }
+            if (!helper(s1_1, s2_1)) {
+                return false;
+            }
 
-        return true;
-    }
-};
+            if (!helper(s1_2, s2_2)) {
+                return false;
+            }
+
+            return true;
+        }
+    };
+}  // namespace
 */
 
 // 方法二：计数法（优化实现）
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
    public:
     bool checkStrings(string s1, string s2) {
@@ -114,6 +119,7 @@ class Solution {
         return true;
     }
 };
+}  // namespace
 
 TEST(Daily, 2840) {
     Solution s;

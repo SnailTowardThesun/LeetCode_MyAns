@@ -17,12 +17,15 @@
 //
 
 #include <gtest/gtest.h>
+
 #include <vector>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     vector<int> twoSum(vector<int>& numbers, int target) {
         vector<int> result;
         int pre = 0, last = numbers.size() - 1;
@@ -41,9 +44,10 @@ public:
         return result;
     }
 };
+}  // namespace
 
 TEST(top150, 167) {
-    auto numbers = vector<int>{2,7,11,15};
+    auto numbers = vector<int>{2, 7, 11, 15};
     auto target = 9;
     Solution s;
     auto ret = s.twoSum(numbers, target);

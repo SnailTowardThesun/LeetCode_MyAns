@@ -24,18 +24,21 @@
 // - 空间复杂度：O(n)，栈存储字符。
 
 #include <gtest/gtest.h>
+
 #include <stack>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     int maxDepth(string s) {
         stack<char> st;
         int ret = 0;
 
         int count = 0;
-        for (auto i: s) {
+        for (auto i : s) {
             if (i == '(') {
                 st.emplace(i);
                 count++;
@@ -58,6 +61,7 @@ public:
         return ret;
     }
 };
+}  // namespace
 
 TEST(Daily, 1614) {
     Solution s;

@@ -15,12 +15,14 @@
 
 #include <gtest/gtest.h>
 
+#include <climits>
 #include <unordered_map>
 #include <vector>
-#include <climits>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
    public:
     vector<int> solveQueries(vector<int>& nums, vector<int>& queries) {
@@ -73,6 +75,7 @@ class Solution {
         return ret;
     }
 };
+}  // namespace
 
 TEST(Daily, 3488) {
     Solution s;

@@ -35,6 +35,8 @@
 #include <string>
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
    public:
     bool judgeCircle(string moves) {
@@ -57,6 +59,7 @@ class Solution {
         return up == down && left == right;
     }
 };
+}  // namespace
 
 TEST(Daily, 657) {
     // 测试用例1：上下移动各一次，回到原点

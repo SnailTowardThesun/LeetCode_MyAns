@@ -28,9 +28,11 @@
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
    public:
-    int minSubArrayLen(int target, vector<int> &nums) {
+    int minSubArrayLen(int target, vector<int>& nums) {
         int n = nums.size();
         int left = 0;
         int sum = 0;
@@ -49,6 +51,7 @@ class Solution {
         return result == INT_MAX ? 0 : result;
     }
 };
+}  // namespace
 
 TEST(TOP150, 209) {
     auto target = 7;

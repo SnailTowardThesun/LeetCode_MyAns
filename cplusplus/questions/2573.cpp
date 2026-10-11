@@ -29,7 +29,7 @@
 // 2. 验证：从右下到左上递推验证每个 lcp[i][j] 是否与构造出的字符串一致，
 //    不一致则返回空串。
 //
-// 本文件同时提供并查集（SolutionUnionFind）和贪心（SolutionGreedy）两种实现，
+// 本文件同时提供贪心（Solution）和并查集（SolutionUnionFind）两种实现，
 // 核心思路一致：先合并等价位置，再按字典序最小分配字符，最后验证。
 //
 // 复杂度分析：
@@ -114,7 +114,9 @@ class SolutionUnionFind {
     }
 };
 
-class SolutionGreedy {
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+class Solution {
    public:
     /**
      * 构建与 LCP 矩阵对应的字典序最小字符串, 贪心算法
@@ -166,20 +168,28 @@ class SolutionGreedy {
         return container;
     }
 };
+}  // namespace
 
 TEST(Daily, 2573) {
-    // SolutionGreedy solution;
-    SolutionUnionFind solution;
+    // 贪心算法
+    Solution greedy;
 
     // 示例 1：交替字母情况
     vector<vector<int>> lcp1 = {{4, 0, 2, 0}, {0, 3, 0, 1}, {2, 0, 2, 0}, {0, 1, 0, 1}};
-    EXPECT_EQ(solution.findTheString(lcp1), "abab");
+    EXPECT_EQ(greedy.findTheString(lcp1), "abab");
 
     // 示例 2：全相同字母情况
     vector<vector<int>> lcp2 = {{4, 3, 2, 1}, {3, 3, 2, 1}, {2, 2, 2, 1}, {1, 1, 1, 1}};
-    EXPECT_EQ(solution.findTheString(lcp2), "aaaa");
+    EXPECT_EQ(greedy.findTheString(lcp2), "aaaa");
 
     // 示例 3：无效 LCP 矩阵情况
     vector<vector<int>> lcp3 = {{4, 3, 2, 1}, {3, 3, 2, 1}, {2, 2, 2, 1}, {1, 1, 1, 3}};
-    EXPECT_EQ(solution.findTheString(lcp3), "");
+    EXPECT_EQ(greedy.findTheString(lcp3), "");
+
+    // 并查集算法
+    SolutionUnionFind unionFind;
+
+    EXPECT_EQ(unionFind.findTheString(lcp1), "abab");
+    EXPECT_EQ(unionFind.findTheString(lcp2), "aaaa");
+    EXPECT_EQ(unionFind.findTheString(lcp3), "");
 }

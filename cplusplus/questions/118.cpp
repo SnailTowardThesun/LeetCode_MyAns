@@ -48,30 +48,33 @@
  */
 
 #include <gtest/gtest.h>
+
 #include <vector>
 
 using namespace std;
 
-TEST(Daily, 118) {
-    class Solution {
-    public:
-        vector<vector<int>> generate(int numRows) {
-            if (numRows == 0) return vector<vector<int>>();
-            vector<int> level;
-            vector<vector<int>> ret;
-            for (int i = 1; i <= numRows; i++) {
-                int k = (int)level.size();
-                for (int j = k-1; j >= 1; j--)
-                    level[j] += level[j-1];
-                level.push_back(1);
-                ret.push_back(level);
-            }
-            return ret;
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+class Solution {
+   public:
+    vector<vector<int>> generate(int numRows) {
+        if (numRows == 0) return vector<vector<int>>();
+        vector<int> level;
+        vector<vector<int>> ret;
+        for (int i = 1; i <= numRows; i++) {
+            int k = (int)level.size();
+            for (int j = k - 1; j >= 1; j--) level[j] += level[j - 1];
+            level.push_back(1);
+            ret.push_back(level);
         }
-    };
+        return ret;
+    }
+};
+}  // namespace
 
+TEST(Daily, 118) {
     Solution s;
-    
+
     // 测试用例 1
     auto result1 = s.generate(5);
     EXPECT_EQ(result1.size(), 5);
@@ -80,16 +83,16 @@ TEST(Daily, 118) {
     EXPECT_EQ(result1[2], vector<int>({1, 2, 1}));
     EXPECT_EQ(result1[3], vector<int>({1, 3, 3, 1}));
     EXPECT_EQ(result1[4], vector<int>({1, 4, 6, 4, 1}));
-    
+
     // 测试用例 2
     auto result2 = s.generate(1);
     EXPECT_EQ(result2.size(), 1);
     EXPECT_EQ(result2[0], vector<int>({1}));
-    
+
     // 测试用例 3
     auto result3 = s.generate(0);
     EXPECT_EQ(result3.size(), 0);
-    
+
     // 测试用例 4
     auto result4 = s.generate(3);
     EXPECT_EQ(result4.size(), 3);

@@ -36,8 +36,10 @@
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     int strStr(string haystack, string needle) {
         auto ret = -1;
 
@@ -60,10 +62,10 @@ public:
             }
         }
 
-
         return ret;
     }
 };
+}  // namespace
 
 TEST(TOP150, 28) {
     auto haystack = "sadbutsad";

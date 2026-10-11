@@ -35,17 +35,22 @@
  */
 
 #include <gtest/gtest.h>
+
 #include <unordered_set>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
-    int longestConsecutive(vector<int> &nums) {
+   public:
+    int longestConsecutive(vector<int>& nums) {
         unordered_set<int> container{nums.begin(), nums.end()};
         int ret = 1;
-        for (auto it: container) {
-            if (container.find(it - 1) != container.end()) { continue; }
+        for (auto it : container) {
+            if (container.find(it - 1) != container.end()) {
+                continue;
+            }
             int next = it + 1;
             while (container.find(next) != container.end()) {
                 next = next + 1;
@@ -57,6 +62,7 @@ public:
         return ret;
     }
 };
+}  // namespace
 
 TEST(top150, 128) {
     Solution s;

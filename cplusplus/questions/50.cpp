@@ -44,29 +44,32 @@
 
 using namespace std;
 
-TEST(Daily, 50) {
-    class Solution {
-    public:
-        double pow(double x, int n) {
-            if (n == 0) return 1;
-            if (n == 1) return x;
-            int exp = n < 0 ? -n : n;
-            double result = exp % 2 == 0 ? pow(x * x, exp / 2) : pow(x * x, exp / 2) * x;
-            return n < 0 ? 1 / result : result;
-        }
-    };
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+class Solution {
+   public:
+    double pow(double x, int n) {
+        if (n == 0) return 1;
+        if (n == 1) return x;
+        int exp = n < 0 ? -n : n;
+        double result = exp % 2 == 0 ? pow(x * x, exp / 2) : pow(x * x, exp / 2) * x;
+        return n < 0 ? 1 / result : result;
+    }
+};
+}  // namespace
 
+TEST(Daily, 50) {
     Solution s;
-    
+
     // 测试用例 1
     EXPECT_NEAR(s.pow(2.0, 10), 1024.0, 0.0001);
-    
+
     // 测试用例 2
     EXPECT_NEAR(s.pow(2.1, 3), 9.261, 0.001);
-    
+
     // 测试用例 3
     EXPECT_NEAR(s.pow(2.0, -2), 0.25, 0.0001);
-    
+
     // 测试用例 4
     EXPECT_NEAR(s.pow(2.0, 0), 1.0, 0.0001);
 }

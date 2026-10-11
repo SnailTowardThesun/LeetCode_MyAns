@@ -19,8 +19,10 @@
 #include <gtest/gtest.h>
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     bool isSubsequence(string s, string t) {
         size_t s_p = 0;
         size_t t_p = 0;
@@ -35,6 +37,7 @@ public:
         return s_p == s.size();
     }
 };
+}  // namespace
 
 TEST(top150, 392) {
     Solution s;

@@ -49,14 +49,17 @@
  */
 
 #include <gtest/gtest.h>
-#include <vector>
+
 #include <string>
 #include <unordered_set>
+#include <vector>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     int longestCommonPrefix(vector<int>& arr1, vector<int>& arr2) {
         unordered_set<string> prefixes;
         for (int num : arr1) {
@@ -80,6 +83,7 @@ public:
         return result;
     }
 };
+}  // namespace
 
 TEST(Daily, 3043) {
     Solution s;

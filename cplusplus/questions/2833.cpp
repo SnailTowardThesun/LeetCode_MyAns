@@ -19,22 +19,28 @@
 // - 空间复杂度: O(1)
 
 #include <gtest/gtest.h>
+
 #include <climits>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     int furthestDistanceFromOrigin(string moves) {
         // 统计L、R和_的数量
         int ls = 0, rs = 0, ms = 0;
-        for (auto i: moves) {
+        for (auto i : moves) {
             switch (i) {
-                case 'L': ls++;
+                case 'L':
+                    ls++;
                     break;
-                case 'R': rs++;
+                case 'R':
+                    rs++;
                     break;
-                default: ms++;
+                default:
+                    ms++;
                     break;
             }
         }
@@ -43,6 +49,7 @@ public:
         return ls > rs ? ls + ms - rs : rs + ms - ls;
     }
 };
+}  // namespace
 
 TEST(Daily, 2833) {
     Solution s;

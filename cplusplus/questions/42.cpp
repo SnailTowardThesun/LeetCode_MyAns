@@ -38,8 +38,10 @@
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     int trap(int A[], int n) {
         if (n < 3) return 0;
         int pt = 0, pb = n - 1, com = 0, result = 0, tmp = 0;
@@ -57,18 +59,19 @@ public:
         return result;
     }
 };
+}  // namespace
 
 TEST(Daily, 42) {
     Solution s;
-    
+
     // 测试用例 1
     int A1[] = {0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1};
     EXPECT_EQ(s.trap(A1, 12), 6);
-    
+
     // 测试用例 2
     int A2[] = {4, 2, 0, 3, 2, 5};
     EXPECT_EQ(s.trap(A2, 6), 9);
-    
+
     // 测试用例 3
     int A3[] = {1, 0, 1};
     EXPECT_EQ(s.trap(A3, 3), 1);

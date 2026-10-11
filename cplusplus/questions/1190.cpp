@@ -34,14 +34,17 @@
 // - 空间复杂度：O(n)，栈和临时字符串。
 
 #include <gtest/gtest.h>
+
 #include <algorithm>
 #include <stack>
 #include <string>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     string reverseParentheses(string s) {
         stack<char> st;
         for (auto i : s) {
@@ -75,6 +78,7 @@ public:
         return ret;
     }
 };
+}  // namespace
 
 TEST(Daily, 1190) {
     Solution s;

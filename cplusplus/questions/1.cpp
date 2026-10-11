@@ -48,41 +48,45 @@
  */
 
 #include <gtest/gtest.h>
-#include <vector>
+
 #include <unordered_map>
+#include <vector>
 
 using namespace std;
 
-TEST(Daily, 1) {
-    class Solution {
-    public:
-        vector<int> twoSum(vector<int>& nums, int target) {
-            unordered_map<int, int> hash;
-            for (int i = 0; i < nums.size(); ++i) {
-                int complement = target - nums[i];
-                if (hash.find(complement) != hash.end()) {
-                    return {hash[complement], i};
-                }
-                hash[nums[i]] = i;
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 方法产生 ODR 冲突
+namespace {
+class Solution {
+   public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        unordered_map<int, int> hash;
+        for (int i = 0; i < nums.size(); ++i) {
+            int complement = target - nums[i];
+            if (hash.find(complement) != hash.end()) {
+                return {hash[complement], i};
             }
-            return {};
+            hash[nums[i]] = i;
         }
-    };
+        return {};
+    }
+};
+}  // namespace
 
+TEST(Daily, 1) {
     Solution s;
-    
+
     // 测试用例 1
     vector<int> nums1 = {2, 7, 11, 15};
     EXPECT_EQ(s.twoSum(nums1, 9), vector<int>({0, 1}));
-    
+
     // 测试用例 2
     vector<int> nums2 = {3, 2, 4};
     EXPECT_EQ(s.twoSum(nums2, 6), vector<int>({1, 2}));
-    
+
     // 测试用例 3
     vector<int> nums3 = {3, 3};
     EXPECT_EQ(s.twoSum(nums3, 6), vector<int>({0, 1}));
-    
+
     // 测试用例 4
     vector<int> nums4 = {1, 2, 3, 4, 5};
     EXPECT_EQ(s.twoSum(nums4, 9), vector<int>({3, 4}));

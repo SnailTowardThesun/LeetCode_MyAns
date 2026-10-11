@@ -46,48 +46,50 @@
  */
 
 #include <gtest/gtest.h>
+
 #include <string>
 
 using namespace std;
 
-TEST(Daily, 151) {
-    class Solution {
-    public:
-        void reverseWords(string &s) {
-            string ss;
-            int i = s.length() - 1;
-            while (i >= 0) {
-                while (i >= 0 && s[i] == ' ') i--;
-                if (i < 0) break;
-                if (ss.length() != 0)
-                    ss.push_back(' ');
-                string temp;
-                for (; i >= 0 && s[i] != ' '; i--)
-                    temp.push_back(s[i]);
-                reverse(temp.begin(), temp.end());
-                ss.append(temp);
-            }
-            s = ss;
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+class Solution {
+   public:
+    void reverseWords(string& s) {
+        string ss;
+        int i = s.length() - 1;
+        while (i >= 0) {
+            while (i >= 0 && s[i] == ' ') i--;
+            if (i < 0) break;
+            if (ss.length() != 0) ss.push_back(' ');
+            string temp;
+            for (; i >= 0 && s[i] != ' '; i--) temp.push_back(s[i]);
+            reverse(temp.begin(), temp.end());
+            ss.append(temp);
         }
-    };
+        s = ss;
+    }
+};
+}  // namespace
 
+TEST(Daily, 151) {
     Solution s;
-    
+
     // 测试用例 1
     string s1 = "the sky is blue";
     s.reverseWords(s1);
     EXPECT_EQ(s1, "blue is sky the");
-    
+
     // 测试用例 2
     string s2 = "  hello world  ";
     s.reverseWords(s2);
     EXPECT_EQ(s2, "world hello");
-    
+
     // 测试用例 3
     string s3 = "a good   example";
     s.reverseWords(s3);
     EXPECT_EQ(s3, "example good a");
-    
+
     // 测试用例 4
     string s4 = " ";
     s.reverseWords(s4);

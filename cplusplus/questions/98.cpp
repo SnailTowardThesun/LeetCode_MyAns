@@ -40,25 +40,28 @@
  */
 
 #include <gtest/gtest.h>
+
 #include <climits>
 
 using namespace std;
 
 struct TreeNode {
     int val;
-    TreeNode *left;
-    TreeNode *right;
+    TreeNode* left;
+    TreeNode* right;
     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     bool isValidBST(TreeNode* root) {
         long prev = LLONG_MIN;
         return isValidBSTHelper(root, prev);
     }
 
-private:
+   private:
     bool isValidBSTHelper(TreeNode* root, long& prev) {
         if (root == NULL) return true;
 
@@ -72,6 +75,7 @@ private:
         return true;
     }
 };
+}  // namespace
 
 TEST(Daily, 98) {
     Solution s;

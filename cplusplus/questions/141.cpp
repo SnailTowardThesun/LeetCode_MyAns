@@ -50,33 +50,36 @@ using namespace std;
 
 struct ListNode {
     int val;
-    ListNode *next;
+    ListNode* next;
     ListNode(int x) : val(x), next(NULL) {}
 };
 
-TEST(Daily, 141) {
-    class Solution {
-    public:
-        bool hasCycle(ListNode *head) {
-            if (head == NULL || head->next == NULL) {
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+class Solution {
+   public:
+    bool hasCycle(ListNode* head) {
+        if (head == NULL || head->next == NULL) {
+            return false;
+        }
+        ListNode* slow = head;
+        ListNode* fast = head->next;
+
+        while (slow != fast) {
+            if (fast == NULL || fast->next == NULL) {
                 return false;
             }
-            ListNode* slow = head;
-            ListNode* fast = head->next;
-
-            while (slow != fast) {
-                if (fast == NULL || fast->next == NULL) {
-                    return false;
-                }
-                slow = slow->next;
-                fast = fast->next->next;
-            }
-            return true;
+            slow = slow->next;
+            fast = fast->next->next;
         }
-    };
+        return true;
+    }
+};
+}  // namespace
 
+TEST(Daily, 141) {
     Solution s;
-    
+
     // 测试用例 1
     ListNode* head1 = new ListNode(3);
     head1->next = new ListNode(2);
@@ -84,13 +87,13 @@ TEST(Daily, 141) {
     head1->next->next->next = new ListNode(-4);
     head1->next->next->next->next = head1->next;
     EXPECT_TRUE(s.hasCycle(head1));
-    
+
     // 测试用例 2
     ListNode* head2 = new ListNode(1);
     head2->next = new ListNode(2);
     head2->next->next = head2;
     EXPECT_TRUE(s.hasCycle(head2));
-    
+
     // 测试用例 3
     ListNode* head3 = new ListNode(1);
     EXPECT_FALSE(s.hasCycle(head3));

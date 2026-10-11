@@ -21,11 +21,14 @@
 //
 
 #include <gtest/gtest.h>
+
 #include <vector>
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     int minimumCost(vector<int>& cost) {
         int ret = 0;
         for (auto i : cost) {
@@ -37,16 +40,17 @@ public:
         }
 
         std::sort(cost.begin(), cost.end());
-        for (int i = cost.size() - 3; i >= 0; i-=3) {
+        for (int i = cost.size() - 3; i >= 0; i -= 3) {
             ret -= cost[i];
         }
 
         return ret;
     }
 };
+}  // namespace
 
 TEST(Daily, 2144) {
-    vector<int>cost{1,2,3};
+    vector<int> cost{1, 2, 3};
     Solution s;
     auto ret = s.minimumCost(cost);
     EXPECT_EQ(5, ret);

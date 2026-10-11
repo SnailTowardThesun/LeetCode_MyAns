@@ -35,8 +35,10 @@
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     bool isAnagram(string s, string t) {
         if (s == t) {
             return true;
@@ -57,6 +59,7 @@ public:
         return true;
     }
 };
+}  // namespace
 
 TEST(top150, 242) {
     Solution solution;

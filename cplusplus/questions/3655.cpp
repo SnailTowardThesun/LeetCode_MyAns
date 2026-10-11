@@ -18,17 +18,20 @@
 */
 
 #include <gtest/gtest.h>
+
 #include <vector>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-private:
+   private:
     const int mod = 1e9 + 7;
 
-public:
-    int xorAfterQueries(vector<int> &nums, vector<vector<int> > &queries) {
-        for (auto query: queries) {
+   public:
+    int xorAfterQueries(vector<int>& nums, vector<vector<int> >& queries) {
+        for (auto query : queries) {
             int64_t l = query[0], r = query[1], k = query[2], v = query[3];
             for (int i = l; i <= r; i += k) {
                 nums[i] = (nums[i] * v) % mod;
@@ -42,6 +45,7 @@ public:
         return ret;
     }
 };
+}  // namespace
 
 TEST(Daily, 3655) {
     Solution s;

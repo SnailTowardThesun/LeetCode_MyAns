@@ -35,14 +35,16 @@
  */
 
 #include <gtest/gtest.h>
+
 #include <vector>
 
 using namespace std;
 
-
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
-    vector<int> productExceptSelf(vector<int> &nums) {
+   public:
+    vector<int> productExceptSelf(vector<int>& nums) {
         vector<int> left;
         vector<int> right;
         int n = nums.size();
@@ -58,14 +60,15 @@ public:
         }
 
         vector<int> ret;
-        ret.push_back(right[n-2]);
+        ret.push_back(right[n - 2]);
         for (int i = 1; i < n - 1; i++) {
-            ret.push_back(left[i-1] * right[n-i-2]);
+            ret.push_back(left[i - 1] * right[n - i - 2]);
         }
-        ret.push_back(left[n-2]);
+        ret.push_back(left[n - 2]);
         return ret;
     }
 };
+}  // namespace
 
 TEST(TOP150, No238_ProductExceptSelf) {
     Solution solution;

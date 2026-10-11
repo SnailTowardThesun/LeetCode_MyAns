@@ -41,11 +41,13 @@
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
-    vector<vector<string> > groupAnagrams(vector<string> &strs) {
+   public:
+    vector<vector<string> > groupAnagrams(vector<string>& strs) {
         unordered_map<string, vector<string> > container;
-        for (auto str: strs) {
+        for (auto str : strs) {
             auto sorted = str;
             sort(sorted.begin(), sorted.end());
             container[sorted].emplace_back(str);
@@ -59,6 +61,7 @@ public:
         return ret;
     }
 };
+}  // namespace
 
 TEST(top150, 49) {
     Solution s;

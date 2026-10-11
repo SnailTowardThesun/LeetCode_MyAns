@@ -1,11 +1,9 @@
 // 1722. 执行交换操作后的最小汉明距离
 // 题目：https://leetcode.com/problems/minimize-hamming-distance-after-swap-operations/
 // 题目描述：
-// 给你两个整数数组 source 和 target，以及一个二维数组 allowedSwaps，其中 allowedSwaps[i] = [ai, bi] 表示你可以交换 source 中位于 ai 和 bi 位置的两个元素。
-// 你可以最多交换一次 allowedSwaps 中的任意两个元素（也可以不进行交换）。
-// 返回 source 和 target 之间的最小汉明距离。
-// 汉明距离定义为两个数组在相同位置上有不同值的个数。
-// 示例 1：
+// 给你两个整数数组 source 和 target，以及一个二维数组 allowedSwaps，其中 allowedSwaps[i] = [ai, bi] 表示你可以交换
+// source 中位于 ai 和 bi 位置的两个元素。 你可以最多交换一次 allowedSwaps 中的任意两个元素（也可以不进行交换）。 返回
+// source 和 target 之间的最小汉明距离。 汉明距离定义为两个数组在相同位置上有不同值的个数。 示例 1：
 //   输入：source = [1,2,3,4], target = [2,1,4,5], allowedSwaps = [[0,1],[2,3]]
 //   输出：1
 //   解释：交换 source[0] 和 source[1]，得到 [2,1,3,4]，与 target 比较在位置2和3不同，汉明距离为1。
@@ -20,13 +18,16 @@
 // 时间复杂度：O((n+m) log n)，空间复杂度：O(n)
 
 #include <gtest/gtest.h>
-#include <vector>
+
 #include <unordered_map>
+#include <vector>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     int minimumHammingDistance(vector<int>& source, vector<int>& target, vector<vector<int>>& allowedSwaps) {
         // 并查集：初始化 parent 数组，每个元素的根节点指向自己
         int n = source.size();
@@ -79,11 +80,12 @@ public:
         return hammingDist;
     }
 };
+}  // namespace
 
 TEST(Daily, 1722) {
     Solution s;
-    auto source = vector<int>{1,2,3, 4};
-    auto target = vector<int>{2,1,4, 5};
-    auto allowedSwaps = vector<vector<int>>{{0,1}, {2,3}};
+    auto source = vector<int>{1, 2, 3, 4};
+    auto target = vector<int>{2, 1, 4, 5};
+    auto allowedSwaps = vector<vector<int>>{{0, 1}, {2, 3}};
     EXPECT_EQ(s.minimumHammingDistance(source, target, allowedSwaps), 1);
 }

@@ -46,8 +46,10 @@
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     int minInsertions(string s) {
         int ret = 0;
         int l = 0;
@@ -64,7 +66,7 @@ public:
                 ret++;
             }
 
-            if (i < s.size() - 1 && s.at(i+1) == ')') {
+            if (i < s.size() - 1 && s.at(i + 1) == ')') {
                 i++;
             } else {
                 ret++;
@@ -73,10 +75,10 @@ public:
 
         ret += l * 2;
 
-
         return ret;
     }
 };
+}  // namespace
 
 TEST(Daily, 1541) {
     Solution s;

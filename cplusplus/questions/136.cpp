@@ -39,17 +39,19 @@
 
 using namespace std;
 
-TEST(Daily, 136) {
-    class Solution {
-    public:
-        int singleNumber(int A[], int n) {
-            int result = 0;
-            for (int i = 0; i < n; i++)
-                result = result ^ A[i];
-            return result;
-        }
-    };
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+class Solution {
+   public:
+    int singleNumber(int A[], int n) {
+        int result = 0;
+        for (int i = 0; i < n; i++) result = result ^ A[i];
+        return result;
+    }
+};
+}  // namespace
 
+TEST(Daily, 136) {
     Solution s;
 
     // 测试用例 1

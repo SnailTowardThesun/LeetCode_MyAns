@@ -44,18 +44,21 @@
 // - 空间复杂度：O(m + k)，哈希表和结果字符串。
 
 #include <gtest/gtest.h>
+
 #include <string>
 #include <unordered_map>
 #include <vector>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
-    string evaluate(string s, vector<vector<string> > &knowledge) {
+   public:
+    string evaluate(string s, vector<vector<string> >& knowledge) {
         // 建立 key -> value 的哈希映射
         unordered_map<string, string> lookup;
-        for (auto i: knowledge) {
+        for (auto i : knowledge) {
             lookup[i[0]] = i[1];
         }
 
@@ -89,6 +92,7 @@ public:
         return ret;
     }
 };
+}  // namespace
 
 TEST(Daily, 1807) {
     Solution s;

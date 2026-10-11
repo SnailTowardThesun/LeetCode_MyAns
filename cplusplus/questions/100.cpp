@@ -47,25 +47,25 @@ using namespace std;
 
 struct TreeNode {
     int val;
-    TreeNode *left;
-    TreeNode *right;
+    TreeNode* left;
+    TreeNode* right;
     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
 
-TEST(Daily, 100) {
-    class Solution {
-    public:
-        bool isSameTree(TreeNode* p, TreeNode* q) {
-            if (p == NULL || q == NULL)
-                return p == q ? true : false;
-            return p->val == q->val
-                ? isSameTree(p->left, q->left) && isSameTree(p->right, q->right)
-                : false;
-        }
-    };
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+class Solution {
+   public:
+    bool isSameTree(TreeNode* p, TreeNode* q) {
+        if (p == NULL || q == NULL) return p == q ? true : false;
+        return p->val == q->val ? isSameTree(p->left, q->left) && isSameTree(p->right, q->right) : false;
+    }
+};
+}  // namespace
 
+TEST(Daily, 100) {
     Solution s;
-    
+
     // 测试用例 1
     TreeNode* p1 = new TreeNode(1);
     p1->left = new TreeNode(2);
@@ -74,14 +74,14 @@ TEST(Daily, 100) {
     q1->left = new TreeNode(2);
     q1->right = new TreeNode(3);
     EXPECT_TRUE(s.isSameTree(p1, q1));
-    
+
     // 测试用例 2
     TreeNode* p2 = new TreeNode(1);
     p2->left = new TreeNode(2);
     TreeNode* q2 = new TreeNode(1);
     q2->right = new TreeNode(2);
     EXPECT_FALSE(s.isSameTree(p2, q2));
-    
+
     // 测试用例 3
     TreeNode* p3 = new TreeNode(1);
     TreeNode* q3 = new TreeNode(2);

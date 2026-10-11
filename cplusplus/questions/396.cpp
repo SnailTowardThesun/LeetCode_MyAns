@@ -59,8 +59,10 @@
 #include <gtest/gtest.h>
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     int maxRotateFunction(vector<int>& nums) {
         int totalSum = 0;
         int helper = 0;
@@ -70,7 +72,7 @@ public:
         }
 
         int ret = helper;
-        for (int i = nums.size()-1; i >= 0; i--) {
+        for (int i = nums.size() - 1; i >= 0; i--) {
             helper += totalSum - nums.size() * nums[i];
             ret = max(ret, helper);
         }
@@ -78,10 +80,11 @@ public:
         return ret;
     }
 };
+}  // namespace
 
 TEST(Daily, 396) {
     Solution s;
-    auto nums = vector<int>{4,3,2,6};
+    auto nums = vector<int>{4, 3, 2, 6};
     auto ret = s.maxRotateFunction(nums);
     EXPECT_EQ(26, ret);
 }

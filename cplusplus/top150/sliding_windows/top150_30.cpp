@@ -26,14 +26,16 @@
 // - 空间复杂度：O(n)，两个单词频率哈希表。
 
 #include <gtest/gtest.h>
+
 #include <unordered_map>
 
 using namespace std;
 
-
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
-    vector<int> findSubstring(string s, vector<string> &words) {
+   public:
+    vector<int> findSubstring(string s, vector<string>& words) {
         vector<int> ret;
 
         int n = words.size();
@@ -56,10 +58,10 @@ public:
             bool is_same = true;
             for (auto j = 0; j < n; j++) {
                 string word = s.substr(i + j * ws, ws);
-                auto it = lookup.find(word); // 单词不存在，或者出现次数超过目标次数
+                auto it = lookup.find(word);  // 单词不存在，或者出现次数超过目标次数
                 if (it == lookup.end() || ++tmp[word] > it->second) {
                     is_same = false;
-                    break ;
+                    break;
                 }
             }
 
@@ -71,6 +73,7 @@ public:
         return ret;
     }
 };
+}  // namespace
 
 TEST(top150, 30) {
     Solution s;

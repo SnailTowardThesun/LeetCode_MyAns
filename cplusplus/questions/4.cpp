@@ -42,46 +42,49 @@
 
 using namespace std;
 
-TEST(Daily, 4) {
-    class Solution {
-    public:
-        double findMediaSortedArrays(int A[], int m, int B[], int n) {
-            if (!m && !n) return NULL;
-            int tmp = (int)(m+n)/2;
-            int result1 = 0;
-            int result2 = 0;
-            int a = 0, b = 0;
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+class Solution {
+   public:
+    double findMediaSortedArrays(int A[], int m, int B[], int n) {
+        if (!m && !n) return NULL;
+        int tmp = (int)(m + n) / 2;
+        int result1 = 0;
+        int result2 = 0;
+        int a = 0, b = 0;
 
-            for (int i = 0; i < tmp; i++) {
-                if (a < m && b < n)
-                    A[a] < B[b] ? result1 = A[a++] : result1 = B[b++];
-                else
-                    a < m ? result1 = A[a++] : result1 = B[b++];
-            }
-            if ((m+n) % 2) {
-                if (a < m && b < n)
-                    A[a] < B[b] ? result1 = A[a++] : result1 = B[b++];
-                else
-                    a < m ? result1 = A[a++] : result1 = B[b++];
-                return result1;
-            } else {
-                if (a < m && b < n)
-                    result2 = A[a] < B[b] ? A[a++] : B[b++];
-                else
-                    result2 = a < m ? A[a++] : B[b++];
-
-                return (result2 + result1) / 2.0;
-            }
+        for (int i = 0; i < tmp; i++) {
+            if (a < m && b < n)
+                A[a] < B[b] ? result1 = A[a++] : result1 = B[b++];
+            else
+                a < m ? result1 = A[a++] : result1 = B[b++];
         }
-    };
+        if ((m + n) % 2) {
+            if (a < m && b < n)
+                A[a] < B[b] ? result1 = A[a++] : result1 = B[b++];
+            else
+                a < m ? result1 = A[a++] : result1 = B[b++];
+            return result1;
+        } else {
+            if (a < m && b < n)
+                result2 = A[a] < B[b] ? A[a++] : B[b++];
+            else
+                result2 = a < m ? A[a++] : B[b++];
 
+            return (result2 + result1) / 2.0;
+        }
+    }
+};
+}  // namespace
+
+TEST(Daily, 4) {
     Solution s;
-    
+
     // 测试用例 1
     int A1[] = {1, 3};
     int B1[] = {2};
     EXPECT_EQ(s.findMediaSortedArrays(A1, 2, B1, 1), 2.0);
-    
+
     // 测试用例 2
     int A2[] = {1, 2};
     int B2[] = {3, 4};

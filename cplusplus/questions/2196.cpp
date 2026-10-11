@@ -45,33 +45,33 @@
  */
 
 #include <gtest/gtest.h>
-#include <vector>
+
 #include <unordered_map>
+#include <vector>
 using namespace std;
 
 // Definition for a binary tree node.
 struct TreeNode {
     int val;
-    TreeNode *left;
-    TreeNode *right;
+    TreeNode* left;
+    TreeNode* right;
 
-    TreeNode() : val(0), left(nullptr), right(nullptr) {
-    }
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
 
-    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {
-    }
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
 
-    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {
-    }
+    TreeNode(int x, TreeNode* left, TreeNode* right) : val(x), left(left), right(right) {}
 };
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
-    TreeNode *createBinaryTree(vector<vector<int> > &descriptions) {
+   public:
+    TreeNode* createBinaryTree(vector<vector<int>>& descriptions) {
         // key=val, value[0] = parent, value[1] = left, value[2]=right, default is 0
         unordered_map<int, vector<int>> container;
         unordered_map<int, TreeNode*> nodes;
-        for (auto i: descriptions) {
+        for (auto i : descriptions) {
             int p = i[0];
             int c = i[1];
             int isLeft = i[2];
@@ -99,21 +99,21 @@ public:
 
         int root = 0;
 
-        for (auto i: container) {
+        for (auto i : container) {
             if (i.second[0] == 0) {
                 root = i.first;
                 break;
             }
         }
 
-
         return nodes[root];
     }
 };
+}  // namespace
 
 TEST(Daily, 2196) {
     Solution s;
-    vector<vector<int> > descriptions = {{20, 15, 1}, {20, 17, 0}, {50, 20, 1}, {50, 80, 0}, {80, 19, 1}};
+    vector<vector<int>> descriptions = {{20, 15, 1}, {20, 17, 0}, {50, 20, 1}, {50, 80, 0}, {80, 19, 1}};
     auto ret = s.createBinaryTree(descriptions);
     EXPECT_EQ(ret->val, 50);
 }

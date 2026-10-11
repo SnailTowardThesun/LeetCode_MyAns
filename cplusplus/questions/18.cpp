@@ -41,54 +41,60 @@
  */
 
 #include <gtest/gtest.h>
-#include <vector>
-#include <set>
+
 #include <algorithm>
+#include <set>
+#include <vector>
 
 using namespace std;
 
-TEST(Daily, 18) {
-    class FourSumSolution {
-    public:
-        vector<vector<int>> fourSum(vector<int>& nums, int target) {
-            set<vector<int> > res;
-            sort(nums.begin(), nums.end());
-            for (int i = 0; i < int(nums.size() - 3); ++i) {
-                for (int j = i + 1; j < int(nums.size() - 2); ++j) {
-                    int left = j + 1, right = nums.size() - 1;
-                    while (left < right) {
-                        int sum = nums[i] + nums[j] + nums[left] + nums[right];
-                        if (sum == target) {
-                            vector<int> out;
-                            out.push_back(nums[i]);
-                            out.push_back(nums[j]);
-                            out.push_back(nums[left]);
-                            out.push_back(nums[right]);
-                            res.insert(out);
-                            ++left; --right;
-                        }
-                        else if (sum < target) ++left;
-                        else --right;
-                    }
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+class Solution {
+   public:
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+        set<vector<int>> res;
+        sort(nums.begin(), nums.end());
+        for (int i = 0; i < int(nums.size() - 3); ++i) {
+            for (int j = i + 1; j < int(nums.size() - 2); ++j) {
+                int left = j + 1, right = nums.size() - 1;
+                while (left < right) {
+                    int sum = nums[i] + nums[j] + nums[left] + nums[right];
+                    if (sum == target) {
+                        vector<int> out;
+                        out.push_back(nums[i]);
+                        out.push_back(nums[j]);
+                        out.push_back(nums[left]);
+                        out.push_back(nums[right]);
+                        res.insert(out);
+                        ++left;
+                        --right;
+                    } else if (sum < target)
+                        ++left;
+                    else
+                        --right;
                 }
             }
-            return vector<vector<int> >(res.begin(), res.end());
         }
-    };
+        return vector<vector<int>>(res.begin(), res.end());
+    }
+};
+}  // namespace
 
-    FourSumSolution s;
-    
+TEST(Daily, 18) {
+    Solution s;
+
     // 测试用例 1
     vector<int> nums1 = {1, 0, -1, 0, -2, 2};
     auto result1 = s.fourSum(nums1, 0);
     EXPECT_EQ(result1.size(), 3);
-    
+
     // 测试用例 2
     vector<int> nums2 = {2, 2, 2, 2};
     auto result2 = s.fourSum(nums2, 8);
     EXPECT_EQ(result2.size(), 1);
     EXPECT_EQ(result2[0], vector<int>({2, 2, 2, 2}));
-    
+
     // 测试用例 3
     vector<int> nums3 = {0};
     auto result3 = s.fourSum(nums3, 0);

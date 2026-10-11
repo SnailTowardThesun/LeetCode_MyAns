@@ -35,14 +35,16 @@
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     string simplifyPath(string path) {
         string ret = "";
 
         vector<string> container;
         string tmp = "";
-        for (auto i: path) {
+        for (auto i : path) {
             if (i == '/') {
                 if (tmp != "") {
                     container.emplace_back(tmp);
@@ -58,7 +60,7 @@ public:
         }
 
         vector<string> simple_container;
-        for (auto i: container) {
+        for (auto i : container) {
             if (i == "..") {
                 if (!simple_container.empty()) {
                     simple_container.pop_back();
@@ -71,7 +73,7 @@ public:
         }
 
         ret = "/";
-        for (auto i: simple_container) {
+        for (auto i : simple_container) {
             ret += i;
             ret += '/';
         }
@@ -83,7 +85,7 @@ public:
         return ret;
     }
 };
-
+}  // namespace
 
 TEST(top150, 71) {
     Solution s;

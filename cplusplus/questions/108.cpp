@@ -47,36 +47,40 @@
  */
 
 #include <gtest/gtest.h>
+
 #include <vector>
 
 using namespace std;
 
 struct TreeNode {
     int val;
-    TreeNode *left;
-    TreeNode *right;
+    TreeNode* left;
+    TreeNode* right;
     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
 
-TEST(Daily, 108) {
-    class Solution {
-    public:
-        TreeNode* sortedArrayToBST(vector<int> &num) {
-            TreeNode* root = NULL;
-            GetResult(num, 0, num.size()-1, root);
-            return root;
-        }
-        void GetResult(vector<int> &num, int left, int right, TreeNode* &root) {
-            if (left > right) return;
-            int mid = (left + right + 1) / 2;
-            root = new TreeNode(num[mid]);
-            GetResult(num, left, mid-1, root->left);
-            GetResult(num, mid+1, right, root->right);
-        }
-    };
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+class Solution {
+   public:
+    TreeNode* sortedArrayToBST(vector<int>& num) {
+        TreeNode* root = NULL;
+        GetResult(num, 0, num.size() - 1, root);
+        return root;
+    }
+    void GetResult(vector<int>& num, int left, int right, TreeNode*& root) {
+        if (left > right) return;
+        int mid = (left + right + 1) / 2;
+        root = new TreeNode(num[mid]);
+        GetResult(num, left, mid - 1, root->left);
+        GetResult(num, mid + 1, right, root->right);
+    }
+};
+}  // namespace
 
+TEST(Daily, 108) {
     Solution s;
-    
+
     // 测试用例 1
     vector<int> nums1 = {-10, -3, 0, 5, 9};
     TreeNode* root1 = s.sortedArrayToBST(nums1);
@@ -85,17 +89,17 @@ TEST(Daily, 108) {
     EXPECT_EQ(root1->right->val, 9);
     EXPECT_EQ(root1->left->left->val, -10);
     EXPECT_EQ(root1->right->left->val, 5);
-    
+
     // 测试用例 2
     vector<int> nums2 = {1, 3};
     TreeNode* root2 = s.sortedArrayToBST(nums2);
     EXPECT_TRUE(root2->val == 1 || root2->val == 3);
-    
+
     // 测试用例 3
     vector<int> nums3 = {};
     TreeNode* root3 = s.sortedArrayToBST(nums3);
     EXPECT_EQ(root3, nullptr);
-    
+
     // 测试用例 4
     vector<int> nums4 = {1};
     TreeNode* root4 = s.sortedArrayToBST(nums4);

@@ -40,43 +40,47 @@
  */
 
 #include <gtest/gtest.h>
+
 #include <vector>
 
 using namespace std;
 
-TEST(Daily, 53) {
-    class MaxSub {
-    public:
-        int maxSubArray(vector<int>& nums) {
-            int global = nums[0];
-            int local = nums[0];
-            int size = nums.size();
-            for (int i = 1; i < size; i++) {
-                local = nums[i] > local + nums[i] ? nums[i] : local + nums[i];
-                global = local > global ? local : global;
-            }
-            return global;
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+class Solution {
+   public:
+    int maxSubArray(vector<int>& nums) {
+        int global = nums[0];
+        int local = nums[0];
+        int size = nums.size();
+        for (int i = 1; i < size; i++) {
+            local = nums[i] > local + nums[i] ? nums[i] : local + nums[i];
+            global = local > global ? local : global;
         }
-    };
+        return global;
+    }
+};
+}  // namespace
 
-    MaxSub s;
-    
+TEST(Daily, 53) {
+    Solution s;
+
     // 测试用例 1
     vector<int> nums1 = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
     EXPECT_EQ(s.maxSubArray(nums1), 6);
-    
+
     // 测试用例 2
     vector<int> nums2 = {1};
     EXPECT_EQ(s.maxSubArray(nums2), 1);
-    
+
     // 测试用例 3
     vector<int> nums3 = {0};
     EXPECT_EQ(s.maxSubArray(nums3), 0);
-    
+
     // 测试用例 4
     vector<int> nums4 = {-1};
     EXPECT_EQ(s.maxSubArray(nums4), -1);
-    
+
     // 测试用例 5
     vector<int> nums5 = {-2, -1};
     EXPECT_EQ(s.maxSubArray(nums5), -1);

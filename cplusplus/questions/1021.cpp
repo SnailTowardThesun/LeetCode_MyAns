@@ -39,16 +39,19 @@
  */
 
 #include <gtest/gtest.h>
+
 #include <stack>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     string removeOuterParentheses(string s) {
         string ret;
         stack<char> container;
-        for (auto ch: s) {
+        for (auto ch : s) {
             if (ch == '(') {
                 if (!container.empty()) {
                     ret += ch;
@@ -67,6 +70,7 @@ public:
         return ret;
     }
 };
+}  // namespace
 
 TEST(Daily, 1021) {
     Solution s;

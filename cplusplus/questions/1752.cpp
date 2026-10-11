@@ -47,21 +47,24 @@
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     bool check(vector<int>& nums) {
         int n = static_cast<int>(nums.size());
         int count = 0;
-        
+
         for (int i = 0; i < n; ++i) {
             if (nums[i] > nums[(i + 1) % n]) {
                 ++count;
             }
         }
-        
+
         return count <= 1;
     }
 };
+}  // namespace
 
 #include <gtest/gtest.h>
 

@@ -35,47 +35,52 @@
  */
 
 #include <gtest/gtest.h>
+
 #include <vector>
 
 using namespace std;
 
-TEST(Daily, 73) {
-    class Solution {
-    public:
-        void setZeroes(vector<vector<int>> &matrix) {
-            if (matrix.empty()) return;
-            int m = matrix.size();
-            int n = matrix[0].size();
-            bool row = false, col = false;
-            for (int i = 0; i < m; ++i)
-                for (int j = 0; j < n; j++)
-                    if (matrix[i][j] == 0) {
-                        if (i == 0) row = true;
-                        if (j == 0) col = true;
-                        matrix[i][0] = 0;
-                        matrix[0][j] = 0;
-                    }
-            for (int i = 1; i < m; ++i)
-                for (int j = 1; j < n; j++)
-                    if (matrix[i][0] == 0 || matrix[0][j] == 0)
-                        matrix[i][j] = 0;
-            if (row) for (int j = 0; j < n; ++j) matrix[0][j] = 0;
-            if (col) for (int i = 0; i < m; ++i) matrix[i][0] = 0;
-        }
-    };
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+class Solution {
+   public:
+    void setZeroes(vector<vector<int>>& matrix) {
+        if (matrix.empty()) return;
+        int m = matrix.size();
+        int n = matrix[0].size();
+        bool row = false, col = false;
+        for (int i = 0; i < m; ++i)
+            for (int j = 0; j < n; j++)
+                if (matrix[i][j] == 0) {
+                    if (i == 0) row = true;
+                    if (j == 0) col = true;
+                    matrix[i][0] = 0;
+                    matrix[0][j] = 0;
+                }
+        for (int i = 1; i < m; ++i)
+            for (int j = 1; j < n; j++)
+                if (matrix[i][0] == 0 || matrix[0][j] == 0) matrix[i][j] = 0;
+        if (row)
+            for (int j = 0; j < n; ++j) matrix[0][j] = 0;
+        if (col)
+            for (int i = 0; i < m; ++i) matrix[i][0] = 0;
+    }
+};
+}  // namespace
 
+TEST(Daily, 73) {
     Solution s;
-    
+
     // 测试用例 1
-    vector<vector<int>> matrix1 = {{1,1,1},{1,0,1},{1,1,1}};
+    vector<vector<int>> matrix1 = {{1, 1, 1}, {1, 0, 1}, {1, 1, 1}};
     s.setZeroes(matrix1);
-    EXPECT_EQ(matrix1[0], vector<int>({1,0,1}));
-    EXPECT_EQ(matrix1[1], vector<int>({0,0,0}));
-    EXPECT_EQ(matrix1[2], vector<int>({1,0,1}));
-    
+    EXPECT_EQ(matrix1[0], vector<int>({1, 0, 1}));
+    EXPECT_EQ(matrix1[1], vector<int>({0, 0, 0}));
+    EXPECT_EQ(matrix1[2], vector<int>({1, 0, 1}));
+
     // 测试用例 2
-    vector<vector<int>> matrix2 = {{0,1,2,0},{3,4,5,2},{1,3,1,5}};
+    vector<vector<int>> matrix2 = {{0, 1, 2, 0}, {3, 4, 5, 2}, {1, 3, 1, 5}};
     s.setZeroes(matrix2);
-    EXPECT_EQ(matrix2[0], vector<int>({0,0,0,0}));
-    EXPECT_EQ(matrix2[1], vector<int>({0,4,5,0}));
+    EXPECT_EQ(matrix2[0], vector<int>({0, 0, 0, 0}));
+    EXPECT_EQ(matrix2[1], vector<int>({0, 4, 5, 0}));
 }

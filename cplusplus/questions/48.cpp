@@ -24,8 +24,10 @@
 #include "gtest/gtest.h"
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     void rotate(vector<vector<int>>& matrix) {
         int n = matrix.size();
 
@@ -40,9 +42,10 @@ public:
         }
     }
 };
+}  // namespace
 
 TEST(Daily, 48) {
     Solution s;
-    auto matrix = vector<vector<int>>{{1,2,3},{4,5,6},{7,8,9}};
+    auto matrix = vector<vector<int>>{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
     s.rotate(matrix);
 }

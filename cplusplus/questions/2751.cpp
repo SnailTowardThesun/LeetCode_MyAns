@@ -93,8 +93,10 @@
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     vector<int> survivedRobotsHealths(vector<int>& positions, vector<int>& healths, string directions) {
         int n = positions.size();
         // 创建索引数组 [0, 1, ..., n-1]
@@ -102,9 +104,7 @@ public:
         // iota: 用递增序列填充数组，idx 变为 [0, 1, 2, ..., n-1]
         iota(idx.begin(), idx.end(), 0);
         // 按位置排序索引，得到从左到右的机器人顺序
-        sort(idx.begin(), idx.end(), [&](int a, int b) {
-            return positions[a] < positions[b];
-        });
+        sort(idx.begin(), idx.end(), [&](int a, int b) { return positions[a] < positions[b]; });
 
         // 栈用于存储向右移动的机器人索引
         // 栈中机器人按位置从左到右排列（栈底到栈顶）
@@ -142,7 +142,7 @@ public:
                     healths[i] = 0;
                     healths[j] = 0;
                     stk.pop_back();  // 栈顶出栈
-                    break;  // 当前机器人也被移除，停止碰撞
+                    break;           // 当前机器人也被移除，停止碰撞
                 }
             }
         }
@@ -158,6 +158,7 @@ public:
         return ans;
     }
 };
+}  // namespace
 
 TEST(Daily, 2751) {
     Solution s;

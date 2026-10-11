@@ -54,7 +54,7 @@ using namespace std;
 //   - 存在重复计算，先存数组再遍历检查效率不高
 // ============================================================
 class SolutionV1 {
-public:
+   public:
     bool helper(const vector<int64_t>& board) {
         int n = board.size();
         vector<int64_t> pre(n);
@@ -135,7 +135,7 @@ public:
 //   - 需要两次遍历矩阵（一次计算行和，一次计算列和）
 // ============================================================
 class SolutionV2 {
-public:
+   public:
     bool helper(const vector<int64_t>& board) {
         int64_t total = 0;
         for (int64_t val : board) {
@@ -215,8 +215,10 @@ public:
 //   - 对内存敏感的场景
 //   - 追求极致性能的场景
 // ============================================================
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     bool canPartitionGrid(vector<vector<int>>& grid) {
         int rows = grid.size();
         int cols = grid[0].size();
@@ -254,6 +256,7 @@ public:
         return false;
     }
 };
+}  // namespace
 
 // ============================================================
 // 测试用例

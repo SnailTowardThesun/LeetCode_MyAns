@@ -22,19 +22,22 @@
 // 4. 时间复杂度：O(n)，空间复杂度：O(1)
 
 #include <gtest/gtest.h>
-#include <vector>
+
 #include <climits>
+#include <vector>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     int maxDistance(vector<int>& colors) {
-        if(colors[0] != colors[colors.size() - 1]) {
+        if (colors[0] != colors[colors.size() - 1]) {
             return colors.size() - 1;
         }
         int ret = INT_MIN;
-        for (int i = 1; i < static_cast<int>(colors.size())-1; i++) {
+        for (int i = 1; i < static_cast<int>(colors.size()) - 1; i++) {
             if (colors[i] != colors[0]) {
                 int tmp = max(i, static_cast<int>(colors.size()) - 1 - i);
                 ret = max(ret, tmp);
@@ -44,9 +47,10 @@ public:
         return ret;
     }
 };
+}  // namespace
 
 TEST(Daily, 2078) {
     Solution sol;
-    vector<int> colors = {1,1,1,6,1,1};
+    vector<int> colors = {1, 1, 1, 6, 1, 1};
     EXPECT_EQ(sol.maxDistance(colors), 3);
 }

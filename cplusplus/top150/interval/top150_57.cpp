@@ -43,12 +43,13 @@
 #include <gtest/gtest.h>
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
-    vector<vector<int> > insert(vector<vector<int> > &intervals, vector<int> &newInterval) {
-        sort(intervals.begin(), intervals.end(), [](const vector<int> &a, const vector<int> &b) {
-            return a[0] < b[0];
-        });
+   public:
+    vector<vector<int> > insert(vector<vector<int> >& intervals, vector<int>& newInterval) {
+        sort(intervals.begin(), intervals.end(),
+             [](const vector<int>& a, const vector<int>& b) { return a[0] < b[0]; });
 
         vector<vector<int> > ret;
         int left = newInterval[0];
@@ -78,9 +79,9 @@ public:
         }
 
         return ret;
-
     }
 };
+}  // namespace
 
 TEST(top150, 57) {
     Solution s;

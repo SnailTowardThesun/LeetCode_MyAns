@@ -25,13 +25,16 @@
  */
 
 #include <gtest/gtest.h>
+
 #include <vector>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
     static constexpr int mod = 1e9 + 7;
-    
+
     int quick_pow(int x, int y) {
         int res = 1;
         for (; y; y >>= 1) {
@@ -42,7 +45,7 @@ class Solution {
         }
         return res;
     }
-    
+
     int dfs(const vector<vector<int>>& g, int x, int parent) {
         int max_dep = 0;
         for (int y : g[x]) {
@@ -53,8 +56,8 @@ class Solution {
         }
         return max_dep;
     }
-    
-public:
+
+   public:
     int assign_edge_weights(vector<vector<int>>& edges) {
         int n = edges.size() + 1;
         vector<vector<int>> g(n + 1);
@@ -68,15 +71,16 @@ public:
         return quick_pow(2, max_dep - 1);
     }
 };
+}  // namespace
 
 TEST(Daily, 3558) {
     Solution s;
-    vector<vector<int>> edges1{{1,2}};
+    vector<vector<int>> edges1{{1, 2}};
     EXPECT_EQ(s.assign_edge_weights(edges1), 1);
-    
-    vector<vector<int>> edges2{{1,2}, {1,3}, {3,4}, {3,5}};
+
+    vector<vector<int>> edges2{{1, 2}, {1, 3}, {3, 4}, {3, 5}};
     EXPECT_EQ(s.assign_edge_weights(edges2), 2);
-    
-    vector<vector<int>> edges3{{1,2}, {2,3}, {3,4}};
+
+    vector<vector<int>> edges3{{1, 2}, {2, 3}, {3, 4}};
     EXPECT_EQ(s.assign_edge_weights(edges3), 4);
 }

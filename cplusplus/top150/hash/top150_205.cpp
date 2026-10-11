@@ -26,17 +26,19 @@
 // - 空间复杂度：O(k)，k 为字符种类数。
 
 #include <gtest/gtest.h>
+
 #include <unordered_map>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     bool isIsomorphic(string s, string t) {
         unordered_map<char, char> container_s;
         unordered_map<char, char> container_t;
         for (auto i = 0; i < s.size(); i++) {
-
             if (container_s.count(s.at(i)) < 1) {
                 container_s[s.at(i)] = t.at(i);
             }
@@ -54,6 +56,7 @@ public:
         return true;
     }
 };
+}  // namespace
 
 TEST(top150, 205) {
     Solution s;

@@ -35,13 +35,16 @@
 // ============================================================================
 
 #include <gtest/gtest.h>
+
 #include <vector>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-    int m_, n_;                         // 网格的行数和列数
-    vector<vector<bool>> vis_;           // 记录每个格子是否已被访问
+    int m_, n_;                 // 网格的行数和列数
+    vector<vector<bool>> vis_;  // 记录每个格子是否已被访问
     // 四个方向：左、右、上、下
     const int DIRS[4][2] = {{0, -1}, {0, 1}, {-1, 0}, {1, 0}};
 
@@ -62,7 +65,7 @@ class Solution {
             // 检查边界和字符值
             if (i >= 0 && i < m_ && j >= 0 && j < n_ && grid[i][j] == c) {
                 if (vis_[i][j]) {
-                    return true; // 找到环
+                    return true;  // 找到环
                 }
                 // (i, j) 不是父节点才继续递归
                 if ((i != px || j != py) && dfs(i, j, x, y, c, grid)) {
@@ -73,7 +76,7 @@ class Solution {
         return false;
     }
 
-public:
+   public:
     /**
      * @brief 检查网格中是否存在由相同字符组成的环
      * @param grid 输入的二维字符网格
@@ -95,9 +98,11 @@ public:
         return false;
     }
 };
+}  // namespace
 
 TEST(Daily, 1559) {
     Solution s;
-    auto grid = vector<vector<char>>{{'a','a','a','a'},{'a','b','b','a'},{'a','b','b','a'},{'a','a','a','a'}};
+    auto grid =
+        vector<vector<char>>{{'a', 'a', 'a', 'a'}, {'a', 'b', 'b', 'a'}, {'a', 'b', 'b', 'a'}, {'a', 'a', 'a', 'a'}};
     // auto ret = s.containsCycle(grid);
 }

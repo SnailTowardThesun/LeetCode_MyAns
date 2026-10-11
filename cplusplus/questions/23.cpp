@@ -42,67 +42,71 @@
  */
 
 #include <gtest/gtest.h>
-#include <vector>
+
 #include <queue>
+#include <vector>
 
 using namespace std;
 
 struct ListNode {
     int val;
-    ListNode *next;
+    ListNode* next;
     ListNode(int x) : val(x), next(NULL) {}
 };
 
-TEST(Daily, 23) {
-    class Solution {
-    public:
-        ListNode * mergeKLists(vector<ListNode*>& lists) {
-            int count = lists.size();
-            if (count == 0) {
-                return nullptr;
-            }
-
-            ListNode node(0), *res = &node;
-            auto cmp = [](const ListNode *a, const ListNode *b) { return a->val > b->val; };
-            priority_queue<ListNode*, vector<ListNode*>, decltype(cmp)> que(cmp);
-
-            for (int i = 0; i < count; i++) {
-                if (lists[i]) {
-                    que.push(lists[i]);
-                }
-            }
-
-            while (!que.empty()) {
-                ListNode * p = que.top();
-                que.pop();
-                res->next = p;
-                res = p;
-
-                if (p->next) {
-                    que.push(p->next);
-                }
-            }
-            return node.next;
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+class Solution {
+   public:
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        int count = lists.size();
+        if (count == 0) {
+            return nullptr;
         }
-    };
 
+        ListNode node(0), *res = &node;
+        auto cmp = [](const ListNode* a, const ListNode* b) { return a->val > b->val; };
+        priority_queue<ListNode*, vector<ListNode*>, decltype(cmp)> que(cmp);
+
+        for (int i = 0; i < count; i++) {
+            if (lists[i]) {
+                que.push(lists[i]);
+            }
+        }
+
+        while (!que.empty()) {
+            ListNode* p = que.top();
+            que.pop();
+            res->next = p;
+            res = p;
+
+            if (p->next) {
+                que.push(p->next);
+            }
+        }
+        return node.next;
+    }
+};
+}  // namespace
+
+TEST(Daily, 23) {
     Solution s;
-    
+
     // 测试用例 1
     ListNode* l1 = new ListNode(1);
     l1->next = new ListNode(4);
     l1->next->next = new ListNode(5);
-    
+
     ListNode* l2 = new ListNode(1);
     l2->next = new ListNode(3);
     l2->next->next = new ListNode(4);
-    
+
     ListNode* l3 = new ListNode(2);
     l3->next = new ListNode(6);
-    
+
     vector<ListNode*> lists = {l1, l2, l3};
     ListNode* result = s.mergeKLists(lists);
-    
+
     EXPECT_EQ(result->val, 1);
     EXPECT_EQ(result->next->val, 1);
     EXPECT_EQ(result->next->next->val, 2);

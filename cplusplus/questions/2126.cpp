@@ -16,7 +16,7 @@
  * 示例 1：
  * 输入: mass = 10, asteroids = [3,9,15]
  * 输出: true
- * 解释: 
+ * 解释:
  * - 首先摧毁质量为 3 的小行星，mass 变为 13
  * - 然后摧毁质量为 9 的小行星，mass 变为 22
  * - 最后摧毁质量为 15 的小行星，mass 变为 37
@@ -49,28 +49,31 @@
  * 空间复杂度: O(1)，不计排序栈空间
  */
 
-#include <vector>
 #include <algorithm>
+#include <vector>
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
+   public:
     bool asteroidsDestroyed(int mass, const vector<int>& asteroids) {
         int64_t currentMass = mass;
         vector<int> sortedAsteroids = asteroids;
         sort(sortedAsteroids.begin(), sortedAsteroids.end());
-        
+
         for (int asteroid : sortedAsteroids) {
             if (currentMass < asteroid) {
                 return false;
             }
             currentMass += asteroid;
         }
-        
+
         return true;
     }
 };
+}  // namespace
 
 #include <gtest/gtest.h>
 
@@ -80,7 +83,7 @@ TEST(Daily, 2126) {
     EXPECT_TRUE(s.asteroidsDestroyed(10, vector<int>{3, 9, 15}));
     EXPECT_TRUE(s.asteroidsDestroyed(10, vector<int>{4, 9, 23}));
     EXPECT_TRUE(s.asteroidsDestroyed(5, vector<int>{4, 9, 23, 5}));
-    
+
     EXPECT_TRUE(s.asteroidsDestroyed(1, vector<int>{1}));
     EXPECT_TRUE(s.asteroidsDestroyed(100, vector<int>{1, 2, 3, 4, 5}));
 }

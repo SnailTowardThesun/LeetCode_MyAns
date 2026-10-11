@@ -40,9 +40,11 @@
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class Solution {
-public:
-    vector<vector<int> > merge(vector<vector<int> > &intervals) {
+   public:
+    vector<vector<int> > merge(vector<vector<int> >& intervals) {
         vector<vector<int> > ret;
 
         if (intervals.empty()) {
@@ -60,10 +62,10 @@ public:
             }
         }
 
-
         return ret;
     }
 };
+}  // namespace
 
 TEST(top150, 56) {
     Solution s;
