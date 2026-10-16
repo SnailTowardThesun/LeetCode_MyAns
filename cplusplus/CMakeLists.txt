@@ -30,6 +30,7 @@ add_executable(
         ${TEST_FILES}
         questions/2333.cpp
         questions/2913.cpp
+        questions/2916.cpp
 )
 
 target_link_libraries(
