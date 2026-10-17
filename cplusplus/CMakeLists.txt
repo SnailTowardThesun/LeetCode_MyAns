@@ -31,6 +31,7 @@ add_executable(
         questions/2333.cpp
         questions/2913.cpp
         questions/2916.cpp
+        questions/3551.cpp
 )
 
 target_link_libraries(
