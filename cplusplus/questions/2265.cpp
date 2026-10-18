@@ -44,6 +44,9 @@ using namespace std;
 /**
  * Definition for a binary tree node.
  */
+
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 struct TreeNode {
     int val;
     TreeNode* left;
@@ -53,8 +56,6 @@ struct TreeNode {
     TreeNode(int x, TreeNode* left, TreeNode* right) : val(x), left(left), right(right) {}
 };
 
-// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
-namespace {
 class Solution {
    public:
     // 后序遍历一棵子树，累加其全部节点的值之和 sum 与节点数 count

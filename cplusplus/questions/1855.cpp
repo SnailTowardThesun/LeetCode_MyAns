@@ -57,6 +57,7 @@ class Solution {
 };
 }  // namespace
 
+namespace {
 class Solution2 {
    public:
     int maxDistance(vector<int>& nums1, vector<int>& nums2) {
@@ -74,6 +75,7 @@ class Solution2 {
         return ret;
     }
 };
+}  // namespace
 
 TEST(Daily, 1855) {
     Solution s;

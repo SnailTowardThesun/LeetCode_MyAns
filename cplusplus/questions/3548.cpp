@@ -87,6 +87,8 @@
 #include <vector>
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 方法产生 ODR 冲突
+namespace {
 class SolutionOriginal {
    public:
     bool helper(const vector<unordered_set<int64_t>>& board) {
@@ -254,8 +256,6 @@ class SolutionOriginal {
     }
 };
 
-// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 方法产生 ODR 冲突
-namespace {
 class Solution {
    public:
     bool canPartitionGrid(vector<vector<int>>& grid) {

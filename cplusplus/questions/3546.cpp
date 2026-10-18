@@ -53,6 +53,9 @@ using namespace std;
 //   - 代码结构复杂，需要辅助函数
 //   - 存在重复计算，先存数组再遍历检查效率不高
 // ============================================================
+
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class SolutionV1 {
    public:
     bool helper(const vector<int64_t>& board) {
@@ -215,8 +218,6 @@ class SolutionV2 {
 //   - 对内存敏感的场景
 //   - 追求极致性能的场景
 // ============================================================
-// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
-namespace {
 class Solution {
    public:
     bool canPartitionGrid(vector<vector<int>>& grid) {

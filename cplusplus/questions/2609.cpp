@@ -31,6 +31,9 @@ using namespace std;
 // 特点: 对每个位置都重新计算整个矩阵的乘积
 // 缺点: 时间复杂度过高，大数据量会超时
 // ============================================================
+
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 class SolutionV1 {
    public:
     vector<vector<int>> constructProductMatrix(vector<vector<int>>& grid) {
@@ -173,8 +176,6 @@ class SolutionV2 {
 // 特点: 利用结果矩阵本身存储中间值，只用两个变量
 // 优点: 时间和空间都达到最优
 // ============================================================
-// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
-namespace {
 class Solution {
    public:
     vector<vector<int>> constructProductMatrix(vector<vector<int>>& grid) {

@@ -40,6 +40,8 @@
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
 struct TreeNode {
     int val;
     TreeNode* left;
@@ -47,8 +49,6 @@ struct TreeNode {
     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
 
-// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
-namespace {
 class Solution {
    public:
     int maxDepth(TreeNode* root) {

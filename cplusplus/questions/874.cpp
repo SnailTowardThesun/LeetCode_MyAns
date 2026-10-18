@@ -150,6 +150,7 @@ class Solution {
 }  // namespace
 
 // 优化版本
+namespace {
 class SolutionOptimse {
    public:
     int robotSim(vector<int>& commands, vector<vector<int>>& obstacles) {
@@ -203,6 +204,7 @@ class SolutionOptimse {
         return max_distance;
     }
 };
+}  // namespace
 
 TEST(Daily, 874) {
     // 测试用例1：基本移动
