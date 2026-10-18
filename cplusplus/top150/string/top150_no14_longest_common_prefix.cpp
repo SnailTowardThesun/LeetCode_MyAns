@@ -46,31 +46,34 @@
 
 using namespace std;
 
-TEST(TOP150, No14_LongestCommonPrefix) {
-    class Solution {
-    public:
-        string longest_common_prefix(vector<string> &strs) {
-            string ret = "";
-            int steps = INT_MAX;
-            for (auto i = 0; i < strs.size(); i++) {
-                steps = min(int(strs[i].size()), steps);
-            }
-
-            for (auto i = 0; i < steps; i++) {
-                char c = strs[0][i];
-                for (auto j = 1; j < strs.size(); j++) {
-                    if (strs[j][i] != c) {
-                        return ret;
-                    }
-                }
-
-                ret += c;
-            }
-
-            return ret;
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+class Solution {
+public:
+    string longest_common_prefix(vector<string> &strs) {
+        string ret = "";
+        int steps = INT_MAX;
+        for (auto i = 0; i < strs.size(); i++) {
+            steps = min(int(strs[i].size()), steps);
         }
-    };
 
+        for (auto i = 0; i < steps; i++) {
+            char c = strs[0][i];
+            for (auto j = 1; j < strs.size(); j++) {
+                if (strs[j][i] != c) {
+                    return ret;
+                }
+            }
+
+            ret += c;
+        }
+
+        return ret;
+    }
+};
+}  // namespace
+
+TEST(TOP150, No14_LongestCommonPrefix) {
     Solution solution;
     auto input = std::vector<std::string>{"flower", "flow", "flight"};
     auto ret = solution.longest_common_prefix(input);

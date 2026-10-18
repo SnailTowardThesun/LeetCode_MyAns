@@ -45,47 +45,50 @@
 
 using namespace std;
 
-TEST(TOP150, No151_ReverseWords) {
-    class Solution {
-    public:
-        string reverse_words(string s) {
-            std::vector<std::string> words;
-            int n = s.size();
-            int i = 0;
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+class Solution {
+public:
+    string reverse_words(string s) {
+        std::vector<std::string> words;
+        int n = s.size();
+        int i = 0;
 
-            // 跳过前导空格
+        // 跳过前导空格
+        while (i < n && s[i] == ' ') {
+            i++;
+        }
+
+        // 提取单词
+        while (i < n) {
+            std::string word;
+            while (i < n && s[i] != ' ') {
+                word += s[i];
+                i++;
+            }
+            words.push_back(word);
+
+            // 跳过空格
             while (i < n && s[i] == ' ') {
                 i++;
             }
-
-            // 提取单词
-            while (i < n) {
-                std::string word;
-                while (i < n && s[i] != ' ') {
-                    word += s[i];
-                    i++;
-                }
-                words.push_back(word);
-
-                // 跳过空格
-                while (i < n && s[i] == ' ') {
-                    i++;
-                }
-            }
-
-            // 反转单词顺序
-            std::string ret = "";
-            for (int j = words.size() - 1; j >= 0; j--) {
-                ret.append(words[j]);
-                if (j > 0) {
-                    ret.append(" ");
-                }
-            }
-
-            return ret;
         }
-    };
 
+        // 反转单词顺序
+        std::string ret = "";
+        for (int j = words.size() - 1; j >= 0; j--) {
+            ret.append(words[j]);
+            if (j > 0) {
+                ret.append(" ");
+            }
+        }
+
+        return ret;
+    }
+};
+}  // namespace
+
+TEST(TOP150, No151_ReverseWords) {
     Solution solution;
     auto ret = solution.reverse_words("the sky is blue");
     EXPECT_EQ(ret, "blue is sky the");

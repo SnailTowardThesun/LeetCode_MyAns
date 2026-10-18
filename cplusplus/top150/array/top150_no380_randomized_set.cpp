@@ -52,6 +52,8 @@
 
 using namespace std;
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名类的 ODR 冲突
+namespace {
 class RandomizedSet {
     unordered_set<int> container;
 
@@ -83,6 +85,7 @@ public:
         return t[seed];
     }
 };
+}  // namespace
 
 TEST(TOP150, No380_RandomizedSet) {
     RandomizedSet randomizedSet;

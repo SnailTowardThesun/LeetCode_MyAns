@@ -28,6 +28,8 @@
 #include <string>
 #include <vector>
 
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名类的 ODR 冲突
+namespace {
 class Robot {
    private:
     int _width{0};
@@ -63,6 +65,7 @@ class Robot {
         }
     }
 };
+}  // namespace
 
 /**
  * Your Robot object will be instantiated and called as such:

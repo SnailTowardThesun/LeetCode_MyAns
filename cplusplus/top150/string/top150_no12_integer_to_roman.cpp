@@ -67,26 +67,29 @@
 
 using namespace std;
 
-TEST(TOP150, No12_IntToRoman) {
-    class Solution {
-    public:
-        string int_to_roman(int num) {
-            std::string ret;
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+class Solution {
+public:
+    string int_to_roman(int num) {
+        std::string ret;
 
-            std::vector<int> nums{1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
-            std::vector<std::string> signs{"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
+        std::vector<int> nums{1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
+        std::vector<std::string> signs{"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
 
-            for (int i = 0; i < nums.size(); i++) {
-                while (num >= nums[i]) {
-                    num -= nums[i];
-                    ret += signs[i];
-                }
+        for (int i = 0; i < nums.size(); i++) {
+            while (num >= nums[i]) {
+                num -= nums[i];
+                ret += signs[i];
             }
-
-            return ret;
         }
-    };
 
+        return ret;
+    }
+};
+}  // namespace
+
+TEST(TOP150, No12_IntToRoman) {
     Solution solution;
     auto ret = solution.int_to_roman(1994);
     EXPECT_EQ(ret, "MCMXCIV");

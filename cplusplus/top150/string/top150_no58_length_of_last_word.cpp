@@ -43,23 +43,26 @@
 
 using namespace std;
 
-TEST(TOP150, No58_LengthOfLastWord) {
-    class Solution {
-    public:
-        int length_of_last_word(string s) {
-            int idx = s.size() - 1;
-            while (s[idx] == ' ' && idx >= 0) {
-                idx--;
-            }
-
-            auto end = idx;
-            while (idx >= 0 && s[idx] != ' ') {
-                idx--;
-            }
-            return end - idx;
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+class Solution {
+public:
+    int length_of_last_word(string s) {
+        int idx = s.size() - 1;
+        while (s[idx] == ' ' && idx >= 0) {
+            idx--;
         }
-    };
 
+        auto end = idx;
+        while (idx >= 0 && s[idx] != ' ') {
+            idx--;
+        }
+        return end - idx;
+    }
+};
+}  // namespace
+
+TEST(TOP150, No58_LengthOfLastWord) {
     Solution solution;
     auto ret = solution.length_of_last_word("Hello World");
     EXPECT_EQ(ret, 5);

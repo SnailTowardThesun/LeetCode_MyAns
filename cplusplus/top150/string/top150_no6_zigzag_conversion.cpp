@@ -53,40 +53,43 @@
 
 using namespace std;
 
-TEST(TOP150, No6_ZigzagConversion) {
-    class Solution {
-    public:
-        string convert(string s, int num_rows) {
-            if (num_rows == 1 || num_rows >= s.size()) {
-                return s;
-            }
-
-            std::vector<std::string> rows(num_rows);
-            for (auto& row : rows) {
-                row.reserve(s.size() / num_rows + 1);
-            }
-
-            int cur_row = 0;
-            bool going_down = false;
-
-            for (char c : s) {
-                rows[cur_row] += c;
-                if (cur_row == 0 || cur_row == num_rows - 1) {
-                    going_down = !going_down;
-                }
-                cur_row += going_down ? 1 : -1;
-            }
-
-            std::string ret;
-            ret.reserve(s.size());
-            for (const auto& row : rows) {
-                ret += row;
-            }
-
-            return ret;
+// 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
+namespace {
+class Solution {
+public:
+    string convert(string s, int num_rows) {
+        if (num_rows == 1 || num_rows >= s.size()) {
+            return s;
         }
-    };
 
+        std::vector<std::string> rows(num_rows);
+        for (auto& row : rows) {
+            row.reserve(s.size() / num_rows + 1);
+        }
+
+        int cur_row = 0;
+        bool going_down = false;
+
+        for (char c : s) {
+            rows[cur_row] += c;
+            if (cur_row == 0 || cur_row == num_rows - 1) {
+                going_down = !going_down;
+            }
+            cur_row += going_down ? 1 : -1;
+        }
+
+        std::string ret;
+        ret.reserve(s.size());
+        for (const auto& row : rows) {
+            ret += row;
+        }
+
+        return ret;
+    }
+};
+}  // namespace
+
+TEST(TOP150, No6_ZigzagConversion) {
     Solution s;
     auto example = "PAYPALISHIRING";
     auto ret = s.convert(example, 3);
