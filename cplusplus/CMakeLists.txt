@@ -15,12 +15,13 @@ FetchContent_MakeAvailable(googletest)
 # compile params
 set(CMAKE_CXX_FLAGS "-g -std=c++17 -Wall")
 
+# 每日一题：CONFIGURE_DEPENDS 让新增 .cpp 后仅执行 make 即可自动重新收集并编译
 set(TEST_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/questions)
-file(GLOB TEST_FILES "${TEST_SRC_DIR}/*.cpp")
+file(GLOB TEST_FILES CONFIGURE_DEPENDS "${TEST_SRC_DIR}/*.cpp")
 
 # Top 150 题目文件
 set(TOP150_DIR ${CMAKE_CURRENT_SOURCE_DIR}/top150)
-file(GLOB_RECURSE TOP150_FILES "${TOP150_DIR}/**.cpp")
+file(GLOB_RECURSE TOP150_FILES CONFIGURE_DEPENDS "${TOP150_DIR}/**.cpp")
 list(APPEND TEST_FILES ${TOP150_FILES})
 
 enable_testing()
@@ -28,10 +29,6 @@ enable_testing()
 add_executable(
         tests
         ${TEST_FILES}
-        questions/2333.cpp
-        questions/2913.cpp
-        questions/2916.cpp
-        questions/3551.cpp
 )
 
 target_link_libraries(
