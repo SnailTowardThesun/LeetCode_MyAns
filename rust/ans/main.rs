@@ -1,4 +1,8 @@
 #![allow(dead_code)]
+
+// 每日一题按题号独立成文件，见 questions/<题号>.rs（与 cplusplus/questions/ 对应）
+mod questions;
+
 use std::collections::HashMap;
 
 /**
