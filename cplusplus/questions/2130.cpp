@@ -48,6 +48,7 @@
  */
 
 #include <gtest/gtest.h>
+#include "leetcode_common.h"
 
 #include <algorithm>
 #include <vector>
@@ -56,12 +57,6 @@ using namespace std;
 
 // 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
 namespace {
-struct ListNode {
-    int val;
-    ListNode* next;
-    ListNode(int x) : val(x), next(NULL) {}
-};
-
 class Solution {
    public:
     int pairSum(ListNode* head) {

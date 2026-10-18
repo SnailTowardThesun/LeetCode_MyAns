@@ -44,6 +44,7 @@
  */
 
 #include <gtest/gtest.h>
+#include "leetcode_common.h"
 
 #include <vector>
 
@@ -51,17 +52,6 @@ using namespace std;
 
 // 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
 namespace {
-struct ListNode {
-    int val;
-    ListNode* next;
-
-    ListNode() : val(0), next(nullptr) {}
-
-    ListNode(int x) : val(x), next(nullptr) {}
-
-    ListNode(int x, ListNode* next) : val(x), next(next) {}
-};
-
 class Solution {
    public:
     ListNode* deleteMiddle(ListNode* head) {

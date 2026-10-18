@@ -36,5 +36,8 @@ target_link_libraries(
         GTest::gtest_main
 )
 
+# 供各题解 #include "leetcode_common.h"（通用 ListNode/TreeNode 定义）
+target_include_directories(tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+
 include(GoogleTest)
 gtest_discover_tests(tests)

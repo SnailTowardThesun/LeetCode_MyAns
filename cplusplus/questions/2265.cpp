@@ -37,6 +37,7 @@
 // - 空间复杂度：O(n)，最坏情况（单链）为递归栈深度。
 
 #include <gtest/gtest.h>
+#include "leetcode_common.h"
 
 #include <vector>
 using namespace std;
@@ -47,15 +48,6 @@ using namespace std;
 
 // 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
 namespace {
-struct TreeNode {
-    int val;
-    TreeNode* left;
-    TreeNode* right;
-    TreeNode() : val(0), left(nullptr), right(nullptr) {}
-    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
-    TreeNode(int x, TreeNode* left, TreeNode* right) : val(x), left(left), right(right) {}
-};
-
 class Solution {
    public:
     // 后序遍历一棵子树，累加其全部节点的值之和 sum 与节点数 count
