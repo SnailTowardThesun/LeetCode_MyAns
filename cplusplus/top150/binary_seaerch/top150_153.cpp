@@ -11,12 +11,17 @@
 // 输入：nums = [4,5,6,7,0,1,2]
 // 输出：0
 //
-// 思路：只比较 nums[mid] 与 nums[right]：
+// @解题思路:
+// 只比较 nums[mid] 与 nums[right]：
 //       - nums[mid] > nums[right]：mid 处于旋转前的"高段"，最小值必在 mid 右侧（mid 本身不可能是最小），
 //         left = mid + 1；
 //       - nums[mid] < nums[right]：[mid, right] 有序，最小值在 mid 或 mid 左侧，right = mid
 //         （不能写 mid - 1，mid 本身可能就是最小值）。
 //       循环用 left < right，退出时 left == right 即最小值下标。
+//
+// 复杂度分析：
+// - 时间复杂度：O(log n)。
+// - 空间复杂度：O(1)。
 
 #include <gtest/gtest.h>
 

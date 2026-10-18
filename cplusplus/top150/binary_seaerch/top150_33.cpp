@@ -12,9 +12,14 @@
 // 输入：nums = [4,5,6,7,0,1,2], target = 0
 // 输出：4
 //
-// 思路：二分后 [left, mid] 与 [mid, right] 至少有一半完全有序（nums[left] <= nums[mid]
+// @解题思路:
+// 二分后 [left, mid] 与 [mid, right] 至少有一半完全有序（nums[left] <= nums[mid]
 //       则左半有序，否则右半有序）；再判断 target 是否落在有序半边的值域内，
 //       在则收缩到该半边，不在则去另一半。
+//
+// 复杂度分析：
+// - 时间复杂度：O(log n)。
+// - 空间复杂度：O(1)。
 
 #include <gtest/gtest.h>
 
