@@ -63,6 +63,13 @@ coverage/
 node_modules/
 package-lock.json
 
+# Python (uv)
+**/.venv/
+**/__pycache__/
+**/.pytest_cache/
+**/.ruff_cache/
+*.py[cod]
+
 # Backup files
 *.backup
 *.orig

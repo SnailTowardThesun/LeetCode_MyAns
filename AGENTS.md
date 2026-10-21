@@ -8,7 +8,7 @@
 
 | 项目 | 路径 | 类型 | 语言/技术 | 用途 |
 |------|------|------|-----------|------|
-| **LeetCode_MyAns** | `LeetCode_MyAns/` | 算法题解 | C++17, Rust | LeetCode 题目解答与测试 |
+| **LeetCode_MyAns** | `LeetCode_MyAns/` | 算法题解 | C++17, Rust, Python | LeetCode 题目解答与测试 |
 | **SnailTowardThesun.github.io** | `SnailTowardThesun.github.io/` | 技术博客 | Jekyll, Markdown, SCSS | 刷题笔记与技术文档 |
 
 ---
@@ -42,6 +42,12 @@ LeetCode_MyAns/
 │   ├── baseAlgorithm/            # 基础算法练习
 │   │   └── src/main.rs           # 排序等基础算法
 │   └── Cargo.toml                # Workspace 配置
+├── python/                       # Python 题解（uv + pytest + ruff）
+│   ├── leetcode_common/          # 通用数据结构 ListNode/TreeNode 及构造工具
+│   ├── questions/                # 每日一题（题号.py）+ _template.py 模板
+│   ├── tests/                    # 框架自检
+│   ├── new_question.py           # 新题脚手架
+│   └── pyproject.toml            # uv 项目配置（pytest/ruff 规则）
 ├── .clang-format                 # C++ 格式化配置
 ├── package.json                  # Turborepo 根配置
 ├── turbo.json                    # Turbo 任务定义
@@ -71,6 +77,14 @@ cargo test                         # 运行测试
 cargo test test_two_sum            # 运行指定测试
 cargo fmt                          # 格式化代码
 cargo clippy                       # 代码检查
+
+# === Python 项目（在 python/ 下执行）===
+uv sync                            # 初始化/更新环境（首次必跑）
+uv run pytest                      # 运行全部测试
+uv run python questions/1.py       # 单独运行一题
+uv run ruff format .               # 格式化代码
+uv run ruff check .                # 代码检查
+uv run python new_question.py 219 "存在重复元素 II"   # 从模板生成新题文件
 ```
 
 ### C++ 编码规范
@@ -112,12 +126,24 @@ cargo clippy                       # 代码检查
 - **文档**: 使用 `///` 为公共 API 添加文档注释
 - **Workspace**: `ans` 和 `baseAlgorithm` 两个成员
 
+### Python 编码规范
+
+- **版本/管理**: uv 管理，Python >= 3.12（`.python-version` 固定），行宽 120、4 空格缩进
+- **命名**:
+  - 题解函数签名保持 LeetCode 官方 camelCase（如 `twoSum`），便于直接提交
+  - 辅助函数/变量: `snake_case`
+- **文件组织**: 每日一题按题号命名 `.py`（如 `1.py`），放在 `questions/`
+- **通用数据结构**: `ListNode`/`TreeNode` 统一 `from leetcode_common import ListNode, TreeNode, build_list, ...`，禁止在题解中重复定义
+- **注释要求**: 文件头 docstring 使用与 C++ 相同标签（`@题目描述`/`@示例`/`@解题思路` + 复杂度），中文
+- **测试**: 每题写 `test_solution()` 函数——既被 pytest 收集，也支持 `uv run python questions/题号.py` 直接运行；新题可用 `new_question.py` 脚手架生成
+
 ### 新题提交 Checklist
 
 - [ ] 代码注释完整（题目描述 + 解题思路 + 示例，中文）
 - [ ] 测试用例包含基本场景和边界条件
 - [ ] C++ 代码通过 `clang-format` 格式化
 - [ ] Rust 代码通过 `cargo fmt` 和 `cargo clippy` 检查
+- [ ] Python 代码通过 `uv run ruff format .` 和 `uv run ruff check .` 检查
 - [ ] 构建通过且测试全部通过
 - [ ] 文档文件命名为 `README.md`（不是 `readme.md`）
 

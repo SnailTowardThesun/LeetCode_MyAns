@@ -12,6 +12,10 @@
       "name": "Rust Solutions",
       "path": "rust",
     },
+    {
+      "name": "Python Solutions",
+      "path": "python",
+    },
 
   ],
   "settings": {
@@ -38,11 +42,17 @@
     "rust-analyzer.procMacro.enable": true,
     "rust-analyzer.workspace.root": "${workspaceFolder:Rust Solutions}",
 
+    "python.defaultInterpreterPath": "${workspaceFolder:Python Solutions}/.venv/bin/python",
+    "python.terminal.activateEnvironment": true,
+
     "[cpp]": {
       "editor.defaultFormatter": "ms-vscode.cpptools",
     },
     "[rust]": {
       "editor.defaultFormatter": "rust-lang.rust-analyzer",
+    },
+    "[python]": {
+      "editor.defaultFormatter": "charliermarsh.ruff",
     },
 
     "files.associations": {
@@ -50,11 +60,14 @@
       "*.hpp": "cpp",
       "*.h": "cpp",
       "*.rs": "rust",
+      "*.py": "python",
     },
 
     "search.exclude": {
       "**/build": true,
       "**/target": true,
+      "**/.venv": true,
+      "**/__pycache__": true,
       "**/.git": true,
       "**/.vscode": true,
     },
@@ -64,6 +77,8 @@
       "**/.DS_Store": true,
       "**/build": true,
       "**/target": true,
+      "**/.venv": true,
+      "**/__pycache__": true,
     },
 
     "terminal.integrated.cwd": "${workspaceFolder:Root}",
@@ -79,6 +94,8 @@
       "eamodio.gitlens",
       "github.copilot",
       "github.copilot-chat",
+      "ms-python.python",
+      "charliermarsh.ruff",
     ],
     "unwantedRecommendations": [],
   },

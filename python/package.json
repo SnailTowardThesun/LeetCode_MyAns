@@ -1,0 +1,9 @@
+{
+  "name": "leetcode-python",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "uv sync",
+    "test": "uv run pytest",
+    "lint": "uv run ruff format . && uv run ruff check --fix ."
+  }
+}

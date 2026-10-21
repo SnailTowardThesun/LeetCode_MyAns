@@ -1,0 +1,33 @@
+[project]
+name = "leetcode-py"
+version = "0.1.0"
+description = "LeetCode Python 题解（uv 管理，pytest + ruff）"
+requires-python = ">=3.12"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "ruff>=0.9",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["leetcode_common"]
+
+# 题解文件按题号命名（如 1.py、3643.py），pytest 按此规则收集，模板 _template.py 不收集
+[tool.pytest.ini_options]
+testpaths = ["questions", "tests"]
+python_files = ["[0-9]*.py", "test_*.py"]
+addopts = "--import-mode=importlib -q"
+
+# 行宽 120、4 空格缩进，与 C++ (.clang-format) / Rust 仓库惯例保持一致
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B"]

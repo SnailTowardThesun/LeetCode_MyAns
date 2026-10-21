@@ -3,7 +3,8 @@
   "private": true,
   "workspaces": [
     "cplusplus",
-    "rust"
+    "rust",
+    "python"
   ],
   "devDependencies": {
     "turbo": "^2.10.8"

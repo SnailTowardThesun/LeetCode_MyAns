@@ -29,6 +29,7 @@ npm run lint
 ### 项目结构
 - `cplusplus/` - C++ 实现的 LeetCode 题解
 - `rust/` - Rust 实现的 LeetCode 题解
+- `python/` - Python 实现的 LeetCode 题解（uv 管理，详见 [python/README.md](python/README.md)）
 
 
 ### 各项目命令
@@ -42,5 +43,10 @@ npm run lint
 - 构建：`npm run build --workspace=rust`
 - 测试：`npm run test --workspace=rust`
 - 格式化：`npm run lint --workspace=rust`
+
+#### Python 项目
+- 构建（初始化 uv 环境）：`npm run build --workspace=python`
+- 测试：`npm run test --workspace=python`
+- 格式化：`npm run lint --workspace=python`
 
 

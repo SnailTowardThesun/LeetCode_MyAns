@@ -2,11 +2,12 @@
 
 ## Project
 
-LeetCode 算法题解集合，包含 C++ 和 Rust 两种语言的实现。本项目用于记录和练习 LeetCode 算法题目的个人解答。
+LeetCode 算法题解集合，包含 C++、Rust 和 Python 三种语言的实现。本项目用于记录和练习 LeetCode 算法题目的个人解答。
 
 - **C++ 部分**: 使用 C++17 标准，包含经典算法题解和每日一题
 - **Rust 部分**: 使用 Rust 最新稳定版，练习 Rust 语言特性和算法实现
-- **测试框架**: Google Test (C++) 和内置测试 (Rust)
+- **Python 部分**: 使用 uv 管理环境，pytest 测试，ruff 格式化检查
+- **测试框架**: Google Test (C++)、内置测试 (Rust) 和 pytest (Python)
 
 ## Key Directories
 
@@ -20,6 +21,10 @@ LeetCode 算法题解集合，包含 C++ 和 Rust 两种语言的实现。本项
 ├── rust/                  # Rust 算法题解
 │   ├── ans/               # 主答案模块
 │   └── baseAlgorithm/     # 基础算法练习
+├── python/                # Python 算法题解（uv 管理）
+│   ├── leetcode_common/   # 通用数据结构 ListNode/TreeNode
+│   ├── questions/         # 每日一题（题号.py）+ 模板
+│   └── tests/             # 框架自检
 └── .clang-format          # C++ 代码格式化配置
 ```
 
@@ -63,6 +68,29 @@ cargo fmt
 
 # 检查代码
 cargo clippy
+```
+
+### Python 项目
+
+```bash
+# 进入 Python 项目目录
+cd python
+
+# 初始化/更新环境（首次必跑）
+uv sync
+
+# 运行测试
+uv run pytest
+
+# 单独运行一题
+uv run python questions/1.py
+
+# 格式化与检查
+uv run ruff format .
+uv run ruff check .
+
+# 从模板生成新题文件
+uv run python new_question.py 219 "存在重复元素 II"
 ```
 
 ## Code Style
