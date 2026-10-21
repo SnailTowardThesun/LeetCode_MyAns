@@ -13,7 +13,7 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 # compile params
-set(CMAKE_CXX_FLAGS "-g -std=c++17 -Wall")
+set(CMAKE_CXX_FLAGS "-g -std=c++20 -Wall")
 
 # 每日一题：CONFIGURE_DEPENDS 让新增 .cpp 后仅执行 make 即可自动重新收集并编译
 set(TEST_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/questions)
