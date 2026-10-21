@@ -4,7 +4,7 @@
 
 LeetCode 算法题解集合，包含 C++、Rust 和 Python 三种语言的实现。本项目用于记录和练习 LeetCode 算法题目的个人解答。
 
-- **C++ 部分**: 使用 C++17 标准，包含经典算法题解和每日一题
+- **C++ 部分**: 使用 C++20 标准，包含经典算法题解和每日一题
 - **Rust 部分**: 使用 Rust 最新稳定版，练习 Rust 语言特性和算法实现
 - **Python 部分**: 使用 uv 管理环境，pytest 测试，ruff 格式化检查
 - **测试框架**: Google Test (C++)、内置测试 (Rust) 和 pytest (Python)
@@ -97,7 +97,7 @@ uv run python new_question.py 219 "存在重复元素 II"
 
 ### C++ 代码规范
 
-- **标准**: C++17
+- **标准**: C++20
 - **缩进**: 4 个空格，不使用 Tab
 - **行宽限制**: 120 字符
 - **格式**: 遵循 Google C++ Style (通过 `.clang-format` 配置)

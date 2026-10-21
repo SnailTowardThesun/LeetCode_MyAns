@@ -8,7 +8,7 @@
 
 | 项目 | 路径 | 类型 | 语言/技术 | 用途 |
 |------|------|------|-----------|------|
-| **LeetCode_MyAns** | `LeetCode_MyAns/` | 算法题解 | C++17, Rust, Python | LeetCode 题目解答与测试 |
+| **LeetCode_MyAns** | `LeetCode_MyAns/` | 算法题解 | C++20, Rust, Python | LeetCode 题目解答与测试 |
 | **SnailTowardThesun.github.io** | `SnailTowardThesun.github.io/` | 技术博客 | Jekyll, Markdown, SCSS | 刷题笔记与技术文档 |
 
 ---
@@ -89,7 +89,7 @@ uv run python new_question.py 219 "存在重复元素 II"   # 从模板生成新
 
 ### C++ 编码规范
 
-- **标准**: C++17，编译标志 `-g -std=c++17 -Wall`
+- **标准**: C++20，编译标志 `-g -std=c++20 -Wall`
 - **CMake**: 最低版本 3.28，通过 FetchContent 自动下载 Google Test
 - **缩进**: 4 空格，不使用 Tab（遵循 `.clang-format` 的 Google 风格）
 - **行宽**: 120 字符
