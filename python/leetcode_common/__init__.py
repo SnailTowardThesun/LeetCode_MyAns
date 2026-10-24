@@ -12,10 +12,12 @@ from collections.abc import Iterable
 __all__ = [
     "ListNode",
     "TreeNode",
+    "QuadNode",
     "build_list",
     "to_list",
     "build_tree",
     "tree_to_level",
+    "quad_to_list",
 ]
 
 
@@ -104,3 +106,50 @@ def tree_to_level(root: TreeNode | None) -> list[int | None]:
     while values and values[-1] is None:
         values.pop()
     return values
+
+
+class QuadNode:
+    """四叉树节点（LeetCode 427/558/559，与官方定义一致）。
+
+    非叶节点的 val 判题时忽略（isLeaf 为 False 时可赋任意值）。
+    """
+
+    __slots__ = ("val", "isLeaf", "topLeft", "topRight", "bottomLeft", "bottomRight")
+
+    def __init__(
+        self,
+        val: int = 0,
+        isLeaf: bool = False,
+        topLeft: QuadNode | None = None,
+        topRight: QuadNode | None = None,
+        bottomLeft: QuadNode | None = None,
+        bottomRight: QuadNode | None = None,
+    ) -> None:
+        self.val = val
+        self.isLeaf = isLeaf
+        self.topLeft = topLeft
+        self.topRight = topRight
+        self.bottomLeft = bottomLeft
+        self.bottomRight = bottomRight
+
+    def __repr__(self) -> str:
+        return f"QuadNode({quad_to_list(self)})"
+
+
+def quad_to_list(root: QuadNode | None) -> list[list[int]]:
+    """四叉树 -> 层序列表（LeetCode 427 输出格式）。
+
+    每个节点序列化为 [isLeaf, val]（0/1），层序遍历，孩子顺序 topLeft、topRight、bottomLeft、
+    bottomRight；叶节点不再展开，官方展示里的 null 填充省略。非叶节点的 val 原样输出，
+    做断言比较时应先忽略非叶节点的 val（判题同样忽略）。
+    """
+    if root is None:
+        return []
+    levels: list[list[int]] = []
+    queue: deque[QuadNode] = deque([root])
+    while queue:
+        node = queue.popleft()
+        levels.append([int(node.isLeaf), int(node.val)])
+        if not node.isLeaf:
+            queue.extend((node.topLeft, node.topRight, node.bottomLeft, node.bottomRight))
+    return levels
