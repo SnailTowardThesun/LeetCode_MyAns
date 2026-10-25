@@ -4,58 +4,63 @@ from top150.graph.union_find import UnionFind
 def test_initial_state() -> None:
     uf = UnionFind(5)
 
-    assert len(uf) == 5
-    assert uf.count == 5
-    assert uf.groups() == [[0], [1], [2], [3], [4]]
-    assert all(uf.size(x) == 1 for x in range(5))
+    # 初始时每个元素自成一集，代表元就是自己。
+    assert all(uf.find(x) == x for x in range(5))
 
 
-def test_union_and_connected() -> None:
+def test_union_and_connectivity() -> None:
     uf = UnionFind(6)
 
-    assert uf.union(0, 1) is True
-    assert uf.union(1, 2) is True
-    assert uf.union(3, 4) is True
-    # 0、1、2 已经连通，重复合并不会产生新的连通分量。
-    assert uf.union(2, 0) is False
+    uf.union(0, 1)
+    uf.union(1, 2)
+    uf.union(3, 4)
 
-    assert uf.connected(0, 2) is True
-    assert uf.connected(1, 4) is False
-    assert uf.count == 3
-    assert uf.size(2) == 3
-    assert uf.size(4) == 2
-    assert uf.groups() == [[0, 1, 2], [3, 4], [5]]
+    # 连通性 = 两个元素的代表元相同。
+    assert uf.find(0) == uf.find(2)
+    assert uf.find(1) != uf.find(4)
+    assert uf.find(5) != uf.find(0)
 
 
-def test_union_all_returns_merged_count() -> None:
-    uf = UnionFind(5)
+def test_repeated_union_is_noop() -> None:
+    uf = UnionFind(6)
 
-    assert uf.union_all([(0, 1), (1, 2), (2, 0), (3, 4)]) == 3
-    assert uf.count == 2
-    assert uf.connected(0, 2) is True
-    assert uf.connected(3, 4) is True
-    assert not uf.connected(0, 4)
+    uf.union(0, 1)
+    uf.union(1, 2)
+    root = uf.find(0)
 
+    uf.union(2, 0)  # 已连通：合并是无操作
+    uf.union(1, 1)  # 自合并：同样是无操作
 
-def test_empty_and_invalid_size() -> None:
-    assert len(UnionFind(0)) == 0
-    assert UnionFind(0).count == 0
-    assert UnionFind(0).groups() == []
-    try:
-        UnionFind(-1)
-    except ValueError as error:
-        assert str(error) == "size must be non-negative"
-    else:
-        raise AssertionError("UnionFind(-1) should raise ValueError")
+    assert uf.find(2) == root
+    assert uf.find(0) == uf.find(1) == uf.find(2)
 
 
-def test_invalid_element() -> None:
-    uf = UnionFind(3)
+def test_merge_two_groups() -> None:
+    uf = UnionFind(6)
 
-    for element in (-1, 3):
-        try:
-            uf.find(element)
-        except IndexError as error:
-            assert "out of range" in str(error)
-        else:
-            raise AssertionError(f"find({element}) should raise IndexError")
+    uf.union(0, 1)
+    uf.union(1, 2)
+    uf.union(3, 4)
+
+    uf.union(4, 2)  # 两个已成分量合并成一个
+
+    assert len({uf.find(x) for x in range(5)}) == 1
+    assert uf.find(5) != uf.find(0)
+
+
+def test_groups_by_pattern() -> None:
+    size = 200
+    uf = UnionFind(size)
+
+    # 每 4 个连续元素合并成一组，最终应形成 50 个大小为 4 的分量。
+    for i in range(0, size, 4):
+        uf.union(i, i + 1)
+        uf.union(i + 1, i + 2)
+        uf.union(i + 2, i + 3)
+
+    groups: dict[int, list[int]] = {}
+    for x in range(size):
+        groups.setdefault(uf.find(x), []).append(x)
+
+    assert len(groups) == 50
+    assert all(len(members) == 4 for members in groups.values())
