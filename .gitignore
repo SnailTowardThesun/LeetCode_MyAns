@@ -19,7 +19,7 @@ Desktop.ini
 target/
 **/target/
 **/*.rs.bk
-**/Cargo.lock
+# Cargo.lock 需提交：workspace 含二进制 crate（ans、baseAlgorithm），锁定依赖保证构建可复现
 
 # C++ build files
 build/

@@ -4,6 +4,6 @@
   "scripts": {
     "build": "cmake -B build && cmake --build build",
     "test": "cd build && ctest",
-    "lint": "clang-format -i src/*.cpp"
+    "lint": "find questions top150 -name '*.cpp' -exec clang-format -i {} +"
   }
 }

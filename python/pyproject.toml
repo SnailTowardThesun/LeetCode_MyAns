@@ -20,7 +20,7 @@ packages = ["leetcode_common"]
 
 # 题解文件按题号命名（如 1.py、3643.py），top150 按前缀命名（top150_108.py），pytest 按此规则收集，模板 _template.py 不收集
 [tool.pytest.ini_options]
-testpaths = ["questions", "tests", "top150"]
+testpaths = ["questions", "top150"]
 python_files = ["[0-9]*.py", "test_*.py", "top150_*.py"]
 addopts = "--import-mode=importlib -q"
 
