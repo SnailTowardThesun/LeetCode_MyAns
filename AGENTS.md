@@ -1,75 +1,62 @@
-# AGENTS.md — 单仓库双项目协作指南
+# AGENTS.md — LeetCode_MyAns（算法题解）
 
-本仓库是一个 **Monorepo**，包含两个独立项目。AI Agent 在操作前必须先确认当前工作目录属于哪个项目，并遵循对应规范。
-
----
-
-## 项目概览
-
-| 项目 | 路径 | 类型 | 语言/技术 | 用途 |
-|------|------|------|-----------|------|
-| **LeetCode_MyAns** | `LeetCode_MyAns/` | 算法题解 | C++20, Rust, Python | LeetCode 题目解答与测试 |
-| **SnailTowardThesun.github.io** | `SnailTowardThesun.github.io/` | 技术博客 | Jekyll, Markdown, SCSS | 刷题笔记与技术文档 |
+本仓库只包含**算法题解**一个项目，C++ / Rust / Python 三种实现。与技术博客（SnailTowardThesun.github.io）的联动发布流程见上层工作区 `AGENTS.md` 及 `.agents/skills/` 技能（`leetcode_publish`、`leetcode-comment-blog-batch`）。
 
 ---
 
 ## 核心原则
 
 - **Logic over Tokens** — 优先生成逻辑严密的短代码，而非冗长的 AI 生成片段
-- **精确操作** — 修改文件前先确认路径归属哪个项目，避免跨项目污染
-- **注释即文档** — 新题和博客必须包含完整注释/说明，缺一不可
-- **本地验证** — 推送前必须通过构建和测试验证
+- **最小变更** — 只修改必要文件，不引入无关改动
+- **注释即文档** — 新题必须包含完整中文注释，缺一不可
+- **本地验证** — 提交前必须通过构建和测试验证
 
 ---
 
-## 项目一：LeetCode_MyAns（算法题解）
-
-### 项目结构
+## 项目结构
 
 ```
 LeetCode_MyAns/
-├── cplusplus/                    # C++ 题解（CMake + Google Test）
-│   ├── questions/                # 每日一题（按编号命名，如 1.cpp）
-│   ├── top150/                   # 面试经典 150 题
-│   │   ├── array/                # 数组类题目
-│   │   ├── double_pointer/       # 双指针类题目（如有）
-│   │   └── string/               # 字符串类题目
-│   ├── CMakeLists.txt            # CMake 构建配置
+├── cplusplus/                     # C++20 题解（CMake + Google Test）
+│   ├── questions/                 # 每日一题（题号.cpp，如 1.cpp）
+│   ├── top150/                    # 面试经典 150 题（top150_题号.cpp，按分类分子目录）
+│   │   ├── array/  binary_search/  binary_tree/  double_pointer/  hash/
+│   │   └── interval/  sliding_windows/  stack/  string/
+│   ├── leetcode_common.h          # 通用 ListNode/TreeNode 定义（唯一来源）
+│   ├── CMakeLists.txt             # 全部 .cpp 链接进同一个 tests 可执行文件
 │   └── README.md
-├── rust/                         # Rust 题解（Cargo Workspace）
-│   ├── ans/                      # 主答案模块
-│   │   └── questions/            # 按题号命名的 .rs 文件
-│   ├── baseAlgorithm/            # 基础算法练习
-│   │   └── src/main.rs           # 排序等基础算法
-│   └── Cargo.toml                # Workspace 配置
-├── python/                       # Python 题解（uv + pytest + ruff）
-│   ├── leetcode_common/          # 通用数据结构 ListNode/TreeNode 及构造工具
-│   ├── questions/                # 每日一题（题号.py）+ _template.py 模板
-│   ├── tests/                    # 框架自检
-│   ├── new_question.py           # 新题脚手架
-│   └── pyproject.toml            # uv 项目配置（pytest/ruff 规则）
-├── .clang-format                 # C++ 格式化配置
-├── package.json                  # Turborepo 根配置
-├── turbo.json                    # Turbo 任务定义
+├── rust/                          # Rust 题解（Cargo Workspace）
+│   ├── ans/                       # 主答案模块（questions/ 内按题号命名 .rs）
+│   ├── baseAlgorithm/             # 基础算法练习（src/main.rs）
+│   └── Cargo.toml                 # Workspace 配置（ans + baseAlgorithm）
+├── python/                        # Python 题解（uv + pytest + ruff）
+│   ├── leetcode_common/           # 通用数据结构 ListNode/TreeNode 及构造工具
+│   ├── questions/                 # 每日一题（题号.py）+ _template.py 模板
+│   ├── top150/                    # 面试经典 150 题（top150_题号.py）
+│   ├── new_question.py            # 新题脚手架
+│   └── pyproject.toml             # uv 项目配置（pytest/ruff 规则）
+├── .clang-format                  # C++ 格式化配置（Google 风格）
+├── LeetCode_MyAns.code-workspace  # VSCode 工作区
+├── package.json / turbo.json      # Turborepo 顶层配置
 └── README.md
 ```
 
-### 构建与测试命令
+---
+
+## 构建与测试命令
 
 ```bash
-# === Turborepo 顶层命令（在 LeetCode_MyAns/ 下执行）===
-npm install                          # 安装依赖
-npm run build                       # 构建所有子项目
-npm run test                        # 运行所有测试
-npm run lint                        # 运行所有格式化
+# === Turborepo 顶层（在 LeetCode_MyAns/ 下执行）===
+npm install                          # 首次必跑（安装 turbo，node_modules 不入库）
+npm run build                        # 构建所有子项目
+npm run test                         # 运行所有测试
+npm run lint                         # 格式化/检查所有子项目
 
 # === C++ 项目（在 cplusplus/ 下执行）===
-mkdir -p build && cd build
-cmake ..
-make
-./tests                            # 运行测试
-ctest --verbose                    # 详细测试输出
-clang-format -i questions/*.cpp    # 格式化代码
+cmake -B build && cmake --build build   # 构建（build/ 已 gitignore）
+ctest --test-dir build                  # 运行测试
+./build/tests                           # 直接运行测试可执行文件
+find questions top150 -name '*.cpp' -exec clang-format -i {} +   # 格式化
 
 # === Rust 项目（在 rust/ 下执行）===
 cargo build                        # 构建
@@ -87,18 +74,22 @@ uv run ruff check .                # 代码检查
 uv run python new_question.py 219 "存在重复元素 II"   # 从模板生成新题文件
 ```
 
-### C++ 编码规范
+---
+
+## C++ 编码规范
 
 - **标准**: C++20，编译标志 `-g -std=c++20 -Wall`
 - **CMake**: 最低版本 3.28，通过 FetchContent 自动下载 Google Test
 - **缩进**: 4 空格，不使用 Tab（遵循 `.clang-format` 的 Google 风格）
 - **行宽**: 120 字符
+- **匿名命名空间**: Solution/题目类必须包在 `namespace { ... }` 内——CMake 将全部 .cpp 链接进同一个 tests 可执行文件，内部链接可避免同名类 ODR/符号冲突
+- **通用数据结构**: `ListNode`/`TreeNode` 统一 `#include "leetcode_common.h"`，禁止在 .cpp 中重复定义
 - **命名**:
   - 类名: `PascalCase`（如 `Solution`）
   - 函数/变量: `snake_case`（如 `two_sum`, `max_length`）
 - **文件命名**:
-  - 每日一题: `题号.cpp`（如 `1.cpp`, `3643.cpp`）
-  - Top150: `top150_题号.cpp`（如 `top150_no121_best_time_to_buy_sell_stock.cpp`）
+  - 每日一题: `题号.cpp`（如 `1.cpp`, `2089.cpp`）
+  - Top150: `top150_题号.cpp`（如 `top150_106.cpp`），放入 top150/ 对应分类子目录
 - **注释要求**（文件头部，中文）:
   - `@题目描述`: 完整题目内容
   - `@示例`: 输入输出示例
@@ -113,7 +104,9 @@ uv run python new_question.py 219 "存在重复元素 II"   # 从模板生成新
 - 避免硬编码魔法数字
 - 不要使用已废弃的 C++ 特性
 
-### Rust 编码规范
+---
+
+## Rust 编码规范
 
 - **标准**: 最新稳定版 Rust
 - **缩进**: 4 空格
@@ -124,9 +117,11 @@ uv run python new_question.py 219 "存在重复元素 II"   # 从模板生成新
 - **文件组织**: 按题号命名 `.rs` 文件（如 `2389.rs`），放在 `ans/questions/`
 - **测试**: 使用 `#[test]` 属性，测试函数与源码放在同一文件
 - **文档**: 使用 `///` 为公共 API 添加文档注释
-- **Workspace**: `ans` 和 `baseAlgorithm` 两个成员
+- **Workspace**: `ans` 和 `baseAlgorithm` 两个成员；`Cargo.lock` 需提交（含二进制 crate，锁定依赖保证构建可复现）
 
-### Python 编码规范
+---
+
+## Python 编码规范
 
 - **版本/管理**: uv 管理，Python >= 3.12（`.python-version` 固定），行宽 120、4 空格缩进
 - **命名**:
@@ -137,7 +132,9 @@ uv run python new_question.py 219 "存在重复元素 II"   # 从模板生成新
 - **注释要求**: 文件头 docstring 使用与 C++ 相同标签（`@题目描述`/`@示例`/`@解题思路` + 复杂度），中文
 - **测试**: 每题写 `test_solution()` 函数——既被 pytest 收集，也支持 `uv run python questions/题号.py` 直接运行；新题可用 `new_question.py` 脚手架生成
 
-### 新题提交 Checklist
+---
+
+## 新题提交 Checklist
 
 - [ ] 代码注释完整（题目描述 + 解题思路 + 示例，中文）
 - [ ] 测试用例包含基本场景和边界条件
@@ -149,162 +146,12 @@ uv run python new_question.py 219 "存在重复元素 II"   # 从模板生成新
 
 ---
 
-## 项目二：SnailTowardThesun.github.io（技术博客）
+## 提交规范
 
-### 项目结构
-
-```
-SnailTowardThesun.github.io/
-├── _posts/                       # 博客文章（Markdown）
-├── _layouts/                     # 页面布局模板
-├── _sass/                        # Sass 样式
-├── assets/                       # 静态资源（图片、CSS）
-├── category/                     # 分类页面
-├── docker/                       # Docker 配置
-├── _config.yml                   # Jekyll 配置
-├── Gemfile / Gemfile.lock        # Ruby 依赖
-├── index.html                    # 首页
-├── 404.html                      # 404 页面
-├── Dockerfile.local              # 本地 Docker 镜像
-├── .editorconfig                 # 编辑器配置
-└── README.md
-```
-
-### 技术栈
-
-| 技术 | 版本 | 用途 |
-|------|------|------|
-| Jekyll | ~> 4.3 | 静态站点生成器 |
-| Minima | ~> 2.5 | 默认主题 |
-| Ruby | 3.4 | 运行环境 |
-| Sass | - | CSS 预处理器 |
-| Docker/Podman | - | 容器化开发 |
-| GitHub Pages | - | 自动部署 |
-
-### 构建与部署命令
-
-```bash
-# === 本地开发（需 Ruby 环境）===
-bundle exec jekyll serve           # 启动开发服务器（含 live reload）
-bundle exec jekyll build           # 构建静态站点
-bundle exec jekyll clean           # 清理构建产物
-
-# === Docker 方式（推荐）===
-docker run --rm -v "$PWD:/app" -w /app -p 4000:4000 \
-  ruby:3.4 /bin/bash -c "bundle install && bundle exec jekyll serve --host 0.0.0.0 --port 4000"
-
-# === 构建验证（推送前必做）===
-docker run --rm -v "$PWD:/app" -w /app ruby:3.4 \
-  /bin/bash -c "bundle exec jekyll build"
-
-# === Podman 替代方案 ===
-podman run --rm -v "$PWD:/app" -w /app -p 4000:4000 \
-  ruby:3.4 /bin/bash -c "bundle install && bundle exec jekyll serve --host 0.0.0.0 --port 4000"
-```
-
-### 博客文章规范
-
-**文件名格式**: `YYYY-MM-DD-title.md`（如 `2026-05-05-leetcode-61-rotate-list.md`）
-
-**YAML Front Matter**:
-```yaml
----
-layout: article
-author: SnailTowardThesun
-title: "LeetCode刷题的日子--No.61: 旋转链表"
-categories: LeetCode
----
-```
-
-**文章结构**（按顺序，每篇必须遵循）:
-1. **小知识** — YAML Front Matter 之后、正文之前，以 Markdown 引用块（`>`）形式呈现，不超过 100 字，内容与题目相关（应用场景、趣味知识、历史背景等）
-2. `## 题目` — 题目名称、难度、题目描述
-3. `### 示例` — 输入输出示例
-4. `## 解题思路` — 算法思路、步骤详解、复杂度分析
-5. `## 代码实现` — 代码块
-6. （可选）扩展讨论
-
-### 小知识格式示例
-
-```markdown
----
-layout: article
-author: SnailTowardThesun
-title: "LeetCode刷题的日子--No.61: 旋转链表"
-categories: LeetCode
----
-
-> 链表旋转操作在轮询调度、循环队列等场景中经常使用，可以用来实现资源的循环分配。
-
-## 题目
-
-...
-```
-
-**小知识要求**:
-- 以 `>` 引用块格式出现
-- 不超过 100 个中文字符
-- 内容必须与题目相关（应用场景、趣味知识、算法背景等）
-- 位置：YAML Front Matter 之后、第一个正文标题之前
-- 非 LeetCode 技术文章同样适用（如算法笔记、技术总结等）
-
-**标题格式**: `LeetCode刷题的日子--No.<序号>: <题目名称>`
-- 含冒号时，YAML 中需用双引号包裹：`title: "LeetCode刷题的日子--No.61: 旋转链表"`
-
-### ⚠️ Jekyll/Liquid 模板兼容（必须）
-
-Jekyll 使用 Liquid 模板引擎，会将左花括号解释为变量起始标记。包含双大括号的代码必须用特殊标签包裹：
-
-**需包裹的场景**:
-- C++ STL 容器初始化
-- Java/C++ 匿名对象初始化
-- 任何使用双大括号的代码（即使行内反引号也触发）
-
-### 编辑器配置
-
-`.editorconfig` 定义了全局格式规则:
-- 编码: UTF-8，换行: LF
-- 缩进: 2 空格
-- Markdown 文件保留尾部空格（用于排版控制）
-
-### 新文章发布 Checklist
-
-- [ ] YAML Front Matter 格式正确（冒号用双引号包裹）
-- [ ] 文件名符合 `YYYY-MM-DD-title.md` 格式
-- [ ] 代码块中双大括号已用 raw 标签包裹
-- [ ] 小知识在 YAML Front Matter 之后以 `>` 引用块格式出现，不超过 100 字
-- [ ] 本地构建验证通过（`bundle exec jekyll build` 或 Docker）
-- [ ] 图片存放在 `assets/` 目录，使用相对路径引用
-- [ ] 链接使用相对路径或完整 URL
-
----
-
-## 跨项目协作规范
-
-### 代码与博客联动
-
-当在 LeetCode_MyAns 中完成新题解答后，可选择在博客中发布对应的文章：
-1. 先在 `LeetCode_MyAns/` 中完成代码编写和测试
-2. 确保代码注释完整（题目描述 + 解题思路 + 复杂度分析）
-3. 在博客中创建新文章，复用代码和思路
-4. 博客代码注意 Liquid 模板兼容性
-
-### 提交规范
-
-- **提交信息**: 简洁明了，包含项目标识前缀
-  - `[algo] Add solution for LeetCode 61` — 算法题解
-  - `[blog] Post LeetCode No.61: Rotate List` — 博客文章
+- **提交信息**: 简洁明了，包含项目标识前缀，如 `[algo] Add solution for LeetCode 61`
 - **分支策略**: 直接在主分支提交（个人仓库）
 - **文件命名**: 只使用 `README.md`（大写），不使用 `readme.md`
 
-### Agent 操作指南
-
-1. **确认路径**: 每次修改前先确认当前文件属于哪个项目
-2. **遵循对应规范**: 严格按所属项目的编码规范执行
-3. **最小变更**: 只修改必要文件，不引入无关改动
-4. **验证先行**: 涉及代码变更时优先验证构建和测试
-5. **不创建多余文件**: 不添加 LICENSE、版权头等已有或多余文件
-
 ---
 
-*Generated for Monorepo Agent Collaboration. 遵循 "Vibe Coding, Logical Execution" 原则.*
+*算法题解仓库 Agent 指南。跨项目（博客发布）协作见上层工作区 AGENTS.md。*

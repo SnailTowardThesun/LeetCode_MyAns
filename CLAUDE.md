@@ -13,18 +13,18 @@ LeetCode 算法题解集合，包含 C++、Rust 和 Python 三种语言的实现
 
 ```
 .
-├── cplusplus/              # C++ 算法题解
-│   ├── src/               # 经典算法题源代码
-│   ├── tests/             # 每日一题测试代码
-│   ├── top150/            # 面试经典 150 题
-│   └── CMakeLists.txt     # CMake 构建配置
+├── cplusplus/              # C++ 算法题解（CMake + Google Test）
+│   ├── questions/         # 每日一题（题号.cpp，测试 TEST(Daily, 题号) 写在同文件）
+│   ├── top150/            # 面试经典 150 题（top150_题号.cpp，按分类分子目录）
+│   ├── leetcode_common.h  # 通用 ListNode/TreeNode 定义（唯一来源）
+│   └── CMakeLists.txt     # CMake 构建配置（全部 .cpp 链接进同一个 tests）
 ├── rust/                  # Rust 算法题解
-│   ├── ans/               # 主答案模块
-│   └── baseAlgorithm/     # 基础算法练习
+│   ├── ans/               # 主答案模块（questions/ 内按题号命名 .rs）
+│   └── baseAlgorithm/     # 基础算法练习（src/main.rs）
 ├── python/                # Python 算法题解（uv 管理）
 │   ├── leetcode_common/   # 通用数据结构 ListNode/TreeNode
-│   ├── questions/         # 每日一题（题号.py）+ 模板
-│   └── tests/             # 框架自检
+│   ├── questions/         # 每日一题（题号.py）+ _template.py 模板
+│   └── top150/            # 面试经典 150 题（top150_题号.py）
 └── .clang-format          # C++ 代码格式化配置
 ```
 
@@ -122,9 +122,9 @@ uv run python new_question.py 219 "存在重复元素 II"
 
 ### 文件组织
 
-- **C++ 源文件**: 每个算法题一个 `.cpp` 文件，文件名使用小写和下划线
-- **Rust 模块**: 按题目类型分模块 (`daily.rs`, `offer.rs`)
-- **测试文件**: C++ 测试放在 `tests/` 目录，Rust 测试与源码放在一起
+- **C++ 源文件**: 每日一题一个 `.cpp` 文件，按题号命名（如 `2089.cpp`）；Top150 命名为 `top150_题号.cpp`，放入 top150/ 对应分类子目录
+- **Rust 模块**: 按题号命名 `.rs` 文件（如 `2389.rs`），放在 `ans/questions/`
+- **测试文件**: C++ 测试写在题解同文件（`TEST(Daily, 题号)`），Rust/Python 测试与源码放在一起
 
 ### 代码结构
 
@@ -134,8 +134,8 @@ uv run python new_question.py 219 "存在重复元素 II"
 
 ### 提交规范
 
-- 每日一题使用题目编号命名文件 (如 `3643.cpp`)
-- 经典题目使用描述性名称 (如 `two_sum.cpp`)
+- 每日一题使用题目编号命名文件 (如 `2089.cpp`)
+- Top150 使用 `top150_题号` 命名并按分类放入 `cplusplus/top150/` 子目录
 - **文档文件命名**: 只能使用 `README.md`，不能使用 `readme.md` 等其他形式
 - **提交前必须检查**: 新增题目的注释内容必须完整
   - 必须包含题目内容描述
@@ -155,8 +155,8 @@ uv run python new_question.py 219 "存在重复元素 II"
 
 ### C++ CMake 配置
 
-- **最低版本**: CMake 3.31
-- **编译选项**: `-g -std=c++17 -Wall`
+- **最低版本**: CMake 3.28
+- **编译选项**: `-g -std=c++20 -Wall`
 - **测试框架**: Google Test (通过 FetchContent 自动下载)
 
 ### Rust Cargo 配置
