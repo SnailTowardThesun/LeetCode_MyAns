@@ -20,30 +20,86 @@
     输入：n = 1, k = 1
     输出：[[1]]
 
-@解题思路（待实现）
-    1. 回溯 DFS：维护当前路径 path 与枚举起点 start，
-       每次从 start..n 中选一个数加入 path，递归后回溯撤销
-    2. 收集条件：len(path) == k 时把 path 的拷贝加入结果集
-    3. 剪枝：剩余可用数字 n - start + 1 不足以凑满 k 个时提前返回
+@解题思路
+    1. 分治递归 dfs(arr, k)：枚举组合的首元素 start = arr[i]，
+       其余 k-1 个数从后缀 arr[i+1:] 中递归选取
+    2. 边界：k == 1 时每个元素自成一组；k > len(arr) 时无解返回空；
+       k == len(arr) 时只剩「全选」一种
+    3. 上层用 [start, *c] 把首元素与子组合逐个拼接收集
 
-    时间复杂度 O(C(n,k) * k)，空间复杂度 O(k)（递归栈 + path）
+    时间复杂度 O(C(n,k) * k)，空间复杂度 O(k)（递归栈）
 
 来源：LeetCode
 链接：https://leetcode.cn/problems/combinations/description/
 """
 
+from math import comb
+
 
 class Solution:
     def combine(self, n: int, k: int) -> list[list[int]]:
-        # TODO: 按上述回溯思路实现
-        ...
+        def dfs(arr: list[int], k: int) -> list[list[int]]:
+            if k == 1:
+                return [[i] for i in arr]
+            if k > len(arr):
+                return []
+            if k == len(arr):
+                return [arr]
+
+            ret = []
+            for i in range(len(arr)):
+                start = arr[i]
+                combines = dfs(arr[i + 1 :], k - 1)
+                for c in combines:
+                    ret.append([start, *c])
+
+            return ret
+
+        arr = list(range(n + 1))[1:]
+        return dfs(arr, k)
 
 
-def test_solution() -> None:
+def test_combine() -> None:
     solution = Solution()
-    assert solution is not None  # TODO: 实现后替换为真实测试用例（含边界情况）
+
+    # 官方示例 1：n = 4, k = 2（题目允许任意顺序，排序后比较）
+    assert sorted(solution.combine(4, 2)) == [
+        [1, 2],
+        [1, 3],
+        [1, 4],
+        [2, 3],
+        [2, 4],
+        [3, 4],
+    ]
+
+    # 官方示例 2：n = 1, k = 1
+    assert sorted(solution.combine(1, 1)) == [[1]]
+
+    # 边界：k = 1，每个数单独成组
+    assert sorted(solution.combine(3, 1)) == [[1], [2], [3]]
+
+    # 边界：k = n，只能全选
+    assert sorted(solution.combine(3, 3)) == [[1, 2, 3]]
+
+    # 规模较大：C(5, 3) = 10 个组合
+    assert sorted(solution.combine(5, 3)) == [
+        [1, 2, 3],
+        [1, 2, 4],
+        [1, 2, 5],
+        [1, 3, 4],
+        [1, 3, 5],
+        [1, 4, 5],
+        [2, 3, 4],
+        [2, 3, 5],
+        [2, 4, 5],
+        [3, 4, 5],
+    ]
+
+    # 组合数量与数学组合数一致
+    assert len(solution.combine(6, 2)) == comb(6, 2)
+    assert len(solution.combine(10, 5)) == comb(10, 5)
 
 
 if __name__ == "__main__":
     s = Solution()
-    print("TODO: 实现后运行", s.combine(4, 2))
+    print(s.combine(4, 2))
