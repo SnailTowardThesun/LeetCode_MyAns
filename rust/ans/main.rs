@@ -2093,7 +2093,7 @@ fn is_valid_bst(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
         }
         true
     }
-    valid(root, std::i64::MIN, std::i64::MAX)
+    valid(root, i64::MIN, i64::MAX)
 }
 
 #[test]

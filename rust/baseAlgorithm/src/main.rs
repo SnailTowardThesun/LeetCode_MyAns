@@ -1,7 +1,9 @@
+// 基础算法练习：函数仅由 #[test] 驱动验证，main 不直接调用，故允许 dead_code
+#![allow(dead_code)]
 /**
  * bubble sort
  */
-fn bubbleSort(array: Vec<i32>) -> Vec<i32> {
+fn bubble_sort(array: Vec<i32>) -> Vec<i32> {
     let mut array = array;
     for i in 0..(array.len() - 1) {
         for j in 0..(array.len() - 1 - i) {
@@ -17,7 +19,7 @@ fn bubbleSort(array: Vec<i32>) -> Vec<i32> {
 #[test]
 fn test_bubble_sort() {
     let demo = vec![3, 5, 6, 1, 0, 2, 9];
-    let array = bubbleSort(demo);
+    let array = bubble_sort(demo);
 
     for number in &array {
         println!("{}", number);
@@ -27,7 +29,7 @@ fn test_bubble_sort() {
 /**
  * select sort
  */
-fn selectSort(array: Vec<i32>) -> Vec<i32> {
+fn select_sort(array: Vec<i32>) -> Vec<i32> {
     let mut array = array;
 
     for i in 0..array.len() {
@@ -44,7 +46,7 @@ fn selectSort(array: Vec<i32>) -> Vec<i32> {
 #[test]
 fn test_select_sort() {
     let demo = vec![3, 5, 6, 1, 0, 2, 10, 9];
-    let array = selectSort(demo);
+    let array = select_sort(demo);
 
     for number in &array {
         println!("{}", number);
@@ -54,7 +56,7 @@ fn test_select_sort() {
 /**
  * insertion sort
  */
-fn insertionSort(array: Vec<i32>) -> Vec<i32> {
+fn insertion_sort(array: Vec<i32>) -> Vec<i32> {
     let mut array = array;
 
     for i in 1..array.len() {
@@ -71,7 +73,7 @@ fn insertionSort(array: Vec<i32>) -> Vec<i32> {
 #[test]
 fn test_insertion_sort() {
     let demo = vec![3, 5, 6, 1, 0, 2, 10, 9];
-    let array = insertionSort(demo);
+    let array = insertion_sort(demo);
 
     for number in &array {
         println!("{}", number);
@@ -81,15 +83,15 @@ fn test_insertion_sort() {
 /**
  * merge sort
  */
-fn mergeSort(array: Vec<i32>) -> Vec<i32> {
-    let mut array = array;
+fn merge_sort(array: Vec<i32>) -> Vec<i32> {
+    let array = array;
     let mid = array.len() / 2;
     if mid == 0 {
         return array;
     }
 
-    let mut left_array = mergeSort(array[..mid].to_owned());
-    let mut right_array = mergeSort(array[mid..].to_owned());
+    let left_array = merge_sort(array[..mid].to_owned());
+    let right_array = merge_sort(array[mid..].to_owned());
 
     let mut left = 0; // Head of left pile.
     let mut right = 0; // Head of right pile.
@@ -124,7 +126,7 @@ fn mergeSort(array: Vec<i32>) -> Vec<i32> {
 #[test]
 fn test_merge_sort() {
     let demo = vec![3, 5, 6, 1, 0, 2, 10, 9];
-    let array = mergeSort(demo);
+    let array = merge_sort(demo);
 
     for number in &array {
         println!("{}", number);
@@ -134,7 +136,7 @@ fn test_merge_sort() {
 /**
  * quick sort
  */
-fn quickSort(array: &mut [i32]) {
+fn quick_sort(array: &mut [i32]) {
     let n = array.len();
     if n > 1 {
         let mut j = 0;
@@ -145,15 +147,15 @@ fn quickSort(array: &mut [i32]) {
             }
         }
         array.swap(j, n - 1); // pivot
-        quickSort(&mut array[0..j]);
-        quickSort(&mut array[j + 1..n]);
+        quick_sort(&mut array[0..j]);
+        quick_sort(&mut array[j + 1..n]);
     }
 }
 
 #[test]
 fn test_quick_sort() {
     let mut demo = vec![3, 5, 6, 1, 0, 2, 10, 9];
-    quickSort(&mut demo);
+    quick_sort(&mut demo);
     println!("{:?}", demo);
 }
 
@@ -181,7 +183,7 @@ impl TreeNode {
 /**
  * binary tree: pre-order
  */
-fn binaryTreePreOrder(root: Option<Rc<RefCell<TreeNode>>>) {
+fn binary_tree_pre_order(root: Option<Rc<RefCell<TreeNode>>>) {
     if let Some(node) = root.clone().unwrap().borrow().left.clone() {
         println!("{}", node.borrow().val);
     }
@@ -197,7 +199,7 @@ fn test_binary_tree_pre_order() {
     root.clone().borrow_mut().left = Some(Rc::new(RefCell::new(TreeNode::new(4))));
     root.clone().borrow_mut().right = Some(Rc::new(RefCell::new(TreeNode::new(6))));
 
-    binaryTreePreOrder(Some(root))
+    binary_tree_pre_order(Some(root))
 }
 
 struct UnionFind {
