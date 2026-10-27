@@ -12,18 +12,17 @@
 
 ```
 rust/
-├── ans/                       # 主答案 crate
-│   ├── questions/             # 每日一题（按题号命名，与 cplusplus/questions/、python/questions/ 对应）
-│   │   ├── 1.rs               # No.1 两数之和
-│   │   ├── 25.rs              # No.25 K 个一组翻转链表
-│   │   ├── ...
-│   │   ├── _template.rs       # 新题模板（不注册到 mod.rs，不参与编译）
-│   │   └── mod.rs             # #[path] 把 q<题号> 模块映射到 <题号>.rs
-│   ├── leetcode_common.rs     # 公共数据结构（对应 cplusplus/leetcode_common.h、python/leetcode_common/）
-│   ├── extras.rs              # 附加练习（无题号的历史题目）
-│   ├── main.rs                # crate 根，仅声明模块
-│   └── Cargo.toml
+├── questions/                 # 每日一题（按题号命名，与 cplusplus/questions/、python/questions/ 对应）
+│   ├── 1.rs                   # No.1 两数之和
+│   ├── 25.rs                  # No.25 K 个一组翻转链表
+│   ├── ...
+│   ├── _template.rs           # 新题模板（不注册到 mod.rs，不参与编译）
+│   └── mod.rs                 # #[path] 把 q<题号> 模块映射到 <题号>.rs
+├── leetcode_common.rs         # 公共数据结构（对应 cplusplus/leetcode_common.h、python/leetcode_common/）
+├── extras.rs                  # 附加练习（无题号的历史题目）
+├── main.rs                    # crate 根（[lib] path），仅声明模块
 ├── baseAlgorithm/             # 基础算法练习 crate（排序 / 并查集 / 树遍历）
+├── Cargo.toml                 # 根包 ans + workspace（members: baseAlgorithm）
 └── README.md                  # 项目说明文档
 ```
 

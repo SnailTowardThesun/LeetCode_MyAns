@@ -1,2 +1,19 @@
+# 根包即题解主模块（原 ans crate，已平移至 rust/ 根目录，与 cplusplus/、python/ 的 questions/ 布局一致）
+# default-members 让裸 cargo build/test 仍然覆盖全部成员（原虚拟 workspace 的行为）
 [workspace]
-members=["ans", "baseAlgorithm"]
+members = ["baseAlgorithm"]
+default-members = [".", "baseAlgorithm"]
+
+[package]
+name = "ans"
+version = "0.1.0"
+authors = ["ME_Kun_Han <hanvskun@hotmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+path = "main.rs"
+
+[dependencies]
+rand = "0.8.5"

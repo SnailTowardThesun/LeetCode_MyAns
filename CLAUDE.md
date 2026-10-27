@@ -18,8 +18,9 @@ LeetCode 算法题解集合，包含 C++、Rust 和 Python 三种语言的实现
 │   ├── top150/            # 面试经典 150 题（top150_题号.cpp，按分类分子目录）
 │   ├── leetcode_common.h  # 通用 ListNode/TreeNode 定义（唯一来源）
 │   └── CMakeLists.txt     # CMake 构建配置（全部 .cpp 链接进同一个 tests）
-├── rust/                  # Rust 算法题解
-│   ├── ans/               # 主答案模块（questions/ 内按题号命名 .rs）
+├── rust/                  # Rust 算法题解（根包 ans + workspace）
+│   ├── questions/         # 每日一题（题号.rs）+ _template.rs 模板
+│   ├── leetcode_common.rs # 通用数据结构 ListNode/TreeNode
 │   └── baseAlgorithm/     # 基础算法练习（src/main.rs）
 ├── python/                # Python 算法题解（uv 管理）
 │   ├── leetcode_common/   # 通用数据结构 ListNode/TreeNode
@@ -123,7 +124,7 @@ uv run python new_question.py 219 "存在重复元素 II"
 ### 文件组织
 
 - **C++ 源文件**: 每日一题一个 `.cpp` 文件，按题号命名（如 `2089.cpp`）；Top150 命名为 `top150_题号.cpp`，放入 top150/ 对应分类子目录
-- **Rust 模块**: 按题号命名 `.rs` 文件（如 `2389.rs`），放在 `ans/questions/`
+- **Rust 模块**: 按题号命名 `.rs` 文件（如 `2389.rs`），放在 `questions/`（rust/ 根目录）
 - **测试文件**: C++ 测试写在题解同文件（`TEST(Daily, 题号)`），Rust/Python 测试与源码放在一起
 
 ### 代码结构
@@ -161,7 +162,7 @@ uv run python new_question.py 219 "存在重复元素 II"
 
 ### Rust Cargo 配置
 
-- **工作区**: 包含 `ans` 和 `baseAlgorithm` 两个成员
+- **工作区**: 根包 `ans`（题解主模块，位于 rust/ 根目录）+ 成员 `baseAlgorithm`
 - **依赖**: 标准库为主，必要时添加外部 crate
 
 ## Tips
