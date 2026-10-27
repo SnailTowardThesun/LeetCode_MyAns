@@ -27,12 +27,25 @@
 // 输入：equations = [["a","b"]], values = [0.5],
 //       queries = [["a","b"],["b","a"],["a","c"],["x","y"]]
 // 输出：[0.50000,2.00000,-1.00000,-1.00000]
+//
+// @解题思路:
+// 带权并查集。不变量：weight[x] = x 的值 / parent[x] 的值，根的 weight 恒为 1。
+// 1. 字符串变量 → 下标：扫一遍 equations，给每个首次出现的变量分配递增编号（map）；
+// 2. find 路径压缩时权值同步累乘：先记旧父亲 p，递归 find(p) 归来后
+//    weight[p] 已刷新为「p 相对根」的比值，于是 weight[x] *= weight[p]，
+//    再把 parent[x] 直挂根（先挂根后累乘亦可：改 parent 不动 weight，两序等价）；
+// 3. unit（合并）：由 a / b = v 推出两根之间的比值——固定把 root_x 挂到 root_y 下，
+//    weight[root_x] = v * weight[y] / weight[x]（用节点自己的权值，根的权值恒为 1）；
+// 4. 查询：任一变量不在编号表、或 find 后两根不同 → -1.0；
+//    同根 → weight[c] / weight[d]（a / a 自然得 1.0，无需特判）。
+//
+// 复杂度分析：
+// - 时间复杂度：O((E + Q)·α(V))，E 等式数、Q 查询数、V 变量数（≤ 2E），α 为反阿克曼函数
+// - 空间复杂度：O(V)（parent / weight 数组 + 编号 map）
 
 #include <gtest/gtest.h>
 
-#include <algorithm>
-#include <cstdlib>
-#include <locale>
+#include <map>
 #include <string>
 #include <vector>
 
@@ -41,38 +54,38 @@ using namespace std;
 // 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
 namespace {
 class UnionFind {
-    public:
-        vector<int> parent;
-        vector<double> weight;
+   public:
+    vector<int> parent;
+    vector<double> weight;
 
-        UnionFind(int n) {
-            for (int i = 0; i < n; i++) {
-                parent.emplace_back(i);
-                weight.emplace_back(1.0);
-            }
+    UnionFind(int n) {
+        for (int i = 0; i < n; i++) {
+            parent.emplace_back(i);
+            weight.emplace_back(1.0);
+        }
+    }
+
+    int find(int x) {
+        if (parent[x] != x) {
+            int p = parent[x];
+            int root = find(p);
+
+            parent[x] = root;
+            weight[x] = weight[x] * weight[p];
+        }
+        return parent[x];
+    }
+
+    void unit(int x, int y, double v) {
+        int root_x = find(x);
+        int root_y = find(y);
+        if (root_x == root_y) {
+            return;
         }
 
-        int find(int x) {
-            if (parent[x] != x) {
-                int p = parent[x];
-                int root = find(p);
-
-                parent[x] = root;
-                weight[x] = weight[x] * weight[p];
-            }
-            return parent[x];
-        }
-
-        void unit(int x, int y, double v){
-            int root_x = find(x);
-            int root_y = find(y);
-            if (root_x == root_y) {
-                return ;
-            }
-
-            parent[root_x] = root_y;
-            weight[root_x] = v * weight[y] / weight[x];
-        }
+        parent[root_x] = root_y;
+        weight[root_x] = v * weight[y] / weight[x];
+    }
 };
 class Solution {
    public:
@@ -114,7 +127,7 @@ class Solution {
 };
 }  // namespace
 
-TEST(top150, 399) {
+TEST(TOP150, 399) {
     Solution s;
 
     // 官方示例 1：a/b=2, b/c=3 → a/c=6；a/a=1；e、x 未定义 → -1
