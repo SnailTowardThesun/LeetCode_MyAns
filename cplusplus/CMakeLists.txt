@@ -15,6 +15,9 @@ FetchContent_MakeAvailable(googletest)
 # compile params
 set(CMAKE_CXX_FLAGS "-g -std=c++20 -Wall")
 
+# 导出 compile_commands.json 到 build/，供 clangd（Zed）正确解析代码
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # 每日一题：CONFIGURE_DEPENDS 让新增 .cpp 后仅执行 make 即可自动重新收集并编译
 set(TEST_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/questions)
 file(GLOB TEST_FILES CONFIGURE_DEPENDS "${TEST_SRC_DIR}/*.cpp")
