@@ -29,18 +29,9 @@
  * - 时间复杂度: O(n)，收集、反转、重建各一遍
  * - 空间复杂度: O(n)，用于存储节点值数组
  */
-
-struct ListNode {
-    val: i32,
-    next: Option<Box<ListNode>>,
-}
-
-impl ListNode {
-    #[inline]
-    fn new(val: i32) -> Self {
-        ListNode { val, next: None }
-    }
-}
+use crate::leetcode_common::ListNode;
+#[cfg(test)]
+use crate::leetcode_common::{make_list, to_vals};
 
 fn reverse_k_group(head: Option<Box<ListNode>>, k: i32) -> Option<Box<ListNode>> {
     // 收集所有节点值
@@ -73,27 +64,6 @@ fn reverse_k_group(head: Option<Box<ListNode>>, k: i32) -> Option<Box<ListNode>>
     }
 
     return ret;
-}
-
-/// 根据值数组构造链表，返回头节点
-fn make_list(vals: &[i32]) -> Option<Box<ListNode>> {
-    let mut head: Option<Box<ListNode>> = None;
-    for &v in vals.iter().rev() {
-        let mut node = ListNode::new(v);
-        node.next = head;
-        head = Some(Box::new(node));
-    }
-    head
-}
-
-/// 把链表展开成值数组，便于断言
-fn to_vals(mut head: Option<Box<ListNode>>) -> Vec<i32> {
-    let mut vals = Vec::new();
-    while let Some(node) = head {
-        vals.push(node.val);
-        head = node.next;
-    }
-    vals
 }
 
 #[test]

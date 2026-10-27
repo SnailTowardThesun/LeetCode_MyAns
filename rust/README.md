@@ -1,84 +1,51 @@
 # Rust 算法题解
 
-本目录包含使用 Rust 语言实现的 LeetCode 算法题解。
+本目录包含使用 Rust 语言实现的 LeetCode 算法题解，文件组织与 `cplusplus/`、`python/` 保持一致。
 
 ## 技术栈
 
-- **语言**: Rust 最新稳定版
-- **依赖**: 标准库为主，必要时使用外部 crate
+- **语言**: Rust 最新稳定版（Cargo Workspace）
+- **依赖**: 标准库为主，必要时使用外部 crate（如 `rand`）
 - **测试**: Rust 内置测试框架
 
 ## 代码结构
 
 ```
 rust/
-├── ans/                    # 主答案模块
-│   ├── questions/          # 每日一题（按题目编号命名）
-│   │   ├── 1615.rs
-│   │   └── 2389.rs
-│   ├── top150/             # 面试经典 150 题
-│   │   ├── array/          # 数组相关题目
-│   │   └── string/         # 字符串相关题目
-│   ├── main.rs             # 经典算法题实现
-│   └── Cargo.toml          # 项目配置文件
-├── baseAlgorithm/          # 基础算法练习
-│   ├── src/
-│   │   └── main.rs
+├── ans/                       # 主答案 crate
+│   ├── questions/             # 每日一题（按题号命名，与 cplusplus/questions/、python/questions/ 对应）
+│   │   ├── 1.rs               # No.1 两数之和
+│   │   ├── 25.rs              # No.25 K 个一组翻转链表
+│   │   ├── ...
+│   │   ├── _template.rs       # 新题模板（不注册到 mod.rs，不参与编译）
+│   │   └── mod.rs             # #[path] 把 q<题号> 模块映射到 <题号>.rs
+│   ├── leetcode_common.rs     # 公共数据结构（对应 cplusplus/leetcode_common.h、python/leetcode_common/）
+│   ├── extras.rs              # 附加练习（无题号的历史题目）
+│   ├── main.rs                # crate 根，仅声明模块
 │   └── Cargo.toml
-└── README.md               # 项目说明文档
+├── baseAlgorithm/             # 基础算法练习 crate（排序 / 并查集 / 树遍历）
+└── README.md                  # 项目说明文档
 ```
+
+## 约定
+
+- **每日一题**: 一题一文件 `questions/<题号>.rs`，注释头包含 `@题目描述` / `@示例` / `@解题思路`
+- **公共数据结构**: `ListNode` / `TreeNode` 及构造工具统一 `use crate::leetcode_common::...` 引入，禁止在题解文件中重复定义
+- **跨题复用**: 被其他题引用的函数（如 `q51::solve_n_queens`、`q56::merge`、`q547::OrderedUnion`）声明为 `pub`，用 `use super::q<题号>::...` 引入
+- **命名规范**: 函数/变量 `snake_case`，结构体/枚举 `PascalCase`
+- **新题**: 复制 `questions/_template.rs` 为 `<题号>.rs`，并在 `questions/mod.rs` 中注册
 
 ## 编译与运行
 
-### 构建项目
-
 ```bash
-# 进入 Rust 项目目录
 cd rust
 
-# 构建所有模块
-cargo build
-
-# 构建特定模块
-cd ans
-cargo build
+cargo build              # 构建所有模块（0 警告）
+cargo test               # 运行全部测试
+cargo test q1            # 运行单题测试（如 No.1）
+cargo fmt                # 格式化
+cargo clippy             # 静态检查
 ```
-
-### 运行测试
-
-```bash
-# 运行所有测试
-cargo test
-
-# 运行特定测试
-cargo test test_two_sum
-
-# 运行特定文件的测试
-cargo test --test main
-```
-
-### 代码格式化
-
-```bash
-# 格式化代码
-cargo fmt
-
-# 检查代码
-cargo clippy
-```
-
-## 代码规范
-
-- **命名规范**:
-  - 函数名: `snake_case`
-  - 结构体/枚举: `PascalCase`
-  - 常量: `SCREAMING_SNAKE_CASE`
-- **文档**: 使用 `///` 为公共 API 添加文档注释
-- **测试**: 使用 `#[test]` 属性标记测试函数
-- **文件组织**:
-  - 每日一题: 按题目编号命名文件（如 `1615.rs`）
-  - 面试经典 150 题: 按类型分类存放在对应子目录中
-  - 经典算法题: 存放在 `main.rs` 文件中
 
 ## 注意事项
 
@@ -90,4 +57,4 @@ cargo clippy
 
 - [Rust 官方文档](https://doc.rust-lang.org/)
 - [LeetCode 官网](https://leetcode.com/)
-- [Rust 编程实战](https://kaisery.github.io/trpl-zh-cn/)
+- [Rust 语言圣经](https://kaisery.github.io/trpl-zh-cn/)
