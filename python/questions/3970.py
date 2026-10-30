@@ -45,6 +45,8 @@
     3. 边权 wi >= 1 全为正，Dijkstra 的贪心成立：终点 n-1 第一次出堆的代价即答案
        （堆按代价有序，先出堆的更小）。堆耗尽仍没到终点则返回 -1。
     4. 起点状态 (0, 1) 代价 0；n == 1 时起点即终点，答案 0。
+    5. 分层图中的走法允许重复经过节点（非简单路径）：借环里的异字符打断连续段有时是唯一合法
+       走法，只枚举简单路径会漏解（见测试中的绕环用例）。
 
     时间复杂度 O(E*k*log(n*k))，空间复杂度 O(n*k + E)
     状态共 n*k 个（5e4*50 = 2.5e6），每条边在每个尾段长下至多松弛一次。
@@ -54,32 +56,31 @@
 """
 
 import heapq
+from math import inf
 
 
 class Solution:
     def shortestPath(self, n: int, edges: list[list[int]], labels: str, k: int) -> int:
-        adj: list[list[tuple[int, int]]] = [[] for _ in range(n)]
-        for u, v, w in edges:
-            adj[u].append((v, w))
+        graph = [[] for _ in range(n)]
+        for x, y, w in edges:
+            graph[x].append((y, w))
 
-        INF = float("inf")
-        # dist[v][r]：到达 v 且尾部连续段长恰为 r 的最小总边权（r 取 1..k，下标 0 弃用）
-        dist = [[INF] * (k + 1) for _ in range(n)]
-        dist[0][1] = 0
-        heap = [(0, 0, 1)]  # (总边权, 节点, 尾部连续段长)
-        while heap:
-            d, u, r = heapq.heappop(heap)
-            if d > dist[u][r]:
-                continue  # 惰性删除：堆里残留的过期条目
-            if u == n - 1:
-                return d  # 终点首次出堆即最小，可提前返回
-            for v, w in adj[u]:
-                nr = r + 1 if labels[v] == labels[u] else 1  # 同字符接长，异字符重开
-                if nr > k:
-                    continue  # 这一步会凑出 k+1 个连续相同字符，禁止
-                if d + w < dist[v][nr]:
-                    dist[v][nr] = d + w
-                    heapq.heappush(heap, (d + w, v, nr))
+        dis = [[inf] * (k + 1) for _ in range(n)]
+        dis[0][1] = 0  # 起点状态入堆前先落表，绕环回到起点的走法不会重复松弛
+        h = [(0, 0, 1)]
+        while h:
+            d, x, cnt = heapq.heappop(h)
+            if x == n - 1:
+                return d
+            if d > dis[x][cnt]:
+                continue
+            for y, w in graph[x]:
+                new_cnt = 1 if labels[y] != labels[x] else cnt + 1
+                new_dis = d + w
+                if new_cnt <= k and new_dis < dis[y][new_cnt]:
+                    dis[y][new_cnt] = new_dis
+                    heapq.heappush(h, (new_dis, y, new_cnt))
+
         return -1
 
 
@@ -103,6 +104,30 @@ def test_solution() -> None:
     assert solution.shortestPath(2, [[0, 1, 7], [0, 1, 3]], "ab", 1) == 3
     # 权值上界也不影响正确性
     assert solution.shortestPath(3, [[0, 1, 10000], [1, 2, 10000]], "abc", 50) == 20000
+    # 有向边方向陷阱：只有 1→0 的边，0 走不到 1（邻接表按 u→v 建，反向无法通行）
+    assert solution.shortestPath(2, [[1, 0, 1]], "ab", 5) == -1
+    # 非简单路径：最优解 0→1→2→1→3（权 4）会重复经过节点 1，借环里的 'b' 打断 a,a,a；
+    # 只枚举简单路径的解法会误判 -1——分层 Dijkstra 允许重访节点，天然正确
+    assert solution.shortestPath(4, [[0, 1, 1], [1, 2, 1], [2, 1, 1], [1, 3, 1]], "aaba", 2) == 4
+    # 随机小图（期望值经独立参考实现 + 全走法有界枚举双重验证）
+    assert (
+        solution.shortestPath(
+            6, [[1, 0, 2], [1, 5, 9], [3, 4, 9], [0, 5, 4], [5, 2, 2], [0, 4, 8], [0, 4, 2]], "bbccab", 3
+        )
+        == 4
+    )
+    assert (
+        solution.shortestPath(
+            4, [[1, 3, 7], [1, 3, 1], [0, 3, 1], [2, 3, 2], [2, 3, 1], [3, 0, 3], [2, 0, 1]], "bbbc", 1
+        )
+        == 1
+    )
+    assert (
+        solution.shortestPath(
+            4, [[1, 0, 1], [1, 0, 8], [0, 3, 8], [0, 1, 4], [2, 1, 2], [1, 0, 1], [1, 3, 7]], "bcbc", 1
+        )
+        == 8
+    )
 
 
 if __name__ == "__main__":
