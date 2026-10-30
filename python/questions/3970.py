@@ -1,0 +1,110 @@
+"""
+@file 3970.py
+@brief LeetCode 3970. 最多 K 个连续相同字符的最短路径（Shortest Path With At Most K Consecutive Identical Characters）
+
+@题目描述
+    给定一个含 n 个节点的有向加权图（节点编号 0 到 n-1），edges[i] = [ui, vi, wi] 表示一条
+    从 ui 指向 vi、权值为 wi 的有向边。另给定长度为 n 的字符串 labels（labels[i] 为节点 i 的
+    字符标签）和整数 k。
+    从节点 0 走到节点 n-1，要求路径上所有节点的标签按顺序拼接后，任意连续相同字符的个数都
+    不超过 k。返回满足约束的路径的最小总边权；不存在合法路径返回 -1。
+
+@示例
+    示例 1：
+    输入：n = 3, edges = [[0,1,1],[1,2,1],[0,2,3]], labels = "aab", k = 1
+    输出：3
+    解释：0→1→2 总权只有 2，但标签拼成 "aab" 出现 2 个连续 'a'，超过 k=1；
+    只能直走 0→2（权 3），标签 "ab" 只有 1 个连续字符，合法。
+
+    示例 2：
+    输入：n = 3, edges = [[0,1,1],[1,2,1],[0,2,3]], labels = "aab", k = 2
+    输出：2
+    解释：0→1→2 标签 "aab" 连续 'a' 恰为 2 个，不超过 k=2，总权 1+1=2。
+
+    示例 3：
+    输入：n = 3, edges = [[0,1,1],[1,2,1]], labels = "aaa", k = 2
+    输出：-1
+    解释：唯一路径 0→1→2 的标签为 "aaa"，连续 'a' 有 3 个，无合法路径。
+
+    数据范围：
+    1 <= n == labels.length <= 5 * 1e4
+    0 <= edges.length <= 5 * 1e4
+    0 <= ui, vi <= n-1 且 ui != vi
+    1 <= wi <= 1e4
+    labels 由小写英文字母组成
+    1 <= k <= 50
+
+@解题思路
+    分层图 Dijkstra（把附加约束并入最短路状态）。
+    1. 只以节点为状态跑 Dijkstra 是错的：到达同一节点的不同路径，尾部连续相同字符段长不同，
+       后续哪些边还能走也不同——段长必须随状态携带。
+       状态定义为 (节点 v, r)，r = 到达 v 时以 labels[v] 结尾的连续段长度，取值 1..k。
+    2. 转移：沿边 u→v（权 w）从状态 (u, r) 出发——
+       labels[v] == labels[u] 时新段长 r+1，超过 k 说明该边在当前状态走不得；
+       labels[v] != labels[u] 时段被字符切换打断，新段长为 1。
+    3. 边权 wi >= 1 全为正，Dijkstra 的贪心成立：终点 n-1 第一次出堆的代价即答案
+       （堆按代价有序，先出堆的更小）。堆耗尽仍没到终点则返回 -1。
+    4. 起点状态 (0, 1) 代价 0；n == 1 时起点即终点，答案 0。
+
+    时间复杂度 O(E*k*log(n*k))，空间复杂度 O(n*k + E)
+    状态共 n*k 个（5e4*50 = 2.5e6），每条边在每个尾段长下至多松弛一次。
+
+来源：LeetCode
+链接：https://leetcode.cn/problems/shortest-path-with-at-most-k-consecutive-identical-characters/description/
+"""
+
+import heapq
+
+
+class Solution:
+    def shortestPath(self, n: int, edges: list[list[int]], labels: str, k: int) -> int:
+        adj: list[list[tuple[int, int]]] = [[] for _ in range(n)]
+        for u, v, w in edges:
+            adj[u].append((v, w))
+
+        INF = float("inf")
+        # dist[v][r]：到达 v 且尾部连续段长恰为 r 的最小总边权（r 取 1..k，下标 0 弃用）
+        dist = [[INF] * (k + 1) for _ in range(n)]
+        dist[0][1] = 0
+        heap = [(0, 0, 1)]  # (总边权, 节点, 尾部连续段长)
+        while heap:
+            d, u, r = heapq.heappop(heap)
+            if d > dist[u][r]:
+                continue  # 惰性删除：堆里残留的过期条目
+            if u == n - 1:
+                return d  # 终点首次出堆即最小，可提前返回
+            for v, w in adj[u]:
+                nr = r + 1 if labels[v] == labels[u] else 1  # 同字符接长，异字符重开
+                if nr > k:
+                    continue  # 这一步会凑出 k+1 个连续相同字符，禁止
+                if d + w < dist[v][nr]:
+                    dist[v][nr] = d + w
+                    heapq.heappush(heap, (d + w, v, nr))
+        return -1
+
+
+def test_solution() -> None:
+    solution = Solution()
+    # 官方示例
+    assert solution.shortestPath(3, [[0, 1, 1], [1, 2, 1], [0, 2, 3]], "aab", 1) == 3  # 便宜路径被约束封死
+    assert solution.shortestPath(3, [[0, 1, 1], [1, 2, 1], [0, 2, 3]], "aab", 2) == 2  # k 放宽后便宜路径恢复合法
+    assert solution.shortestPath(3, [[0, 1, 1], [1, 2, 1]], "aaa", 2) == -1  # 唯一路径 "aaa" 连续段 3 > 2
+    # 边界：起点即终点 / 完全不可达
+    assert solution.shortestPath(1, [], "a", 1) == 0
+    assert solution.shortestPath(2, [], "ab", 5) == -1
+    # 核心：为什么状态必须带段长——同一节点便宜的到达方式段长已满，贵的反而走得通
+    # 0→1 便宜（代价 1）但 "aa" 段长 2，再接 1→3 就是 3 个 'a'；绕 0→2→1 段长归 1，才能接最后的 'a'
+    assert solution.shortestPath(4, [[0, 1, 1], [0, 2, 5], [2, 1, 1], [1, 3, 1]], "aaba", 2) == 7
+    assert solution.shortestPath(4, [[0, 1, 1], [0, 2, 5], [2, 1, 1], [1, 3, 1]], "aaba", 3) == 2  # "aaa" 放行
+    # 换字符重开段：段满时绕一个异字符节点把段打断
+    assert solution.shortestPath(4, [[0, 1, 1], [1, 2, 1], [0, 2, 3], [2, 3, 1]], "aaab", 2) == 4  # "aa" 段满，绕 b
+    assert solution.shortestPath(4, [[0, 1, 1], [1, 2, 1], [0, 2, 3], [2, 3, 1]], "aaab", 3) == 3  # 直行 0→1→2→3
+    # 重复边取较优者（题目不禁止重边，Dijkstra 天然正确）
+    assert solution.shortestPath(2, [[0, 1, 7], [0, 1, 3]], "ab", 1) == 3
+    # 权值上界也不影响正确性
+    assert solution.shortestPath(3, [[0, 1, 10000], [1, 2, 10000]], "abc", 50) == 20000
+
+
+if __name__ == "__main__":
+    test_solution()
+    print("✅ No.3970 全部测试通过")
