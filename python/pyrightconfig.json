@@ -1,0 +1,6 @@
+{
+  "venvPath": ".",
+  "venv": ".venv",
+  "include": ["questions", "top150", "leetcode_common", "new_question.py"],
+  "typeCheckingMode": "basic"
+}
