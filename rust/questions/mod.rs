@@ -310,3 +310,6 @@ pub mod q3551;
 
 #[path = "3723.rs"]
 pub mod q3723;
+
+#[path = "3736.rs"]
+pub mod q3736;

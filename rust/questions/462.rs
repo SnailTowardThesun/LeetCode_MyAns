@@ -1,4 +1,4 @@
-/**
+/*
  * @file 462.rs
  * @brief LeetCode 462. 最小操作次数使数组元素相等 II（Minimum Moves to Equal Array Elements II）
  *
