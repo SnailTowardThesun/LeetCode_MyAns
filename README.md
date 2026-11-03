@@ -6,6 +6,8 @@ Here's my code of leetcode
 
 本仓库使用 Turborepo 进行代码管理，支持以下命令：
 
+构建任务每次都会调用底层工具，由 CMake/Cargo 自身处理增量构建，并确保 `uv sync` 检查本机环境；不缓存这些依赖本机路径的产物。`lint` 包含原地格式化，同样每次执行。
+
 ### 安装依赖
 ```bash
 npm install

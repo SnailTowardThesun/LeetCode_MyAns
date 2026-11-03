@@ -61,6 +61,7 @@ coverage/
 
 # Package manager files
 node_modules/
+.turbo/
 package-lock.json
 
 # Python (uv)

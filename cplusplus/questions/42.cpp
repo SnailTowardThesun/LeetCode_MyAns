@@ -36,6 +36,9 @@
 
 #include <gtest/gtest.h>
 
+#include <algorithm>
+#include <vector>
+
 using namespace std;
 
 // 匿名命名空间：提供内部链接，避免与其他题解文件中同名 Solution 的 ODR 冲突
@@ -44,17 +47,17 @@ class Solution {
    public:
     int trap(int A[], int n) {
         if (n < 3) return 0;
-        int pt = 0, pb = n - 1, com = 0, result = 0, tmp = 0;
-        while (pt < pb) {
-            if (A[pt] > com && A[pb] > com) {
-                com = A[pt] < A[pb] ? A[pt] : A[pb];
-                for (int i = pt + 1; i < pb; i++) {
-                    int ii = A[i];
-                    result += com < A[i] ? 0 : com - (A[i] < tmp ? tmp : A[i]);
-                }
-                tmp = com;
+        int left = 0, right = n - 1;
+        int left_max = 0, right_max = 0, result = 0;
+        while (left < right) {
+            // 较低一侧的水位由本侧最大高度决定，每个位置只结算一次。
+            if (A[left] <= A[right]) {
+                left_max = max(left_max, A[left]);
+                result += left_max - A[left++];
+            } else {
+                right_max = max(right_max, A[right]);
+                result += right_max - A[right--];
             }
-            A[pt] < A[pb] ? pt++ : pb--;
         }
         return result;
     }
@@ -75,4 +78,29 @@ TEST(Daily, 42) {
     // 测试用例 3
     int A3[] = {1, 0, 1};
     EXPECT_EQ(s.trap(A3, 3), 1);
+
+    EXPECT_EQ(s.trap(nullptr, 0), 0);
+    int flat[] = {2, 2, 2};
+    EXPECT_EQ(s.trap(flat, 3), 0);
+
+    // 两侧逐层升高的斜坡会让旧实现反复扫描内部；水量为 10000 的平方。
+    vector<int> valley;
+    for (int h = 10000; h >= 0; --h) valley.push_back(h);
+    for (int h = 1; h <= 10000; ++h) valley.push_back(h);
+    EXPECT_EQ(s.trap(valley.data(), static_cast<int>(valley.size())), 100000000);
+
+    // 穷举小数组，与逐列计算左右最高柱子的参照算法比较。
+    for (int mask = 0; mask < 4096; ++mask) {
+        int heights[6], encoded = mask, expected = 0;
+        for (int& h : heights) {
+            h = encoded % 4;
+            encoded /= 4;
+        }
+        for (int i = 0; i < 6; ++i) {
+            int lmax = *max_element(heights, heights + i + 1);
+            int rmax = *max_element(heights + i, heights + 6);
+            expected += min(lmax, rmax) - heights[i];
+        }
+        EXPECT_EQ(s.trap(heights, 6), expected);
+    }
 }

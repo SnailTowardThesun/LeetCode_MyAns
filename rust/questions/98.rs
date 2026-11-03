@@ -17,7 +17,7 @@ use std::cell::RefCell;
 use std::rc::Rc;
 
 fn is_valid_bst(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
-    fn valid(node: Option<Rc<RefCell<TreeNode>>>, max: i64, min: i64) -> bool {
+    fn valid(node: Option<Rc<RefCell<TreeNode>>>, min: i64, max: i64) -> bool {
         if let Some(node) = node {
             if node.borrow().val as i64 <= min || node.borrow().val as i64 >= max {
                 return false;
@@ -31,6 +31,25 @@ fn is_valid_bst(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
 }
 
 #[test]
-fn test_unique_binary_search_trees_ii() {
-    is_valid_bst(None);
+fn test_is_valid_bst() {
+    fn node(val: i32) -> Rc<RefCell<TreeNode>> {
+        Rc::new(RefCell::new(TreeNode::new(val)))
+    }
+
+    assert!(is_valid_bst(None));
+    assert!(is_valid_bst(Some(node(2))));
+    let root = node(2);
+    root.borrow_mut().left = Some(node(1));
+    root.borrow_mut().right = Some(node(3));
+    assert!(is_valid_bst(Some(root.clone())));
+
+    // 子节点必须满足所有祖先的边界，而不只是直接父节点。
+    root.borrow_mut().right.as_ref().unwrap().borrow_mut().left = Some(node(0));
+    assert!(!is_valid_bst(Some(root.clone())));
+    root.borrow_mut().right.as_ref().unwrap().borrow_mut().left = Some(node(2));
+    assert!(!is_valid_bst(Some(root)));
+
+    let root = node(i32::MIN);
+    root.borrow_mut().right = Some(node(i32::MAX));
+    assert!(is_valid_bst(Some(root)));
 }

@@ -53,11 +53,11 @@ using namespace std;
 namespace {
 class Solution {
    public:
-    int myAtoi(char* str) {
-        if (str == NULL) return 0;
+    int myAtoi(const char* str) {
+        if (str == nullptr) return 0;
         bool isPositive = true;
         long long result = 0;
-        const char* ss = (const char*)str;
+        const char* ss = str;
         while (*ss == ' ') ss++;
 
         if (*ss == '+') {
