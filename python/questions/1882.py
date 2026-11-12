@@ -65,8 +65,8 @@
          busy，记录分配结果。
     4. 返回 ret。
 
-    时间复杂度 O((n + m) log n)（每台服务器在两堆间至多进出各一次，每次堆
-    操作 O(log n)）；空间复杂度 O(n)。
+    时间复杂度 O(n + m log(n + 1))：heapify 初始化 O(n)，每项任务使服务器
+    入忙碌堆一次、完成时至多回收一次；辅助空间 O(n)，输出另占 O(m)。
 
 来源：LeetCode
 链接：https://leetcode.cn/problems/process-tasks-using-servers/description/

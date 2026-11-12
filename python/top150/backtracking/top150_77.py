@@ -23,16 +23,13 @@
 
 @解题思路
     组合问题不区分顺序（{1,2} 与 {2,1} 是同一个组合），关键是让路径严格
-    递增以消除重复——本实现用「固定首元素 + 递归后缀」的自顶向下枚举
-    （与 start 指针回溯等价：每个组合由它最小的元素定位）：
+    递增以消除重复——本实现只传下一个候选值 start，共用一条 path：
 
-    1. dfs(arr, k) 返回从 arr 中选 k 个数的全部组合；
-    2. 边界三连：k == 1 时每个元素自成一组；k > len(arr) 时数不够，
-       无解返回 []；k == len(arr) 时只能全选，唯一组合（剪枝）；
-    3. 一般情况：枚举首个元素 s = arr[i]，与 arr[i+1:] 中选 k-1 个的
-       所有组合拼接 [s, *c]——首元素固定后组合天然不重；由于 arr 有序，
-       循环走到「剩余长度恰好等于 k」时后续 i 只剩全选一种，由上面的
-       k == len(arr) 分支兜住；
+    1. path 收满 k 个数时收集副本；
+    2. 设还缺 remaining 个数，当前候选 value 最大只能为 n-remaining+1，
+       否则后面不足 remaining-1 个数，直接剪掉；
+    3. 选择 value 后递归 backtrack(value+1)，返回时弹出它；不切片、
+       不缓存子问题的全部组合，辅助空间只随路径深度增长；
     4. 结果共 C(n, k) 个组合。
 
     时间复杂度 O(C(n,k) x k)（每个组合构造 O(k)）；空间复杂度 O(k)
@@ -45,25 +42,22 @@
 
 class Solution:
     def combine(self, n: int, k: int) -> list[list[int]]:
-        def dfs(arr, k):
-            if k == 1:
-                return [[i] for i in arr]
-            if k > len(arr):
-                return []
-            if k == len(arr):
-                return [arr]
+        ret: list[list[int]] = []
+        path: list[int] = []
 
-            ret = []
-            for i in range(len(arr)):
-                s = arr[i]
-                combs = dfs(arr[i + 1 :], k - 1)
-                for c in combs:
-                    ret.append([s, *c])
+        def backtrack(start: int) -> None:
+            remaining = k - len(path)
+            if remaining == 0:
+                ret.append(path.copy())
+                return
+            # 选 value 后，后面还须留出 remaining - 1 个数。
+            for value in range(start, n - remaining + 2):
+                path.append(value)
+                backtrack(value + 1)
+                path.pop()
 
-            return ret
-
-        arr = list(range(n + 1))[1:]
-        return dfs(arr, k)
+        backtrack(1)
+        return ret
 
 
 def test_solution() -> None:
@@ -88,6 +82,13 @@ def test_solution() -> None:
     result_20_1 = sorted(solution.combine(20, 1))
     assert len(result_20_1) == 20
     assert result_20_1 == [[i] for i in range(1, 21)]
+
+    # ---- 小规模穷举对照标准库，覆盖剪枝上界、漏解与重复解 ----
+    from itertools import combinations
+
+    for n in range(1, 9):
+        for k in range(1, n + 1):
+            assert sorted(map(tuple, solution.combine(n, k))) == list(combinations(range(1, n + 1), k))
 
 
 if __name__ == "__main__":

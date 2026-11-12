@@ -54,8 +54,6 @@
 
 class Solution:
     def countServers(self, grid: list[list[int]]) -> int:
-        # TODO: 行列计数法——先统计 row_cnt / col_cnt，再逐格判定
-        # （row_cnt[i] > 1 or col_cnt[j] > 1 即计入），思路见文件头 @解题思路
         m, n = len(grid), len(grid[0])
 
         row_cnt = [0] * m

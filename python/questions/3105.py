@@ -1,6 +1,6 @@
 """
 @file 3105.py
-@brief LeetCode 3105. 最长严格递增或递减子数组 I（Longest Strictly Increasing or Strictly Decreasing Subarray I）
+@brief LeetCode 3105. 最长的严格递增或递减子数组（Longest Strictly Increasing or Strictly Decreasing Subarray）
 
 @题目描述
     给你一个整数数组 nums，返回 nums 中最长「严格递增」或「严格递减」子数组的长度。

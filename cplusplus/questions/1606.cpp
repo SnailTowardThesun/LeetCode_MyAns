@@ -36,6 +36,7 @@
 #include <gtest/gtest.h>
 
 #include <algorithm>
+#include <functional>
 #include <queue>
 #include <utility>
 #include <vector>
@@ -46,9 +47,10 @@ namespace {
 class Solution {
    public:
     vector<int> busiestServers(int k, vector<int>& arrival, vector<int>& load) {
+        const int n = static_cast<int>(arrival.size());
         vector<int> ret;
-        if (k > arrival.size()) {
-            for (auto i = 0; i < arrival.size(); i++) {
+        if (k > n) {
+            for (int i = 0; i < n; i++) {
                 ret.emplace_back(i);
             }
             return ret;
@@ -61,7 +63,7 @@ class Solution {
 
         priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>> busy;
         vector<int> cnt(k, 0);
-        for (int i = 0; i < arrival.size(); i++) {
+        for (int i = 0; i < n; i++) {
             int time = arrival[i];
             int duration = load[i];
 

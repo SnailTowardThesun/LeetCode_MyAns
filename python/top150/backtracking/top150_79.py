@@ -27,7 +27,7 @@
     输入：board 同示例 1，word = "ABCB"
     输出：false（回到 B 必须复用已走过的格子）
 
-    示例 4：
+    补充示例：
     输入：board = [["a","b"],["c","d"]], word = "abcd"
     输出：false（b 之后无相邻的 c）
 
@@ -55,61 +55,37 @@
 
 class Solution:
     def exist(self, board: list[list[str]], word: str) -> bool:
-        # TODO: 枚举每个等于 word[0] 的格子作为起点，逐一启动 DFS 回溯
-        # TODO: 当前格匹配 word[i] 后向上下左右四方向扩展，尝试匹配 word[i+1]
-        # TODO: 进入格子时原地标记（如置 '#'）防止路径内复用，返回前恢复原字母（撤销选择）
-        # TODO: 匹配到最后一个字符立即返回 True 短路，避免多余搜索
-        def dfs(board, i, j, no, word, visited):
-            m, n = len(board), len(board[0])
-            if no == len(word) - 1:
-                return True
-            no += 1
-            if i + 1 < m:
-                if board[i + 1][j] == word[no] and not visited[i + 1][j]:
-                    visited[i + 1][j] = 1
-                    if dfs(board, i + 1, j, no, word, visited):
-                        return True
-                    visited[i + 1][j] = 0
-            if i - 1 >= 0:
-                if board[i - 1][j] == word[no] and not visited[i - 1][j]:
-                    visited[i - 1][j] = 1
-                    if dfs(board, i - 1, j, no, word, visited):
-                        return True
-                    visited[i - 1][j] = 0
-            if j + 1 < n:
-                if board[i][j + 1] == word[no] and not visited[i][j + 1]:
-                    visited[i][j + 1] = 1
-                    if dfs(board, i, j + 1, no, word, visited):
-                        return True
-                    visited[i][j + 1] = 0
-            if j - 1 >= 0:
-                if board[i][j - 1] == word[no] and not visited[i][j - 1]:
-                    visited[i][j - 1] = 1
-                    if dfs(board, i, j - 1, no, word, visited):
-                        return True
-                    visited[i][j - 1] = 0
-
-            return False
-
         m, n = len(board), len(board[0])
         if len(word) > m * n:
             return False
+
+        def dfs(i: int, j: int, index: int) -> bool:
+            if board[i][j] != word[index]:
+                return False
+            if index == len(word) - 1:
+                return True
+
+            letter = board[i][j]
+            board[i][j] = "#"  # 输入只有英文字母，标记不会与 word 中的字符冲突。
+            found = False
+            for di, dj in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                ni, nj = i + di, j + dj
+                if 0 <= ni < m and 0 <= nj < n and dfs(ni, nj, index + 1):
+                    found = True
+                    break
+            board[i][j] = letter  # 成功或失败都恢复，调用结束后棋盘保持原样。
+            return found
+
         for i in range(m):
             for j in range(n):
-                visited = [[0] * n for _ in range(m)]
-                visited[i][j] = 1
-                if board[i][j] == word[0]:
-                    if dfs(board, i, j, 0, word, visited):
-                        return True
-
+                if dfs(i, j, 0):
+                    return True
         return False
 
 
 def test_solution() -> None:
     solution = Solution()
     assert not solution.exist([["a", "a"], ["A", "A"]], "aaa")
-
-    assert not solution.exist([["A", "B", "C", "E"], ["S", "F", "C", "S"], ["A", "D", "E", "E"]], "ABCB")
 
     # ---- 官方示例 1：ABCCED 沿 A(0,0)→B→C→C→E→D 走通 ----
     assert solution.exist([["A", "B", "C", "E"], ["S", "F", "C", "S"], ["A", "D", "E", "E"]], "ABCCED")
@@ -118,8 +94,9 @@ def test_solution() -> None:
     assert solution.exist([["A", "B", "C", "E"], ["S", "F", "C", "S"], ["A", "D", "E", "E"]], "SEE")
 
     # ---- 官方示例 3：ABCB 回到 B 必须复用已走过的格子，false ----
+    assert not solution.exist([["A", "B", "C", "E"], ["S", "F", "C", "S"], ["A", "D", "E", "E"]], "ABCB")
 
-    # ---- 官方示例 4：2x2 小写棋盘，b 之后无相邻 c，false ----
+    # ---- 补充示例：2x2 小写棋盘，b 之后无相邻 c，false ----
     assert not solution.exist([["a", "b"], ["c", "d"]], "abcd")
 
     # ---- 大小写敏感：同官方示例 1 棋盘，小写 abcced 匹配不到，false ----
@@ -136,6 +113,13 @@ def test_solution() -> None:
     # 已程序化验证：只标记不恢复（不会撤销选择）的错误实现在本例上误判
     # False，而它在官方示例 1 上仍能通过——本例专防此类缺陷
     assert solution.exist([["A", "B", "C", "E"], ["S", "F", "E", "S"], ["A", "D", "E", "E"]], "ABCESEEE")
+
+    # ---- 成功短路与失败回溯都必须恢复棋盘，同一对象可连续搜索 ----
+    board = [["A", "B"], ["C", "D"]]
+    original = [row.copy() for row in board]
+    for word, expected in (("ABD", True), ("ABA", False), ("ACDB", True), ("ABCD", False)):
+        assert solution.exist(board, word) == expected
+        assert board == original
 
 
 if __name__ == "__main__":

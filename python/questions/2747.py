@@ -115,6 +115,9 @@ def test_solution() -> None:
     # ---- 查询乱序输入：离线排序后仍按原下标返回 ----
     assert solution.countServers(3, [[1, 3], [2, 6], [1, 5]], 5, [11, 10]) == [2, 1]
 
+    # ---- 查询跨过一段日志：新纳入的过期日志必须在本轮删除，不能先左后右 ----
+    assert solution.countServers(2, [[1, 3], [2, 8]], 2, [4, 10]) == [1, 1]
+
     # ---- 没有任何日志：所有服务器都是零请求 ----
     assert solution.countServers(3, [], 2, [10, 11]) == [3, 3]
 

@@ -25,26 +25,15 @@
     输出：[[1]]
 
 @解题思路
-    top150 回溯分类第一题。把全排列看作「逐个位置选数」的决策树：本实现
-    采用「固定首元素 + 递归剩余」的自顶向下分解，与经典的 used 数组回溯
-    在决策树上是同一棵树，只是状态口径不同。
+    把全排列看作「逐个位置选数」的决策树，用 path + used 数组回溯：
+    1. 每层枚举所有下标，跳过 used[i] 为 True 的元素；
+    2. 选择 nums[i] 时标记 used[i] 并追加到 path，递归填下一个位置；
+    3. 返回时弹出 path 尾元素并撤销 used[i]，让兄弟分支独立选择；
+    4. path 长度达到 n 时收集副本。即使输入只有一个元素，结果也不与
+       输入共享列表；共 n! 个排列，每条路径唯一，无需额外去重。
 
-    1. dfs(nums) 返回 nums 的全部排列：单元素即递归终点，返回 [nums]
-       本身（天然是副本）；
-    2. 一般情况：枚举首位数字 cur = nums[i]——拷贝一份列表并 remove 掉
-       cur（相当于 used 标记的"排除已选"），对剩余 n-1 个数递归求全
-       排列；回程时把 cur insert(0, ...) 插回每个子排列头部，即得
-       「以 cur 开头」的全部排列；
-    3. 每层枚举 n 个不同的首位，互不重叠，恰好拼出 n! 个排列，无重复；
-       拷贝列表代替了「选择/撤销」对——remove 是选择，新列表天然隔离
-       了兄弟分支，无需显式撤销；
-    4. 等价标准写法：path + used 数组回溯（每层从 0 扫到 n-1、used 剪枝，
-       收集时拷贝 path）；另有交换法（swap 原地生成）与
-       itertools.permutations 可选。
-
-    时间复杂度 O(n x n!)：共 n! 个排列，每个排列构造 O(n)；拷贝列表使
-    每层多 O(n)，仍被 n! 主项吸收。
-    空间复杂度 O(n^2) 级：递归深度 O(n)，每层持有 O(n) 的列表拷贝。
+    时间复杂度 O(n x n!)；辅助空间 O(n)（递归栈、path、used），
+    不计 O(n x n!) 的输出空间。
 
 来源：LeetCode
 链接：https://leetcode.cn/problems/permutations/description/
@@ -53,22 +42,25 @@
 
 class Solution:
     def permute(self, nums: list[int]) -> list[list[int]]:
-        def dfs(nums):
-            ret = []
-            if len(nums) == 1:
-                return [nums]
+        ret: list[list[int]] = []
+        path: list[int] = []
+        used = [False] * len(nums)
 
-            for i in range(len(nums)):
-                tmp_nums = nums.copy()
-                cur = tmp_nums[i]
-                tmp_nums.remove(cur)
-                sub = dfs(tmp_nums)
-                for s in sub:
-                    s.insert(0, cur)
-                    ret.append(s)
-            return ret
+        def backtrack() -> None:
+            if len(path) == len(nums):
+                ret.append(path.copy())
+                return
+            for i, value in enumerate(nums):
+                if used[i]:
+                    continue
+                used[i] = True
+                path.append(value)
+                backtrack()
+                path.pop()
+                used[i] = False
 
-        return dfs(nums)
+        backtrack()
+        return ret
 
 
 def test_solution() -> None:
@@ -83,10 +75,24 @@ def test_solution() -> None:
     # ---- 官方示例 3：单元素只有自身 ----
     assert sorted(solution.permute([1])) == [[1]]
 
-    # ---- 上限规模：4 个互异数 -> 4! = 24 个排列，且含完全逆序的一个 ----
+    # ---- 多元素：4 个互异数 -> 4! = 24 个排列，且含完全逆序的一个 ----
     result_4 = sorted(solution.permute([1, 2, 3, 4]))
     assert len(result_4) == 24
     assert [4, 3, 2, 1] in result_4
+
+    # ---- 结果必须独立于输入，单元素也不能直接返回输入列表的引用 ----
+    nums = [1]
+    result = solution.permute(nums)
+    result[0][0] = 9
+    assert nums == [1]
+
+    # ---- 约束上界：与标准库的全部 720 个排列逐项核对，兼查重复和漏解 ----
+    from itertools import permutations
+
+    nums = list(range(6))
+    result = solution.permute(nums)
+    assert sorted(map(tuple, result)) == list(permutations(nums))
+    assert nums == list(range(6))
 
     # ---- 含负数：互异性与符号无关，仍是 3! = 6 个 ----
     assert sorted(solution.permute([0, -1, 1])) == [

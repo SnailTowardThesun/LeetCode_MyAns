@@ -39,7 +39,7 @@ class Solution {
    public:
     int longestMonotonicSubarray(vector<int>& nums) {
         int ret = 1, large = 1, small = 1;
-        for (int i = 1; i < nums.size(); i++) {
+        for (size_t i = 1; i < nums.size(); i++) {
             // 严格递增游程：相等也算打断
             if (nums[i] > nums[i - 1]) {
                 large++;
@@ -89,7 +89,7 @@ TEST(Daily, 3105) {
     vector<int> nums6{1, 3, 5, 4, 2};
     EXPECT_EQ(s.longestMonotonicSubarray(nums6), 3);
 
-    // 混合形态：[3,4,5] 增 3 长与 [2,1] 减 2 长，答案 3
+    // 混合形态：[1,2,3] 增 3 长与 [2,1] 减 2 长，答案 3
     vector<int> nums7{1, 2, 3, 2, 2, 1};
     EXPECT_EQ(s.longestMonotonicSubarray(nums7), 3);
 }

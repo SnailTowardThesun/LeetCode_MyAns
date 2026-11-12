@@ -11,8 +11,8 @@
     可以按任意顺序返回这些组合。
 
     提示：
-    - 2 <= candidates.length <= 40
-    - 1 <= candidates[i] <= 40，且 candidates 中的元素互不相同
+    - 1 <= candidates.length <= 30
+    - 2 <= candidates[i] <= 40，且 candidates 中的元素互不相同
     - 1 <= target <= 40
     - 题目保证符合要求的组合数少于 150 个
 
@@ -43,7 +43,8 @@
     5. 当前和恰好等于 target 时收集路径副本，回溯返回。
 
     时间复杂度：指数级（搜索树规模，与满足条件的组合数相关）；
-    空间复杂度：O(target / min(candidates)) 递归栈深度（不计输出）。
+    辅助空间：O(N + target / min(candidates))，N 为候选数，包含 sorted
+    产生的副本、排序临时空间、递归栈及路径，不计输出。
 
 来源：LeetCode
 链接：https://leetcode.cn/problems/combination-sum/description/
@@ -78,7 +79,7 @@ def test_solution() -> None:
     # ---- 官方示例 1：2+2+3 与 7 ----
     assert sorted(sorted(x) for x in solution.combinationSum([2, 3, 6, 7], 7)) == [[2, 2, 3], [7]]
 
-    # ---- 官方示例 2：四种组合中的三种 ----
+    # ---- 官方示例 2：恰好三种组合 ----
     assert sorted(sorted(x) for x in solution.combinationSum([2, 3, 5], 8)) == [
         [2, 2, 2, 2],
         [2, 3, 3],

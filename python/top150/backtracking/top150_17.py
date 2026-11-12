@@ -58,30 +58,23 @@
 
 class Solution:
     def letterCombinations(self, digits: str) -> list[str]:
-        if len(digits) == 0:
+        if not digits:
             return []
 
-        number_char_dict = {
-            "2": ["a", "b", "c"],
-            "3": ["d", "e", "f"],
-            "4": ["g", "h", "i"],
-            "5": ["j", "k", "l"],
-            "6": ["m", "n", "o"],
-            "7": ["p", "q", "r", "s"],
-            "8": ["t", "u", "v"],
-            "9": ["w", "x", "y", "z"],
-        }
+        letters = ("", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz")
+        ret: list[str] = []
+        path: list[str] = []
 
-        input = list(digits)
-        if len(input) == 1:
-            return number_char_dict[input[0]]
+        def backtrack(index: int) -> None:
+            if index == len(digits):
+                ret.append("".join(path))
+                return
+            for letter in letters[int(digits[index])]:
+                path.append(letter)
+                backtrack(index + 1)
+                path.pop()
 
-        ret = []
-        subs = self.letterCombinations("".join(input[1:]))
-        for k in number_char_dict[input[0]]:
-            for s in subs:
-                ret.append(k + s)
-
+        backtrack(0)
         return ret
 
 

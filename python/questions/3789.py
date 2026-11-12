@@ -26,10 +26,11 @@
 
     数据范围：
     1 <= cost1, cost2, costBoth <= 1e6
-    0 <= need1, need2 <= 1e9（总额上限 1e15，C++ 需 long long，Python 天然大整数）
+    0 <= need1, need2 <= 1e9
+    全部买捆绑的花费至多 1e15，故最优总额不超过 1e15；C++ 需 long long，Python 支持大整数。
 
 @解题思路
-    O(1) 贪心（本质是关于捆绑数量的线性目标函数，最优解落在端点）：
+    O(1) 贪心（本质是关于捆绑数量的分段线性函数，最优解落在端点）：
     1. 需求为零直接返回 0；
     2. 若 cost1 + cost2 <= costBoth（捆绑不便宜），全部单买：
        need1*cost1 + need2*cost2；
@@ -39,8 +40,8 @@
          （比 cost1 + cost2 便宜），共 small_n * costBoth；
        - 剩余 (large_n - small_n) 个 large 单位，每单位取 min(large_c, costBoth)——
          若捆绑价低于大侧单价，宁可多买捆绑浪费掉小侧覆盖也更便宜（示例 1 正是如此）；
-    4. 购买方案可写作 x 个捆绑 + y 个类型 1 + z 个类型 2，总花费是 x 的线性函数，
-       最优 x 必取 0 或 min(need1, need2) 或 max(need1, need2) 端点，上述贪心恰好
+    4. 购买方案可写作 x 个捆绑 + y 个类型 1 + z 个类型 2，总花费是 x 的分段线性函数，
+       总能在 0、min(need1, need2)、max(need1, need2) 中找到最优 x，上述贪心恰好
        覆盖这些端点，故为全局最优。
 
     时间复杂度 O(1)，空间复杂度 O(1)
