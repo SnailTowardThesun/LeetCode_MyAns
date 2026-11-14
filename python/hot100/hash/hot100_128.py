@@ -17,23 +17,21 @@
     输出：9
 
     示例 3：
-    输入：nums = [0]
-    输出：1
+    输入：nums = [1,0,1,2]
+    输出：3
 
     数据范围：
     0 <= nums.length <= 1e5
     -1e9 <= nums[i] <= 1e9
 
 @解题思路
-    去重排序 + 游程扫描：
-    1. set 去重（重复元素不会延长连续段），排序后相邻差为 1 即连续；
-    2. 一次遍历维护当前连续游程 run：与前一元素差 1 则 run++，否则重置为 1，
-       全程记录最大值；
-    3. 空数组特判返回 0（否则初始 run=1 会误报）。
+    哈希集合 + 只从序列起点扩展：
+    1. set 去重，遍历集合而非原数组，避免重复起点导致重复扫描；
+    2. 只有 x-1 不在集合时，x 才是序列起点，从 x 向后数连续数字；
+    3. 每个不同数字只在所属序列中计数一次，维护最大长度；空集合自然返回 0。
 
-    时间复杂度 O(n log n)（排序主导），空间复杂度 O(n)
-    题目进阶要求 O(n)：哈希集合存全部数字，只从「序列起点」（x-1 不在集合中）
-    开始向后数——每个数字至多被访问两次，总 O(n)；此解法见对应博客文章。
+    时间复杂度平均 O(n)（哈希查询平均 O(1)），空间复杂度 O(n)。
+    排序扫描虽能求出答案，但 O(n log n) 不满足题目要求的 O(n)。
 
 来源：LeetCode
 链接：https://leetcode.cn/problems/longest-consecutive-sequence/description/
@@ -42,19 +40,14 @@
 
 class Solution:
     def longestConsecutive(self, nums: list[int]) -> int:
-        if not nums:
-            return 0
-
-        container = sorted(set(nums))  # 去重后排序，重复元素不延长连续段
-        ret = 1
-        run = 1
-        for i in range(1, len(container)):
-            if container[i] - container[i - 1] == 1:
-                run += 1
+        num_set = set(nums)
+        ret = 0
+        for x in num_set:
+            if x - 1 not in num_set:
+                run = 1
+                while x + run in num_set:
+                    run += 1
                 ret = max(ret, run)
-            else:
-                run = 1  # 断开：从当前元素重新起段
-
         return ret
 
 
@@ -67,7 +60,10 @@ def test_solution() -> None:
     # ---- 官方示例 2：[0..8] 全连续 ----
     assert solution.longestConsecutive([0, 3, 7, 2, 5, 8, 4, 6, 0, 1]) == 9
 
-    # ---- 官方示例 3：单元素 ----
+    # ---- 官方示例 3：重复值 ----
+    assert solution.longestConsecutive([1, 0, 1, 2]) == 3
+
+    # ---- 单元素 ----
     assert solution.longestConsecutive([0]) == 1
 
     # ---- 空数组 ----
@@ -81,6 +77,9 @@ def test_solution() -> None:
 
     # ---- 负数 ----
     assert solution.longestConsecutive([-2, -1, 1, 2, 3]) == 3
+
+    # ---- 大量重复起点：必须遍历集合，避免重复扫描同一段 ----
+    assert solution.longestConsecutive([0] * 5000 + list(range(5000))) == 5000
 
 
 if __name__ == "__main__":

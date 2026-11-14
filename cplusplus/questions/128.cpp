@@ -18,7 +18,7 @@
  *
  * 示例 2：
  * 输入：nums = [0, 3, 7, 2, 1]
- * 输出：3
+ * 输出：4（连续序列为 [0,1,2,3]）
  *
  * 示例 3：
  * 输入：nums = [0]
@@ -27,22 +27,23 @@
  * @解题思路
  * 1. 哈希表法：
  *    - 使用哈希表存储数组中的每个数字
- *    - 遍历数组，对于每个数字，向前向后扩展查找连续序列
+ *    - 只从没有前驱的序列起点向后扩展
  *
  * 2. 算法步骤：
  *    - 将所有数字存入哈希表
- *    - 遍历数组中的每个数字
+ *    - 遍历去重后的集合，避免重复起点引发重复扫描
  *    - 如果该数字是序列的起点（num-1 不在哈希表中），则向后扩展查找
  *    - 更新最长序列长度
  *
  * 3. 复杂度分析：
- *    - 时间复杂度: O(n)，每个数字最多被访问两次
+ *    - 时间复杂度: 平均 O(n)，每段连续序列只扩展一次，哈希查询平均 O(1)
  *    - 空间复杂度: O(n)，用于存储哈希表
  */
 
 #include <gtest/gtest.h>
 
-#include <map>
+#include <algorithm>
+#include <unordered_set>
 #include <vector>
 
 using namespace std;
@@ -51,27 +52,15 @@ using namespace std;
 namespace {
 class Solution {
    public:
-    map<int, int> mp;
-    int longestConsecutiveSequence(vector<int>& nums) {
-        for (int i = 0; i < nums.size(); i++) mp[nums[i]] = 1;
-
+    int longestConsecutive(vector<int>& nums) {
+        unordered_set<int> values(nums.begin(), nums.end());
         int result = 0;
-        for (int i = 0; i < nums.size(); i++) {
-            int sum = 1;
-            if (mp.count(nums[i]) && mp[nums[i]]) {
-                mp[nums[i]] = 0;
-                int left = nums[i] - 1;
-                while (mp.count(left) && mp[left]) {
-                    mp[left--] = 0;
-                    sum++;
-                }
-                int right = nums[i] + 1;
-                while (mp.count(right) && mp[right]) {
-                    mp[right++] = 0;
-                    sum++;
-                }
+        for (int x : values) {
+            if (!values.contains(x - 1)) {
+                int length = 1;
+                while (values.contains(x + length)) ++length;
+                result = max(result, length);
             }
-            if (result < sum) result = sum;
         }
         return result;
     }
@@ -83,17 +72,25 @@ TEST(Daily, 128) {
 
     // 测试用例 1
     vector<int> nums1 = {100, 4, 200, 1, 3, 2};
-    EXPECT_EQ(s.longestConsecutiveSequence(nums1), 4);
+    EXPECT_EQ(s.longestConsecutive(nums1), 4);
 
     // 测试用例 2
     vector<int> nums2 = {0, 3, 7, 2, 1};
-    EXPECT_EQ(s.longestConsecutiveSequence(nums2), 4);
+    EXPECT_EQ(s.longestConsecutive(nums2), 4);
 
     // 测试用例 3
     vector<int> nums3 = {0};
-    EXPECT_EQ(s.longestConsecutiveSequence(nums3), 1);
+    EXPECT_EQ(s.longestConsecutive(nums3), 1);
 
     // 测试用例 4
     vector<int> nums4 = {1, 2, 3, 4, 5};
-    EXPECT_EQ(s.longestConsecutiveSequence(nums4), 5);
+    EXPECT_EQ(s.longestConsecutive(nums4), 5);
+
+    vector<int> empty;
+    EXPECT_EQ(s.longestConsecutive(empty), 0);
+    vector<int> duplicates(5000, 0);
+    for (int i = 0; i < 5000; ++i) duplicates.push_back(i);
+    EXPECT_EQ(s.longestConsecutive(duplicates), 5000);
+    vector<int> negative = {-2, -1, 1, 2, 3};
+    EXPECT_EQ(s.longestConsecutive(negative), 3);
 }

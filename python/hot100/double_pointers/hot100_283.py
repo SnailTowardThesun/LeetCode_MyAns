@@ -21,14 +21,14 @@
 
 @解题思路
     快慢双指针（原地交换）：
-    1. slow 指向「下一个非零元素应落位」的位置——它同时是当前最靠左的零；
+    1. slow 指向「下一个非零元素应落位」的位置——当 slow < fast 时，它是已扫描区域最靠左的零；
     2. fast 向右扫描，遇到非零元素就与 nums[slow] 交换后 slow 前进一格；
     3. 不变量：循环中任意时刻 nums[0..slow) 全是非零且保持原相对顺序，
-       nums[slow..fast) 全是零——交换只把零换到后面、非零换到前面，两边的
-       相对顺序都不被破坏；
-    4. slow == fast（前缀没有零）时交换是自己和自己，无害，无需特判。
+       nums[slow..fast) 全是零——交换只把零换到后面、非零换到前面，非零元素的
+       相对顺序不被破坏；
+    4. slow == fast（前缀没有零）时无需交换，直接推进 slow，减少无效写入。
 
-    时间复杂度 O(n)（一次遍历，每个元素至多被交换一次），空间复杂度 O(1)
+    时间复杂度 O(n)（一次遍历，每个非零元素至多触发一次交换），空间复杂度 O(1)
     反面教材（本文件初版）：遇到零就 pop 出来 append 到末尾——pop 中间的零
     要整体搬移后半段，最坏 O(n^2)；且弹出后新滑入 left 的元素被 left++ 跳过，
     相邻两个零会漏处理（[0,0,1] 会错成 [0,1,0]）。
@@ -43,10 +43,11 @@ class Solution:
         """
         Do not return anything, modify nums in-place instead.
         """
-        slow = 0  # 下一个非零元素的落位；也即当前最靠左的零
+        slow = 0  # 下一个非零元素的落位
         for fast in range(len(nums)):
             if nums[fast] != 0:
-                nums[slow], nums[fast] = nums[fast], nums[slow]
+                if slow != fast:
+                    nums[slow], nums[fast] = nums[fast], nums[slow]
                 slow += 1
 
 

@@ -33,7 +33,7 @@
  *
  * 2. 算法步骤：
  *    - 初始化一个数组 locs[256] 记录每个字符最后出现的位置
- *    - 使用两个指针 idx 和 max
+ *    - idx 记录窗口左边界的前一格，result 记录最大窗口长度
  *    - 遍历字符串，更新最大长度
  *
  * 3. 复杂度分析：
@@ -43,7 +43,8 @@
 
 #include <gtest/gtest.h>
 
-#include <cstring>
+#include <algorithm>
+#include <array>
 #include <string>
 
 using namespace std;
@@ -52,17 +53,18 @@ using namespace std;
 namespace {
 class Solution {
    public:
-    int lengthOfLongestSubstring(string s) {
+    int lengthOfLongestSubstring(const string& s) {
         int result = 0;
-        int locs[256];
-        memset(locs, -1, sizeof(locs));
-        int idx = -1, max = 0;
-        for (int i = 0; i < s.size(); i++) {
-            if (locs[s[i]] > idx) idx = locs[s[i]];
-            if (i - idx > max) max = i - idx;
-            locs[s[i]] = i;
+        array<int, 256> locs;
+        locs.fill(-1);
+        int idx = -1;
+        for (int i = 0; i < static_cast<int>(s.size()); ++i) {
+            auto ch = static_cast<unsigned char>(s[i]);
+            idx = max(idx, locs[ch]);
+            result = max(result, i - idx);
+            locs[ch] = i;
         }
-        return max;
+        return result;
     }
 };
 }  // namespace
@@ -84,4 +86,10 @@ TEST(Daily, 3) {
 
     // 测试用例 5
     EXPECT_EQ(s.lengthOfLongestSubstring("a"), 1);
+    EXPECT_EQ(s.lengthOfLongestSubstring("abba"), 2);
+    EXPECT_EQ(s.lengthOfLongestSubstring("tmmzuxt"), 5);
+    EXPECT_EQ(s.lengthOfLongestSubstring("a 1!a"), 4);
+    // 用无符号字节作下标，避免 char 为负时越界。
+    string bytes = {static_cast<char>(0xFF), 'a', static_cast<char>(0xFF)};
+    EXPECT_EQ(s.lengthOfLongestSubstring(bytes), 2);
 }

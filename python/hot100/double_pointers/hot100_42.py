@@ -22,11 +22,11 @@
 
 @解题思路
     前后缀最大值（逐列结算）：
-    1. 每列能存的水 = min(左侧最高柱, 右侧最高柱) - 自身高度（负数则该列存不住）；
+    1. 每列能存的水 = min(左侧最高柱, 右侧最高柱) - 自身高度（两侧最大值均含自身，差值非负）；
     2. 预处理两个数组：leftmax[i] = max(height[0..i]) 从左向右递推，
        rightmax[i] = max(height[i..n-1]) 从右向左递推，各一趟 O(n)；
     3. 再一趟求和 min(leftmax[i], rightmax[i]) - height[i]。
-    2 的正确性：一列的水位由「两侧最高墙的较矮者」决定——超过它就会从那侧溢出，
+    正确性：一列的水位由「两侧最高墙的较矮者」决定——超过它就会从那侧溢出，
     低于柱顶的部分被柱子占据。
 
     时间复杂度 O(n)（三趟线性扫描），空间复杂度 O(n)（两个辅助数组）
@@ -54,7 +54,7 @@ class Solution:
         for i in range(n - 2, -1, -1):
             rightmax[i] = max(rightmax[i + 1], height[i])
 
-        # 每列水位 = min(两侧最高墙) - 柱高，负数说明自身就是墙，存不住水
+        # 每列水位 = min(两侧最高墙) - 柱高，两侧最大值均含自身，差值非负
         return sum(min(leftmax[i], rightmax[i]) - height[i] for i in range(n))
 
 
