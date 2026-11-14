@@ -33,7 +33,8 @@
        新左端 i+1；
     4. len(s) < len(p) 时无解，直接返回空。
 
-    时间复杂度 O(n*26)（n 为 s 长度，每滑一步 O(26) 比较），空间复杂度 O(26)
+    时间复杂度 O(n*26)（n 为 s 长度，每滑一步 O(26) 比较）；
+    辅助空间 O(26)，不计输出列表，输出最多占 O(n) 空间。
     进阶：维护一个「计数差异个数」变量 differ（有多少字母计数不同），进出窗口
     时增量更新，可把每步比较降到 O(1)——见 567 题的写法。
 
@@ -88,6 +89,10 @@ def test_solution() -> None:
     # ---- 重复字母："aba" 排序后同为 "aab"，也是异位词 ----
     assert solution.findAnagrams("aabaa", "aab") == [0, 1, 2]
     assert solution.findAnagrams("aababaa", "aab") == [0, 1, 3, 4]
+
+    # ---- 字母集合相同、计数不同；末尾窗口不能漏掉 ----
+    assert solution.findAnagrams("abb", "aab") == []
+    assert solution.findAnagrams("zzab", "ba") == [2]
 
 
 if __name__ == "__main__":

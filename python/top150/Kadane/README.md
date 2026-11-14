@@ -1,6 +1,6 @@
 # Kadane 算法（最大子数组和）
 
-Kadane 算法由卡内基梅隆大学的 Joseph Kadane 于 1984 年提出，用于在线性时间内解决**最大子数组和问题**（Maximum Subarray Problem）：给定一个整数数组，找出和最大的连续子数组。它把朴素的 O(n²) / O(n³) 枚举优化到 **O(n) 时间、O(1) 空间**，是动态规划"局部最优 → 全局最优"思想的经典范例。
+Kadane 算法用于在线性时间内解决**最大子数组和问题**（Maximum Subarray Problem）：给定一个整数数组，找出和最大的连续子数组。它把朴素的 O(n²) / O(n³) 枚举优化到 **O(n) 时间、O(1) 辅助空间**，是动态规划"局部最优 → 全局最优"思想的经典范例。
 
 ## 问题描述
 
@@ -65,7 +65,8 @@ class Solution:
         # cur: 以当前元素结尾的最大子数组和（滚动变量）
         # ans: 全局最大子数组和
         cur = ans = nums[0]
-        for x in nums[1:]:
+        for i in range(1, len(nums)):
+            x = nums[i]  # 不创建切片，保持 O(1) 辅助空间
             # 前缀贡献为负时另起炉灶，否则接在后面
             cur = max(x, cur + x)
             ans = max(ans, cur)
@@ -76,7 +77,7 @@ C++ 版本见本仓库 [cplusplus/questions/53.cpp](../../../cplusplus/questions
 
 ### 扩展：返回子数组本身
 
-记录最优区间的结束下标，再倒推起点：
+维护当前区间的起点，刷新最优和时同时保存起止下标：
 
 ```python
 def max_subarray_with_index(nums: list[int]) -> tuple[int, int, int]:
@@ -84,9 +85,9 @@ def max_subarray_with_index(nums: list[int]) -> tuple[int, int, int]:
     cur = ans = nums[0]
     start = best_start = best_end = 0
     for i in range(1, len(nums)):
-        if nums[i] > cur + nums[i]:   # 另起炉灶
+        if nums[i] > cur + nums[i]:  # 另起炉灶
             cur, start = nums[i], i
-        else:                          # 接在后面
+        else:  # 接在后面
             cur += nums[i]
         if cur > ans:
             ans, best_start, best_end = cur, start, i
@@ -117,7 +118,7 @@ def max_subarray_with_index(nums: list[int]) -> tuple[int, int, int]:
 | [918. 环形子数组的最大和](https://leetcode.cn/problems/maximum-sum-circular-subarray/) | 分"不跨环"（标准 Kadane）与"跨环"（总和 − 最小子数组和）两类取较大值；注意全负数时的边界 |
 | [152. 乘积最大子数组](https://leetcode.cn/problems/maximum-product-subarray/) | 负数会翻转大小，需同时维护以 i 结尾的**最大积与最小积**两个状态 |
 | [1567. 乘积为正数的最长子数组长度](https://leetcode.cn/problems/maximum-length-of-subarray-with-positive-product/) | 按正负分段讨论，维护正/负乘积子数组的长度 |
-| [1186. 删除一次得到子数组最大和](https://leetcode.cn/problems/maximum-subarray-sum-with-one-deletion/) | 正反两次扫描，`left[i] + right[i+1]` 拼出"删 i"后的最优值 |
+| [1186. 删除一次得到子数组最大和](https://leetcode.cn/problems/maximum-subarray-sum-with-one-deletion/) | `left[i]` / `right[i]` 分别表示以 i 结尾 / 开头的最大子数组和；删除内部元素 i 时拼接 `left[i-1] + right[i+1]`，再与不删除时的最优值取最大 |
 | [978. 最长湍流子数组](https://leetcode.cn/problems/longest-turbulent-subarray/) | 把"和"换成"比较符号交替的长度"，思想同构 |
 | [363. 矩形区域不超过 K 的最大数值和](https://leetcode.cn/problems/max-sum-of-rectangle-no-larger-than-k/) | 上下边界枚举 + 列前缀和压缩，退化为一维子数组问题后配合 Kadane / 有序集合 |
 

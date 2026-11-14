@@ -46,7 +46,8 @@ class Solution:
     def maxSubarraySumCircular(self, nums: list[int]) -> int:
         # cur_max / cur_min：以当前元素结尾的最大 / 最小子数组和（Kadane 滚动变量）
         cur_max = best_max = cur_min = best_min = total = nums[0]
-        for x in nums[1:]:
+        for i in range(1, len(nums)):
+            x = nums[i]  # 按下标遍历，避免 nums[1:] 创建 O(n) 切片
             cur_max = max(x, cur_max + x)
             best_max = max(best_max, cur_max)
             cur_min = min(x, cur_min + x)

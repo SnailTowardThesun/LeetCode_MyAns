@@ -28,31 +28,31 @@ class Solution:
         leftmax = [0] * n
         leftmax[0] = height[0]
         for i in range(1, n):
-            leftmax[i] = max(height[i], leftmax[i-1])
+            leftmax[i] = max(height[i], leftmax[i - 1])
         rightmax = [0] * n
-        rightmax[n-1] = height[n-1]
+        rightmax[n - 1] = height[n - 1]
 
-        for i in range(n-2, -1, -1):
-            rightmax[i] = max(height[i], rightmax[i+1])
+        for i in range(n - 2, -1, -1):
+            rightmax[i] = max(height[i], rightmax[i + 1])
         ret = 0
         for i in range(n):
             ret += min(leftmax[i], rightmax[i]) - height[i]
         return ret
-
-if __name__ == '__main__':
-    s = Solution()
-    ret = s.trap([0,1,0,2,1,0,1,3,2,1,2,1])
-    print(ret)
 
 
 def test_solution() -> None:
     solution = Solution()
 
     # 官方示例
-    assert solution.trap([0,1,0,2,1,0,1,3,2,1,2,1]) == 6
-    assert solution.trap([4,2,0,3,2,5]) == 9
+    assert solution.trap([0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]) == 6
+    assert solution.trap([4, 2, 0, 3, 2, 5]) == 9
 
     # 边界：单调 / 平地不积水
-    assert solution.trap([3,2,1,0]) == 0
-    assert solution.trap([2,2,2]) == 0
+    assert solution.trap([3, 2, 1, 0]) == 0
+    assert solution.trap([2, 2, 2]) == 0
     assert solution.trap([5]) == 0
+
+
+if __name__ == "__main__":
+    test_solution()
+    print("✅ No.42 全部测试通过")
