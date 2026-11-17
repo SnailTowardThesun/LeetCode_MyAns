@@ -6,7 +6,7 @@
     给你一个整数数组 nums，返回数组 answer，其中 answer[i] 等于 nums 中除
     nums[i] 之外其余各元素的乘积。题目数据保证数组 nums 之中任意元素的全部
     前缀元素和后缀的乘积都在 32 位整数范围内。
-    进阶要求：O(n) 时间且【不使用除法】；O(1) 空间（不计输出数组）。
+    要求 O(n) 时间且不使用除法；进阶要求 O(1) 额外空间（不计输出数组）。
 
 @示例
     示例 1：
@@ -21,16 +21,11 @@
     2 <= nums.length <= 1e5
 
 @解题思路
-    统计零 + 总乘积 + 分类讨论（本实现，使用了除法）：
-    1. 一趟统计：零的个数 zero_count、唯一零的下标 zero_idx、
-       全体非零元素的总乘积 total；
-    2. 两个及以上零：任何位置的结果都含 0 因子，全零输出；
-    3. 恰一个零：除零位外都被 0 乘成 0，零位结果恰为 total；
-    4. 无零：answer[i] = total // nums[i]（整除精确，因 total 含因子 nums[i]）。
-    注意：题目【明确要求不使用除法】，本实现判题可通过但不符合该要求；
-    标准解法是前缀积 × 后缀积——把前缀积写进答案数组，再从右向左用
-    变量乘后缀积，O(n) 时间、O(1) 额外空间且天然处理含零场景
-    （见对应博客的实现）。
+    前缀积 × 后缀积：
+    1. 从左到右，把位置 i 左侧元素的乘积写入 ret[i]，不包含 nums[i]；
+    2. 从右到左，用变量 right 维护位置 i 右侧元素的乘积，再乘入 ret[i]；
+    3. 每次先使用累积乘积，再乘当前元素，保证不把自身计入答案。
+    空前缀、空后缀的乘积均为 1；含零情况由乘法自然处理，无需分类讨论。
 
     时间复杂度 O(n)，空间复杂度 O(1)（不计输出）
 
@@ -42,27 +37,19 @@
 class Solution:
     def productExceptSelf(self, nums: list[int]) -> list[int]:
         n = len(nums)
-        if n == 0:
-            return []
+        ret = [1] * n
 
-        zero_count = 0
-        zero_idx = -1
-        total = 1  # 全体非零元素的总乘积
+        left = 1  # 位置 i 左侧全体元素之积（不含自身）
         for i in range(n):
-            if nums[i] == 0:
-                zero_count += 1
-                zero_idx = i
-            else:
-                total *= nums[i]
-        if zero_count > 1:
-            return [0] * n  # 任何位置都含 0 因子
+            ret[i] = left
+            left *= nums[i]
 
-        if zero_count == 1:
-            ret = [0] * n  # 除零位外全为 0，零位恰为 total
-            ret[zero_idx] = total
-            return ret
+        right = 1  # 位置 i 右侧全体元素之积（不含自身）
+        for i in range(n - 1, -1, -1):
+            ret[i] *= right
+            right *= nums[i]
 
-        return [total // nums[i] for i in range(n)]  # 整除精确：total 含因子 nums[i]
+        return ret
 
 
 def test_solution() -> None:
@@ -74,6 +61,10 @@ def test_solution() -> None:
 
     # ---- 两个零：全零输出 ----
     assert solution.productExceptSelf([0, 4, 0]) == [0, 0, 0]
+
+    # ---- 唯一的零位于首端或末端，检验空前缀与空后缀 ----
+    assert solution.productExceptSelf([0, 2, 3]) == [6, 0, 0]
+    assert solution.productExceptSelf([2, 3, 0]) == [0, 0, 6]
 
     # ---- 最小规模 ----
     assert solution.productExceptSelf([2, 3]) == [3, 2]

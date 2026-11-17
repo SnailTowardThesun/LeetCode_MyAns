@@ -24,18 +24,15 @@
     -2^31 <= nums[i] <= 2^31 - 1
 
 @解题思路
-    正数集合 + 从 1 线性探测（本实现，O(n) 时间 / O(n) 空间）：
-    1. 一趟把所有正数收进集合；
-    2. 从 1 开始逐个探测，第一个不在集合里的即为答案；
-    3. 鸽笼原理保证答案 <= n+1（n 个位置最多放下 1..n，否则 1..n 某个缺席），
-       探测至多 n+1 步，时间 O(n)。
-    注意：题目进阶要求 O(1) 空间，本实现用了 O(n) 集合不符合该要求；
-    标准解法是原地哈希（循环交换归位）：理想状态 nums[i] == i+1，把值在
-    [1,n] 内的元素不断交换到自己的位置（目标位未被正确占位才交换，防重复值
-    死循环），归位后第一个 nums[i] != i+1 处返回 i+1，全对则 n+1——
-    见对应博客的实现。
+    原地哈希（循环交换归位）：
+    1. n 个元素中缺失的最小正数一定在 [1,n+1] 内；
+    2. 把值 x 在 [1,n] 内的元素交换到下标 x-1，其他值无需归位；
+    3. 目标位置已有相同值时停止交换，避免重复值造成死循环；
+    4. 归位后，第一个 nums[i] != i+1 的位置对应答案 i+1；全部正确则返回 n+1。
+    每次有效交换都让一个值归位，归位的值不会再被移走，因此总交换次数不超过 n。
+    该方法会修改输入数组，只使用常数个辅助变量。
 
-    时间复杂度 O(n)，空间复杂度 O(n)
+    时间复杂度 O(n)，额外空间复杂度 O(1)
 
 来源：LeetCode
 链接：https://leetcode.cn/problems/first-missing-positive/description/
@@ -44,13 +41,17 @@
 
 class Solution:
     def firstMissingPositive(self, nums: list[int]) -> int:
-        container = {i for i in nums if i > 0}  # 只需正数
+        n = len(nums)
+        for i in range(n):
+            # 目标位置已有相同值时停止，避免重复值导致无限交换
+            while 1 <= nums[i] <= n and nums[nums[i] - 1] != nums[i]:
+                j = nums[i] - 1
+                nums[i], nums[j] = nums[j], nums[i]
 
-        # 鸽笼原理：答案 <= n+1，探测至多 n+1 步必命中
-        i = 1
-        while i in container:
-            i += 1
-        return i
+        for i in range(n):
+            if nums[i] != i + 1:
+                return i + 1
+        return n + 1
 
 
 def test_solution() -> None:
@@ -67,6 +68,10 @@ def test_solution() -> None:
 
     # ---- 重复值：[1,1] 缺 2 ----
     assert solution.firstMissingPositive([1, 1]) == 2
+    assert solution.firstMissingPositive([2, 2, 1]) == 3
+
+    # ---- 同一位置需要连续交换，才能完成归位 ----
+    assert solution.firstMissingPositive([2, 3, 4, 1]) == 5
 
     # ---- 全负 / 含大数：答案是 1 ----
     assert solution.firstMissingPositive([-5, -3]) == 1
