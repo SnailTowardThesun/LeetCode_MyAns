@@ -25,20 +25,25 @@
  *
  * @解题思路
  * 1. 原地哈希法：
- *    - 将数组中每个数放到它对应的位置上（即 nums[i] 放到 nums[nums[i]-1]）
+ *    - 将 [1, n] 范围内的值 x 放到下标 x-1
  *    - 遍历数组，第一个不满足 nums[i] == i + 1 的位置就是缺失的最小正数
  *
  * 2. 算法步骤：
- *    - 遍历数组，对于每个数 nums[i]，如果它在 [1, n] 范围内，就将它放到正确的位置
+ *    - 先判断 nums[i] 是否在 [1, n] 内，再减一计算目标下标
+ *    - 目标位置已经有相同的值时停止交换，避免重复值造成循环
  *    - 再次遍历数组，找到第一个不满足 nums[i] == i + 1 的位置
  *    - 如果都满足，返回 n + 1
  *
  * 3. 复杂度分析：
- *    - 时间复杂度: O(n)，每个数字最多被放置两次
+ *    - 时间复杂度: O(n)，每次交换至少固定一个位置，总交换次数不超过 n
  *    - 空间复杂度: O(1)，原地修改数组
  */
 
 #include <gtest/gtest.h>
+
+#include <algorithm>
+#include <limits>
+#include <vector>
 
 using namespace std;
 
@@ -46,26 +51,18 @@ using namespace std;
 namespace {
 class Solution {
    public:
-    int firstMissingPositive(int A[], int n) {
-        for (int i = 0, tmp = -1; i < n; i++) {
-            while (A[i] - 1 >= 0 && A[i] - 1 < n && A[i] - 1 != i) {
-                swap(A, i, A[i] - 1);
-                if (A[i] == tmp)
-                    break;
-                else
-                    tmp = A[i];
+    int firstMissingPositive(vector<int>& nums) {
+        int n = nums.size();
+        for (int i = 0; i < n; ++i) {
+            while (nums[i] >= 1 && nums[i] <= n && nums[nums[i] - 1] != nums[i]) {
+                int target = nums[i] - 1;
+                std::swap(nums[i], nums[target]);
             }
         }
-        for (int i = 0; i < n; i++) {
-            if (A[i] - 1 != i) return i + 1;
+        for (int i = 0; i < n; ++i) {
+            if (nums[i] != i + 1) return i + 1;
         }
         return n + 1;
-    }
-
-    void swap(int A[], int indx1, int indx2) {
-        A[indx1] ^= A[indx2];
-        A[indx2] ^= A[indx1];
-        A[indx1] ^= A[indx2];
     }
 };
 }  // namespace
@@ -74,18 +71,22 @@ TEST(Daily, 41) {
     Solution s;
 
     // 测试用例 1
-    int A1[] = {1, 2, 0};
-    EXPECT_EQ(s.firstMissingPositive(A1, 3), 3);
+    vector<int> nums1{1, 2, 0};
+    EXPECT_EQ(s.firstMissingPositive(nums1), 3);
 
     // 测试用例 2
-    int A2[] = {3, 4, -1, 1};
-    EXPECT_EQ(s.firstMissingPositive(A2, 4), 2);
+    vector<int> nums2{3, 4, -1, 1};
+    EXPECT_EQ(s.firstMissingPositive(nums2), 2);
 
     // 测试用例 3
-    int A3[] = {7, 8, 9, 11, 12};
-    EXPECT_EQ(s.firstMissingPositive(A3, 5), 1);
+    vector<int> nums3{7, 8, 9, 11, 12};
+    EXPECT_EQ(s.firstMissingPositive(nums3), 1);
 
     // 测试用例 4
-    int A4[] = {1, 1};
-    EXPECT_EQ(s.firstMissingPositive(A4, 2), 2);
+    vector<int> nums4{1, 1};
+    EXPECT_EQ(s.firstMissingPositive(nums4), 2);
+
+    // 旧实现会在检查最小整数时先减一，导致有符号溢出
+    vector<int> extremes{numeric_limits<int>::min(), numeric_limits<int>::max(), 1};
+    EXPECT_EQ(s.firstMissingPositive(extremes), 2);
 }

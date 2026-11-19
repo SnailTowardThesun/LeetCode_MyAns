@@ -21,17 +21,13 @@
     进阶：使用 O(1) 空间解决
 
 @解题思路
-    先收集后置零（k 为原矩阵中 0 的个数）：
-    1. 第一遍遍历，把所有 0 的坐标 (i, j) 收进列表；
-    2. 依据收集到的坐标，把对应行、列整体置零。
-    顺序很关键：必须"先收集、后置零"——若边扫边置零，新写入的 0 会再次
-    触发整行整列置零，污染结果。
-    注意：题目进阶要求 O(1) 空间，标准解法是用第一行/第一列自身做标记位
-    （两个 bool 分别记录首行、首列自身是否含 0，从 (1,1) 开始按标记置零，
-    最后处理首行首列）——见对应博客的实现。
+    复用第一行和第一列作为标记：
+    1. 在写入任何标记前，记录第一行和第一列是否原本就含零。
+    2. 扫描其余单元格。遇到零时，将所在行的行首、所在列的列首置零。
+    3. 根据行首和列首的标记置零，最后按步骤 1 的记录处理第一行和第一列。
+    分开标记和置零，避免把后续写入的零误当作原始零。
 
-    时间复杂度 O(m×n + k×(m+n))：收集坐标后，每个零都会触发整行整列遍历，
-    全零矩阵下最坏为 O(m×n×(m+n))。额外空间 O(k+1)，最坏 O(m×n)。
+    时间复杂度 O(m×n)，额外空间复杂度 O(1)。
 
 来源：LeetCode
 链接：https://leetcode.cn/problems/set-matrix-zeroes/description/
@@ -41,14 +37,25 @@
 class Solution:
     def setZeroes(self, matrix: list[list[int]]) -> None:
         m, n = len(matrix), len(matrix[0])
-        zeros = [(i, j) for i in range(m) for j in range(n) if matrix[i][j] == 0]
+        first_row_zero = 0 in matrix[0]
+        first_col_zero = any(row[0] == 0 for row in matrix)
 
-        # 先收集后置零：新写入的 0 不会再触发置零
-        for r, c in zeros:
-            for j in range(n):  # 整行置零
-                matrix[r][j] = 0
-            for i in range(m):  # 整列置零
-                matrix[i][c] = 0
+        for i in range(1, m):
+            for j in range(1, n):
+                if matrix[i][j] == 0:
+                    matrix[i][0] = matrix[0][j] = 0
+
+        for i in range(1, m):
+            for j in range(1, n):
+                if matrix[i][0] == 0 or matrix[0][j] == 0:
+                    matrix[i][j] = 0
+
+        if first_row_zero:
+            for j in range(n):
+                matrix[0][j] = 0
+        if first_col_zero:
+            for i in range(m):
+                matrix[i][0] = 0
 
 
 def test_solution() -> None:
@@ -83,10 +90,19 @@ def test_solution() -> None:
     solution.setZeroes(m6)
     assert m6 == [[0, 0], [0, 4]]
 
-    # ---- 多个 0：重复置零不改变最终结果 ----
+    # ---- 多个 0：同一行或列可以被多次标记 ----
     m7 = [[1, 0, 3], [4, 5, 0], [7, 8, 9]]
     solution.setZeroes(m7)
     assert m7 == [[0, 0, 0], [0, 0, 0], [7, 0, 0]]
+
+    # ---- 首行与首列的标记相互独立 ----
+    first_row_only = [[1, 0, 3], [4, 5, 6]]
+    solution.setZeroes(first_row_only)
+    assert first_row_only == [[0, 0, 0], [4, 0, 6]]
+
+    first_col_only = [[1, 2], [0, 4], [5, 6]]
+    solution.setZeroes(first_col_only)
+    assert first_col_only == [[0, 2], [0, 0], [0, 6]]
 
 
 if __name__ == "__main__":

@@ -4,8 +4,8 @@
 
 @题目描述
     给定一个 m × n 矩阵 matrix，满足：
-    - 每行的元素从左到右升序排列；
-    - 每列的元素从上到下升序排列。
+    - 每行的元素从左到右非递减；
+    - 每列的元素从上到下非递减。
     判断目标值 target 是否存在于矩阵中。
 
 @示例
@@ -21,16 +21,14 @@
     m == matrix.length, n == matrix[i].length
     1 <= m, n <= 300
     -10^9 <= matrix[i][j], target <= 10^9
-    每行、每列均升序，但不保证下一行首元素大于上一行末元素
+    行列分别有序，按行拼接后的序列不一定有序。
 
 @解题思路
-    右上角阶梯搜索：
-    从右上角 (0, n-1) 出发——它是所在行的最大值、所在列的最小值，两个方向
-    的变化方向相反，能够确定下一步移动方向：
-    1. 当前值 > target：本列往下更大，整列排除，左移一列（y -= 1）；
-    2. 当前值 < target：本行往左更小，整行排除，下移一行（x += 1）；
+    从右上角 (0, n-1) 开始阶梯搜索。每一步都在剩余区域的右上角比较：
+    1. 当前值 > target：同列下方的候选值都不小于当前值，排除此列并向左移动。
+    2. 当前值 < target：同行左侧的候选值都不大于当前值，排除此行并向下移动。
     3. 相等则找到，越界则不存在。
-    每步至少排除一行或一列，最多 m + n 步出结果。
+    每步至多访问一个位置，总共至多访问 m+n-1 个位置。
     起点也可以选左下角（行最小、列最大，方向相反）；但左上角（双最小）和
     右下角（双最大）不能仅靠一次比较确定这类搜索的移动方向。
     对比：74 题可按行展开为一维有序数组，本题不满足这一条件。
@@ -47,15 +45,16 @@
 class Solution:
     def searchMatrix(self, matrix: list[list[int]], target: int) -> bool:
         m, n = len(matrix), len(matrix[0])
-        x, y = 0, n - 1  # 从右上角出发：行内最大、列内最小，两向单调性相反
-        while x < m and y >= 0:
-            if matrix[x][y] == target:
+        row, col = 0, n - 1
+        while row < m and col >= 0:
+            value = matrix[row][col]
+            if value == target:
                 return True
 
-            if matrix[x][y] > target:
-                y -= 1  # 本列往下更大 → 整列排除，左移
+            if value > target:
+                col -= 1
             else:
-                x += 1  # 本行往左更小 → 整行排除，下移
+                row += 1
 
         return False
 
@@ -68,7 +67,7 @@ def test_solution() -> None:
     assert solution.searchMatrix(mx, 5) is True
     assert solution.searchMatrix(mx, 20) is False
 
-    # ---- 四个角与界外 ----
+    # ---- 矩阵中的最小值、最大值及范围之外 ----
     assert solution.searchMatrix(mx, 1) is True  # 左上最小
     assert solution.searchMatrix(mx, 30) is True  # 右下最大
     assert solution.searchMatrix(mx, 0) is False  # 小于最小
@@ -87,6 +86,10 @@ def test_solution() -> None:
     # ---- 走完整条搜索路径的对角用例 ----
     assert solution.searchMatrix([[1, 4], [2, 5]], 2) is True
     assert solution.searchMatrix([[1, 4], [2, 5]], 3) is False
+
+    # ---- 重复值允许出现在同一行或同一列 ----
+    assert solution.searchMatrix([[1, 2, 2], [2, 2, 4]], 4) is True
+    assert solution.searchMatrix([[1, 2, 2], [2, 2, 4]], 3) is False
 
 
 if __name__ == "__main__":

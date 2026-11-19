@@ -21,13 +21,10 @@
     -1000 <= matrix[i][j] <= 1000
 
 @解题思路
-    转置 + 逐行反转（两次原地翻转等价于顺时针旋转 90°）：
-    1. 沿主对角线转置：交换 matrix[i][j] 与 matrix[j][i]。内层 j 从 i
-       出发只走「上三角」（含对角线，对角线自交换是 no-op），保证每对
-       (i,j)/(j,i) 恰好交换一次——若 j 扫全列，每对会交换两次还原回去；
-    2. 每行左右反转（水平镜像）。
-    顺时针 90° = 主对角线转置 + 水平镜像；若要逆时针 90°，改为转置 +
-    上下镜像即可。另一条路线是按圈四点轮转：(i,j) → (j, n-1-i)。
+    先沿主对角线转置，再反转每行。
+    1. 转置时令 j 从 i+1 开始，只遍历严格上三角，每对非对角线元素交换一次。
+    2. 逐行反转，把每行下标 i 处的元素移到该行下标 n-1-i 处。
+    原位置 (i,j) 经过这两个步骤依次变为 (j,i) 和 (j,n-1-i)，对应顺时针旋转 90°。
 
     时间复杂度 O(n²)，空间复杂度 O(1)
 
@@ -38,20 +35,15 @@
 
 class Solution:
     def rotate(self, matrix: list[list[int]]) -> None:
-        """
-        Do not return anything, modify matrix in-place instead.
-        """
-        m, n = len(matrix), len(matrix[0])
+        n = len(matrix)
 
-        # 1. 主对角线转置：j 从 i 起只走上三角，每对元素只交换一次
-        for i in range(m):
-            for j in range(i, n):
+        # 只遍历严格上三角，避免重复交换
+        for i in range(n):
+            for j in range(i + 1, n):
                 matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
 
-        # 2. 逐行左右反转（水平镜像），组合后即顺时针旋转 90°
-        for i in range(m):
-            for j in range(n // 2):
-                matrix[i][j], matrix[i][n - j - 1] = matrix[i][n - j - 1], matrix[i][j]
+        for row in matrix:
+            row.reverse()
 
 
 def test_solution() -> None:

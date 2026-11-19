@@ -41,9 +41,7 @@
 class Solution:
     def spiralOrder(self, matrix: list[list[int]]) -> list[int]:
         def do_spiral(matrix: list[list[int]]) -> list[int]:
-            if len(matrix) == 0:
-                return []
-            if len(matrix[0]) == 0:
+            if not matrix or not matrix[0]:
                 return []
 
             m, n = len(matrix), len(matrix[0])
@@ -94,7 +92,7 @@ def test_solution() -> None:
         7,
     ]
 
-    # ---- 单行 / 单列（曾因回头方向重复采集而出错）----
+    # ---- 单行 / 单列：同一条边只采集一次 ----
     assert solution.spiralOrder([[1, 2, 3]]) == [1, 2, 3]
     assert solution.spiralOrder([[1], [2], [3]]) == [1, 2, 3]
 
