@@ -64,8 +64,8 @@ class Solution {
     ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
         if (l1 == NULL || l2 == NULL) return l1 == NULL ? l1 : l2;
 
-        ListNode* result = new ListNode(0);
-        ListNode* pResult = result;
+        ListNode result(0);
+        ListNode* pResult = &result;
         ListNode* p1 = l1;
         ListNode* p2 = l2;
         int isBiggerThenTen = 0;
@@ -101,7 +101,7 @@ class Solution {
             pResult->next = tmpNode;
             pResult = pResult->next;
         }
-        return result->next;
+        return result.next;
     }
 };
 }  // namespace
