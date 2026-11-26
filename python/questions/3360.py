@@ -11,7 +11,7 @@
     n = 1 时，Alice 无法完成第一手，返回 False。
 
 @解题思路
-    依次尝试取 10、9、8……颗，记录已完成的手数。当前的石头不够时停止。
+    helpers 保存从 10 到 1 的取石数。下标 i 等于已完成的手数，取不够 helpers[i] 时判断胜负。
     已完成奇数手说明轮到 Bob 失败，Alice 获胜；偶数手则轮到 Alice 失败。
     前八手共需 52 颗，超过 n 的上限，所以循环最多成功七次。时间和额外空间均为 O(1)。
 """
@@ -19,13 +19,21 @@
 
 class Solution:
     def canAliceWin(self, n: int) -> bool:
-        take = 10
-        moves = 0
-        while take > 0 and n >= take:
-            n -= take
-            take -= 1
-            moves += 1
-        return moves % 2 == 1
+        if n < 10:
+            return False
+
+        helpers =list(range(10, 0, -1))
+        for i in range(len(helpers)):
+            if n < helpers[i]:
+                return True if i % 2 == 1 else False
+            n = n - helpers[i]
+
+        return False
+
+if __name__ == '__main__':
+    s = Solution()
+    ret = s.canAliceWin(n = 12)
+    print(ret)
 
 
 def test_solution() -> None:
@@ -34,7 +42,3 @@ def test_solution() -> None:
     for n in range(1, 51):
         expected = 10 <= n < 19 or 27 <= n < 34 or 40 <= n < 45 or 49 <= n <= 50
         assert solution.canAliceWin(n) == expected, n
-
-
-if __name__ == "__main__":
-    test_solution()
