@@ -27,10 +27,14 @@ class Solution:
     def detectCycle(self, head: ListNode | None) -> ListNode | None:
         slow = fast = head
         while fast is not None and fast.next is not None:
+            # 快指针仍能前进两步，走得更慢的 slow 必然还在链表上。
+            assert slow is not None
             slow = slow.next
             fast = fast.next.next
             if slow is fast:
                 while head is not slow:
+                    # 已确认有环，从头节点或环内出发都不会走到 None。
+                    assert head is not None and slow is not None
                     head = head.next
                     slow = slow.next
                 return head
